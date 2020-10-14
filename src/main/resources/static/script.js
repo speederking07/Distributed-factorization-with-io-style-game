@@ -103,7 +103,7 @@ class BoardView{
             this.animations.push([function(vX, vY, frame){
                 t.drawRotation(x, y, vX, vY, colorFrom, colorTo, frame);
             }, ROTATION_FRAMES + Math.floor(Math.random() * (MAX_ROTATION_DELAY))]);
-        };
+        }
     }
 
     killPlayer(player){
