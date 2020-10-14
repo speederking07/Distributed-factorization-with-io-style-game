@@ -2,6 +2,8 @@ const BLOCK_SIZE = 40;
 const PLAYER_RADIUS = 26;
 const DYING_FRAMES = 30;
 const LINE_WIDTH = 20;
+const ROTATION_FRAMES = 16;
+const MAX_ROTATION_DELAY = 20;
 
 class BoardView{
     constructor(canvas, borad, players){
@@ -9,17 +11,23 @@ class BoardView{
         this.ctx = canvas.getContext('2d');
         this.width = this.canvas.width;
         this.height = this.canvas.height;
+        this.prevX = 0;
+        this.prevY = 0;
         this.boradSize = 100;
         this.borad = borad;
         this.players = players;
         this.dying = [];
+        this.animations = [];
     }
 
     draw(x, y){
+        this.prevX = x;
+        this.prevY = y;
         this.width = this.canvas.width;
         this.height = this.canvas.height;
         this.ctx.clearRect(0, 0, this.width, this.height)
         this.drawBorad(x, y);
+        this.drawBoardAnimations(x, y);
         this.drawDying(x, y);
         for(let p of this.players){
             p.draw(this.ctx, x, y, this.width, this.height);
@@ -38,9 +46,10 @@ class BoardView{
         for(let x = Math.max(0, -arrayX); x <= Math.min(col, this.boradSize-arrayX-1); x++){
             for(let y = Math.max(0, -arrayY); y <= Math.min(row, this.boradSize-arrayY-1); y++){
                 if(this.borad[x+arrayX][y+arrayY] === undefined){
-
-                } else {
                     this.ctx.fillStyle = 'rgb(0, 0, 0)';
+                    this.ctx.fillRect(-mod(viewX,BLOCK_SIZE) + x*BLOCK_SIZE + 1, -mod(viewY,BLOCK_SIZE) + y*BLOCK_SIZE +1, BLOCK_SIZE-2, BLOCK_SIZE-2);
+                } if (this.borad[x+arrayX][y+arrayY] instanceof Player) {
+                    this.ctx.fillStyle = this.borad[x+arrayX][y+arrayY].color.get();
                     this.ctx.fillRect(-mod(viewX,BLOCK_SIZE) + x*BLOCK_SIZE + 1, -mod(viewY,BLOCK_SIZE) + y*BLOCK_SIZE +1, BLOCK_SIZE-2, BLOCK_SIZE-2);
                 }
             }
@@ -56,6 +65,45 @@ class BoardView{
                 i -= 1;
             }
         }
+    }
+
+    drawBoardAnimations(viewX, viewY){
+        for(let i = 0; i < this.animations.length; i++){
+            this.animations[i][0](viewX, viewY, this.animations[i][1])
+            this.animations[i][1] -= 1;
+            if (this.animations[i][1] < 0){
+                this.animations.splice(i, 1);
+                i -= 1;
+            }
+        }
+    }
+
+    drawRotation(x, y, viewX, viewY, colorFrom, colorTo, frame){
+        if((x+2)*BLOCK_SIZE > viewX && (x-2)*BLOCK_SIZE < viewX + this.width && (y+2)*BLOCK_SIZE > viewY && (y-2)*BLOCK_SIZE < viewY + this.height){
+            if(frame <= ROTATION_FRAMES){
+                if(frame*2 < ROTATION_FRAMES){
+                    this.ctx.fillStyle = colorTo;
+                } else {
+                    this.ctx.fillStyle = colorFrom;
+                }
+                this.ctx.clearRect(x*BLOCK_SIZE - viewX, y*BLOCK_SIZE - viewY, BLOCK_SIZE, BLOCK_SIZE)
+                drawRotationRect(this.ctx, x*BLOCK_SIZE - viewX, y*BLOCK_SIZE - viewY, BLOCK_SIZE, BLOCK_SIZE, (Math.PI/ROTATION_FRAMES) * frame);
+            } else {
+                this.ctx.fillStyle = colorFrom;
+                this.ctx.fillRect(x*BLOCK_SIZE - viewX + 1, y*BLOCK_SIZE - viewY + 1, BLOCK_SIZE - 2, BLOCK_SIZE - 2)
+            }
+        }
+    }
+
+    changeField(x,y,colorFrom, colorTo){
+        if((x+2)*BLOCK_SIZE > this.prevX && (x-2)*BLOCK_SIZE < this.prevX + this.width
+            && (y+2)*BLOCK_SIZE > this.prevY && (y-2)*BLOCK_SIZE < this.prevY + this.height)
+        {   
+            let t = this;
+            this.animations.push([function(vX, vY, frame){
+                t.drawRotation(x, y, vX, vY, colorFrom, colorTo, frame);
+            }, ROTATION_FRAMES + Math.floor(Math.random() * (MAX_ROTATION_DELAY))]);
+        };
     }
 
     killPlayer(player){
@@ -217,28 +265,58 @@ class Color{
     }
 }
 
+let k = 0.2
+
+function drawRotationRect(ctx, x, y, w, h, rotation, shape=0.2){
+    ctx.beginPath();
+    let t1 = w*Math.cos(rotation)/2;
+    let t2 = w*shape*Math.sin(rotation)/2;
+    ctx.moveTo(t1+x+w/2, t2+y);
+    ctx.lineTo(-t1+x+w/2, -t2+y);
+    ctx.lineTo(-t1+x+w/2, -t2+y+h);
+    ctx.lineTo(t1+x+w/2, t2+y+h);
+    ctx.closePath();
+    ctx.fill();
+}
+
 let view = undefined;
 let XX = 1;
-let borad = Array(100).fill(Array(100).fill(1));
+let YY = 1;
+let borad = Array(100)
+for(let i = 0; i< 100; i++){
+    borad[i] = Array(100);
+    borad[i].fill(undefined);
+}
 let players = [ new Player(new Color(255,0,0), 320, 40, [[0, 4000], [0, 600],[120, 600], [120, 40]], 4, 0),
                 new Player(new Color(0,255,0), 400, 360, [[5000, 400], [400, 400]], 0, -4),
                 new Player(new Color(0,0,255), 320, 360, [[160, 4000], [160, 320], [320, 320]], 0, 4)];
+r = 0;
 
 $(document).ready(function(){
     view = new BoardView(document.getElementById('board'), borad, players);
     view.killPlayer(new Player(new Color(255,255,0), 800, 80, [[80, 80]], 4, 0))    
     setInterval(function(){
         window.requestAnimationFrame(function(){
-            view.drawFromPerspective(players[XX]);
+            view.drawFromPerspective(players[2]);
         });
-    }, 40);
+    }, 40);    
 
     setInterval(function(){
         for(let p of players){
             p.move();
         }
     }, 40);
+
     $(window).trigger('resize');
+
+    setTimeout(() => {
+        for(let x = 5; x < 8; x++){
+            for(let y = 9; y < 50; y++){
+                view.changeField(x,y, '#000000', players[2].color.get());
+                borad[x][y] = players[2];
+            }
+        }
+    }, 100);
 });
 
 $(window).resize(function(e) {
