@@ -9,7 +9,7 @@ let YY = 1;
 let board = Array(100);
 for (let i = 0; i < 100; i++) {
     board[i] = Array(100);
-    board[i].fill(undefined);
+    board[i].fill(BASE_PATTERN);
 }
 let players = [new Player(new Color(255, 0, 0), 320, 40, [[0, 4000], [0, 600], [120, 600], [120, 40]], 4, 0),
     new Player(new Color(0, 255, 0), 400, 360, [[5000, 400], [400, 400]], 0, -4),
@@ -36,8 +36,8 @@ $(document).ready(function () {
     setTimeout(() => {
         for (let x = 5; x < 8; x++) {
             for (let y = 9; y < 50; y++) {
-                view.changeField(x, y, '#000000', players[2].color.get());
-                board[x][y] = players[2];
+                view.changeField(x, y, BASE_PATTERN, players[2].pattern);
+                board[x][y] = players[2].pattern;
             }
         }
     }, 100);
