@@ -18,7 +18,7 @@ class BoardView {
         this.prevY = y;
         this.width = this.canvas.width;
         this.height = this.canvas.height;
-        $('body').css('background-position', Math.floor(x/10)+"px "+Math.floor(y/10)+"px");
+        $('body').css('background-position', Math.floor(-x * BACKGROUND_SHIFT) + "px " + Math.floor(-y * BACKGROUND_SHIFT) + "px");
         this.ctx.clearRect(0, 0, this.width, this.height);
         this.#drawBoard(x, y);
         this.#drawBoardAnimations(x, y);
