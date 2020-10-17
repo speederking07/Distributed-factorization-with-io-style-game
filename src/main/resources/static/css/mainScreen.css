@@ -1,0 +1,180 @@
+#titleDiv{
+    text-align: center;
+    white-space: nowrap;
+    height: 50%;
+    transition: opacity 2s linear;
+}
+
+.toggleVisibility[visible="False"] #titleDiv{
+    opacity: 0;
+}
+
+.toggleVisibility[visible="True"] #titleDiv{
+    opacity: 100%;
+}
+
+.helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+#titleDiv img{
+    display: inline-block;
+    vertical-align: middle;
+    max-height: 90%;
+    max-width: 80%;
+}
+
+
+#startGameBar{
+    --h: 180px;
+    position: absolute;
+    width: 100%;
+    height: calc(var(--h));
+    top: calc(50% - 20px);
+    background: url(../img/congruent_pentagon.png) 50% 50%;
+    transition: 2s ease-out;
+    box-shadow: 4px 4px 4px #999;
+}
+
+.toggleVisibility[visible="True"] #startGameBar{
+    left: 0;
+}
+
+.toggleVisibility[visible="False"] #startGameBar{
+    left: 100%;
+}
+
+#startGameField{
+    margin-top: -60px;
+    margin-left: -200px;
+    height: 120px;
+    width: 400px;
+}
+
+#startGameField h1{
+    text-align: center;
+    margin: 6px 0;
+    font-size: 34pt;
+}
+
+#startGameField input[type="text"]{
+    width: calc(80% - 26px);
+}
+
+#startGameField input[type="button"]{
+    width: 20%;
+}
+
+@media screen and (max-width: 400px) {
+    #startGameField h1{
+        font-size: 26pt;
+    }
+
+    #startGameField input[type="text"]{
+        width: calc(100% - 40px);
+        margin: 0 10px;
+    }
+
+    #startGameField input[type="button"]{
+        margin: 6px 10px;
+        width: calc(100% - 20px);
+    }
+
+    #startGameField{
+        width: 100%;
+        margin: -60px 0 0 0;
+        left: 0;
+    }
+}
+
+#loginFBtn {
+    right: 120px;
+}
+
+#mainScreen[logged="True"] #loginFBtn{
+    top: -100px;
+    z-index: -1;
+}
+
+#signInFBtn{
+    right: 20px;
+}
+
+#mainScreen[logged="True"] #signInFBtn{
+    top: -100px;
+    z-index: -1;
+}
+
+#configFBtn{
+    right: 120px;
+}
+
+#mainScreen[logged="False"] #configFBtn{
+    top: -100px;
+    z-index: -1;
+}
+
+#logoutFBtn{
+    right: 20px;
+}
+
+#mainScreen[logged="False"] #logoutFBtn{
+    top: -100px;
+    z-index: -1;
+}
+
+.floatingDiv{
+    position: fixed;
+    top: 120px;
+    right: 20px;
+    width: 300px;
+    padding: 18px;
+    z-index: 1;
+    background: url(../img/congruent_pentagon.png) fixed;
+    box-shadow: 4px 4px 4px #999;
+    transition: all .5s ease-in-out;
+    overflow: hidden;
+}
+
+.floatingDiv input{
+    margin: 2px 0;
+    width: calc(100% - 20px);
+}
+
+.floatingDiv input[type="button"]{
+    margin: 2px 0;
+    width: 100%;
+}
+
+.floatingDiv h1{
+    margin-top: 0;
+}
+
+@media screen and (min-width: 501px) {
+    #loginDiv {
+        height: 215px;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .floatingDiv {
+        width: calc(100% - 36px);
+        height: calc(100% - 36px - 120px);
+        overflow: paged-x;
+        left: 0;
+    }
+}
+
+@media screen and (min-width: 501px) {
+    #signInDiv {
+        height: 250px;
+    }
+}
+
+.floatingDiv[visible="False"]{
+    height: 0!important;
+    width: 0;
+    padding: 0;
+}

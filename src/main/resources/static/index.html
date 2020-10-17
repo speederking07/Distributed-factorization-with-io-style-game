@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="style.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/mainScreen.css" rel="stylesheet">
+    <link href="css/icons.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="js/consts.js"></script>
     <script src="js/boardView.js"></script>
@@ -11,9 +13,51 @@
     <script src="js/pattern.js"></script>
     <script src="js/player.js"></script>
     <script src="js/script.js"></script>
+    <script src="js/mainScreen.js"></script>
     <title>Document</title>
 </head>
 <body>
-    <canvas id="board" height="400", width="500"></canvas>
+    <canvas id="board" height="400" width="500"></canvas>
+    <div id="mainScreen" class="toggleVisibility fullScreen" visible="False" logged="False">
+        <div id="titleDiv">
+            <span class="helper"></span><img src="img/title.png" alt="Logo">
+        </div>
+        <div id="loginFBtn" class="floatingBtn">
+            <i class="icon-login"></i>
+        </div>
+        <div id="signInFBtn" class="floatingBtn">
+            <i class="icon-user-add"></i>
+        </div>
+        <div id="logoutFBtn" class="floatingBtn">
+            <i class="icon-logout"></i>
+        </div>
+        <div id="configFBtn" class="floatingBtn">
+            <i class="icon-tools"></i>
+        </div>
+        <div id="loginDiv" class="floatingDiv" visible="False">
+            <h1>Log In</h1>
+            <input id="logInLogin" type="text" placeholder="Login or e-mail">
+            <input id="logInPassword" type="password" placeholder="Password">
+            <input id="logInBtn" type="button" value="Log In">
+            <input id="recoverBtn" type="button" value="Recover Password">
+        </div>
+        <div id="signInDiv" class="floatingDiv" visible="False">
+            <h1>Create account</h1>
+            <input id="signInLogin" type="text" placeholder="Login" invalid>
+            <input id="signInEmail" type="text" placeholder="email">
+            <input id="signInPassword" type="password" placeholder="Password">
+            <input id="signInPassword2" type="password" placeholder="Repeat password">
+            <input id="signInBtn" type="button" value="Create account">
+        </div>
+        <div id="startGameBar">
+            <div id="startGameField" class="center">
+                <h1>Enter player name</h1>
+                <div>
+                    <input id="playerName" type="text">
+                    <input id="startGameBtn" type="button" value="Start">
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
