@@ -6,6 +6,7 @@
     <link href="css/style.css" rel="stylesheet">
     <link href="css/mainScreen.css" rel="stylesheet">
     <link href="css/icons.css" rel="stylesheet">
+    <link href="css/config.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="js/consts.js"></script>
     <script src="js/boardView.js"></script>
@@ -14,6 +15,7 @@
     <script src="js/player.js"></script>
     <script src="js/script.js"></script>
     <script src="js/mainScreen.js"></script>
+    <script src="js/config.js"></script>
     <title>Document</title>
 </head>
 <body>
@@ -32,7 +34,7 @@
             <i class="icon-logout"></i>
         </div>
         <div id="configFBtn" class="floatingBtn">
-            <i class="icon-tools"></i>
+            <i class="icon-palette"></i>
         </div>
         <div id="loginDiv" class="floatingDiv" visible="False">
             <h1>Log In</h1>
@@ -48,6 +50,19 @@
             <input id="signInPassword" type="password" placeholder="Password">
             <input id="signInPassword2" type="password" placeholder="Repeat password">
             <input id="signInBtn" type="button" value="Create account">
+        </div>
+        <div id="configDiv" visible="False">
+            <h1>Personalization</h1>
+            <h2>Choose your color</h2>
+            <div id="chooseColorDiv">
+                <label id="colorLabel" style="background: #ff0000;">
+                    <input id="colorInput" type="color">
+                </label>
+            </div>
+            <h2>Choose your pattern</h2>
+            <div id="choosePatternDiv">
+            </div>
+            <input id="saveConfig" type="button" value="Save and quit">
         </div>
         <div id="startGameBar">
             <div id="startGameField" class="center">

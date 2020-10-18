@@ -19,7 +19,7 @@ r = 0;
 $(document).ready(function () {
     view = new BoardView(document.getElementById('board'), board, players);
     view.killPlayer(new Player(new Color(255, 255, 0), 800, 80, [[80, 80]], 4, 0))
-    setInterval(function () {
+    /*setInterval(function () {
         window.requestAnimationFrame(function () {
             view.drawFromPerspective(players[1]);
         });
@@ -40,10 +40,10 @@ $(document).ready(function () {
                 board[x][y] = players[2].pattern;
             }
         }
-    }, 100);
+    }, 100);*/
 });
 
-$(window).resize(function (e) {
+$(window).resize(function () {
     $('#board').attr('width', $(window).width());
     $('#board').attr('height', $(window).height());
 });

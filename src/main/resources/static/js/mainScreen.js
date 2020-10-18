@@ -25,6 +25,18 @@ $( document ).ready(function () {
         }
     });
 
+    $('#configFBtn').click(function () {
+        let div = $('#configDiv');
+        if (div.attr('visible') === 'False'){
+            closeAllWindows();
+            $(this).attr('active', 'True');
+            div.attr('visible', 'True');
+        } else {
+            $(this).removeAttr('active');
+            div.attr('visible', "False");
+        }
+    });
+
     $('#logInBtn').click(function () {
         $('#mainScreen').attr('logged', 'True');
         $('#loginDiv').attr('visible', "False");
