@@ -11,15 +11,15 @@ for (let i = 0; i < 100; i++) {
     board[i] = Array(100);
     board[i].fill(BASE_PATTERN);
 }
-let players = [new Player(new Color(255, 0, 0), 320, 40, [[0, 4000], [0, 600], [120, 600], [120, 40]], 4, 0),
-    new Player(new Color(0, 255, 0), 400, 360, [[5000, 400], [400, 400]], 0, -4),
-    new Player(new Color(0, 0, 255), 320, 360, [[160, 4000], [160, 320], [320, 320]], 0, 4)];
+let players = [new Player(new Color(255, 0, 0), "Asd", 320, 40, [[0, 4000], [0, 600], [120, 600], [120, 40]], 4, 0),
+    new Player(new Color(0, 255, 0), "P2" ,400, 360, [[5000, 400], [400, 400]], 0, -4),
+    new Player(new Color(0, 0, 255), "P3",  320, 360, [[160, 4000], [160, 320], [320, 320]], 0, 4)];
 r = 0;
 
 $(document).ready(function () {
     view = new BoardView(document.getElementById('board'), board, players);
     view.killPlayer(new Player(new Color(255, 255, 0), 800, 80, [[80, 80]], 4, 0))
-    /*setInterval(function () {
+    setInterval(function () {
         window.requestAnimationFrame(function () {
             view.drawFromPerspective(players[1]);
         });
@@ -40,7 +40,7 @@ $(document).ready(function () {
                 board[x][y] = players[2].pattern;
             }
         }
-    }, 100);*/
+    }, 100);
 });
 
 $(window).resize(function () {
