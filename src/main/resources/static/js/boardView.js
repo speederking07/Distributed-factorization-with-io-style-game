@@ -1,4 +1,15 @@
+/**
+ * Class responsible of displaying current state of game on canvas
+ *
+ * @author Marek Bauer
+ */
 class BoardView {
+    /**
+     * Constructor of boardView     *
+     * @param canvas - handle to canvas
+     * @param board : [[Pattern]] - reference to 2d array of patterns representing current state of board
+     * @param players : [Player] - reference to list of players
+     */
     constructor(canvas, board, players) {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
@@ -6,13 +17,18 @@ class BoardView {
         this.height = this.canvas.height;
         this.prevX = 0;
         this.prevY = 0;
-        this.boradSize = 100;
+        this.boradSize = board.length;
         this.borad = board;
         this.players = players;
         this.dying = [];
         this.animations = [];
     }
 
+    /**
+     * Function displaying game on canvas at point
+     * @param x - x coordinate
+     * @param y - y coordinate
+     */
     draw(x, y) {
         this.prevX = x;
         this.prevY = y;
@@ -28,10 +44,45 @@ class BoardView {
         }
     }
 
+    /**
+     * Function displaying game form same player perspective     *
+     * @param player : Player - player to center perspective on
+     */
     drawFromPerspective(player) {
         this.draw(player.posX - this.canvas.width / 2 + PLAYER_RADIUS, player.posY - this.canvas.height / 2 + PLAYER_RADIUS);
     }
 
+    /**
+     * Call this function to generate color transition animation on board
+     * @param x - coordinate of board tile
+     * @param y - coordinate of board tile
+     * @param patternFrom : Pattern - previous pattern
+     * @param patternTo : Pattern - new pattern
+     */
+    changeField(x, y, patternFrom, patternTo) {
+        if ((x + 2) * BLOCK_SIZE > this.prevX && (x - 2) * BLOCK_SIZE < this.prevX + this.width
+            && (y + 2) * BLOCK_SIZE > this.prevY && (y - 2) * BLOCK_SIZE < this.prevY + this.height) {
+            let t = this;
+            this.animations.push([function (vX, vY, frame) {
+                t.#drawRotation(x, y, vX, vY, patternFrom.getColor(x, y).get(), patternTo.getColor(x, y).get(), frame);
+            }, ROTATION_FRAMES + Math.floor(Math.random() * (MAX_ROTATION_DELAY))]);
+        }
+    }
+
+    /**
+     * Call this function to generate animation of dying player
+     * @param player - reference to dying player
+     */
+    killPlayer(player) {
+        this.dying.push([player, 0])
+    }
+
+    /**
+     * Function displaying board at point
+     *
+     * @param viewX - x coordinate
+     * @param viewY - y coordinate
+     */
     #drawBoard(viewX, viewY) {
         const row = Math.ceil(this.height / BLOCK_SIZE) + 1;
         const col = Math.ceil(this.width / BLOCK_SIZE) + 1;
@@ -46,6 +97,11 @@ class BoardView {
         }
     }
 
+    /**
+     * Function displaying dying players animations
+     * @param viewX - x coordinate
+     * @param viewY - y coordinate
+     */
     #drawDying(viewX, viewY) {
         for (let i = 0; i < this.dying.length; i++) {
             this.dying[i][0].drawDying(this.ctx, viewX, viewY, this.width, this.height, this.dying[i][1]);
@@ -57,6 +113,11 @@ class BoardView {
         }
     }
 
+    /**
+     * Function displaying animations on board
+     * @param viewX - x coordinate
+     * @param viewY - y coordinate
+     */
     #drawBoardAnimations(viewX, viewY) {
         for (let i = 0; i < this.animations.length; i++) {
             this.animations[i][0](viewX, viewY, this.animations[i][1]);
@@ -68,6 +129,16 @@ class BoardView {
         }
     }
 
+    /**
+     * Function displaying rotation of one tile
+     * @param x - coordinate of tile to rotate
+     * @param y - coordinate of tile to rotate
+     * @param viewX - position of camera
+     * @param viewY - position of camera
+     * @param colorFrom - previous color
+     * @param colorTo - new color
+     * @param frame - frame of animation
+     */
     #drawRotation(x, y, viewX, viewY, colorFrom, colorTo, frame) {
         if ((x + 2) * BLOCK_SIZE > viewX && (x - 2) * BLOCK_SIZE < viewX + this.width && (y + 2) * BLOCK_SIZE > viewY && (y - 2) * BLOCK_SIZE < viewY + this.height) {
             if (frame <= ROTATION_FRAMES) {
@@ -85,20 +156,15 @@ class BoardView {
         }
     }
 
-    changeField(x, y, patternFrom, patternTo) {
-        if ((x + 2) * BLOCK_SIZE > this.prevX && (x - 2) * BLOCK_SIZE < this.prevX + this.width
-            && (y + 2) * BLOCK_SIZE > this.prevY && (y - 2) * BLOCK_SIZE < this.prevY + this.height) {
-            let t = this;
-            this.animations.push([function (vX, vY, frame) {
-                t.#drawRotation(x, y, vX, vY, patternFrom.getColor(x, y).get(), patternTo.getColor(x, y).get(), frame);
-            }, ROTATION_FRAMES + Math.floor(Math.random() * (MAX_ROTATION_DELAY))]);
-        }
-    }
-
-    killPlayer(player) {
-        this.dying.push([player, 0])
-    }
-
+    /**
+     * Function to draw rectangle in rotation
+     * @param x - x position of rectangle
+     * @param y - y position of rectangle
+     * @param w - width of rectangle
+     * @param h - height of rectangle
+     * @param rotation - angle of rotation in radians
+     * @param shape - perspective of viewer (at 0 only width is changed)
+     */
     #drawRotationRect(x, y, w, h, rotation, shape = 0.2) {
         this.ctx.beginPath();
         let t1 = w * Math.cos(rotation) / 2;
