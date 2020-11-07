@@ -125,6 +125,10 @@
     background-color: red;
 }
 
+.extended .patternBox{
+    background-color: #ff9ba0;
+}
+
 #choosePatternDiv input[type="color"]{
     display: none;
 }
