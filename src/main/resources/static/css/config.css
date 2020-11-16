@@ -113,6 +113,17 @@
     #colorLabel::before{
         width: 240px;
     }
+
+    #configContentDiv{
+        width: 240px;
+        margin: 0 auto;
+    }
+
+}
+
+#configDiv input[type=button]{
+    width: 100%;
+    margin-top: 6px;
 }
 
 .patternBox{
@@ -137,3 +148,20 @@
     height: 40px;
     min-width: 240px;
 }
+
+.colorPickerDiv {
+    z-index: 3;
+    position: fixed;
+    width: 300px;
+    height: 406px;
+    margin-top: -220px;
+    margin-left: -166px;
+    top: 50%;
+    left: 50%;
+}
+
+.colorPickerDiv input[type=button]{
+    margin-top: 6px;
+    width: 100%;
+}
+

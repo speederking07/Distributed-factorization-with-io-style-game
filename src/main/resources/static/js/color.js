@@ -38,7 +38,7 @@ class Color {
      */
     lighten() {
         let hsl = Color.#rgbToHsl(this.r, this.g, this.b);
-        return Color.#hslToColor(hsl[0], hsl[1], Math.min(hsl[2]+0.2, 1.0))
+        return Color.#hslToColor(hsl[0], hsl[1], hsl[2]/2+0.5)
     }
 
     /**

@@ -7,6 +7,7 @@
     <link href="css/mainScreen.css" rel="stylesheet">
     <link href="css/icons.css" rel="stylesheet">
     <link href="css/config.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@jaames/iro"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="js/consts.js"></script>
     <script src="js/boardView.js"></script>
@@ -20,7 +21,7 @@
 </head>
 <body>
     <canvas id="board" height="400" width="500"></canvas>
-    <div id="mainScreen" class="toggleVisibility fullScreen" visible="False" logged="False">
+    <div id="mainScreen" class="toggleVisibility fullScreen" visible="True" logged="False">
         <div id="titleDiv">
             <span class="helper"></span><img src="img/title.png" alt="Logo">
         </div>
@@ -53,16 +54,20 @@
         </div>
         <div id="configDiv" visible="False">
             <h1>Personalization</h1>
-            <h2>Choose your color</h2>
-            <div id="chooseColorDiv">
-                <label id="colorLabel" style="background: #ff0000;">
-                    <input id="colorInput" type="color">
-                </label>
+            <div id="configContentDiv">
+                <h2>Choose your color</h2>
+                <div id="chooseColorDiv">
+                    <label id="colorLabel" style="background: #ff0000;">
+                        <input id="colorInput" type="color" value="#ff0000">
+                    </label>
+                    <input id="cloneColorBtn" type="button" value="Clone this color to your pattern">
+                </div>
+                <h2>Choose your pattern</h2>
+                <div id="choosePatternDiv">
+                </div>
+                <input id="saveConfig" type="button" value="Save and quit">
+                <input id="quitConfig" type="button" value="Quit without saving">
             </div>
-            <h2>Choose your pattern</h2>
-            <div id="choosePatternDiv">
-            </div>
-            <input id="saveConfig" type="button" value="Save and quit">
         </div>
         <div id="startGameBar">
             <div id="startGameField" class="center">

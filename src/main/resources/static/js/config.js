@@ -6,6 +6,15 @@ $( document ).ready(function () {
         label.css('box-shadow', color.darken().get()+" 2px 2px")
     });
 
+    $('#colorLabel').click(event =>{
+        event.preventDefault();
+        openColorPicker($('#colorInput'))
+    });
+
+    $('#cloneColorBtn').click(()=>{
+        setAllPatternColor($('#colorInput').val())
+    });
+
     $('#saveConfig').click(function (){
         $('#configDiv').attr('visible', 'False');
         $('#configFBtn').removeAttr('active');
@@ -54,6 +63,52 @@ function generatePattern() {
         let c1 = color.get();
         let c2 = color.lighten().get();
         $('label[row="'+row+'"][col="'+col+'"]').css('background-color', c1);
-        $('.extended label[row="'+row+'"][col="'+col+'"]').css('background-color', c1);
+        $('.extended label[row="'+row+'"][col="'+col+'"]').css('background-color', c2);
     });
+
+    setAllPatternColor('#ff0000');
+
+    $('#choosePatternDiv label').click(event =>{
+        event.preventDefault();
+        openColorPicker($('#' + $(event.target).attr('for')));
+    });
+}
+
+function setAllPatternColor(color) {
+    $('#choosePatternDiv input[type=color]').each((_, target) =>{
+        $(target).val(color);
+        $(target).change();
+    });
+}
+
+function openColorPicker(input){
+    if($('.colorPickerDiv').length === 0) {
+        $('body').append("<div class='colorPickerDiv floatingDiv'>" +
+            "<h1>Choose color</h1>" +
+            "<div class=\"wheel\" id=\"colorWheel\"></div>" +
+            "<input type='button' id='confirmColor' value='Confirm'>" +
+            "</div>");
+        let color = input.val();
+        let colorWheel = new iro.ColorPicker("#colorWheel", {
+            layout: [
+                {
+                    component: iro.ui.Wheel,
+                    options: {
+                        wheelLightness: true,
+                        wheelAngle: 0,
+                        wheelDirection: "anticlockwise"
+                    }
+                }],
+            color: color,
+        });
+        $('#confirmColor').click(() => {
+            input.val(colorWheel.color.hexString);
+            input.change();
+            $('.colorPickerDiv').remove();
+        });
+        return true;
+    }
+    else{
+        return false;
+    }
 }
