@@ -89,38 +89,20 @@
     }
 }
 
-#loginFBtn {
-    right: 120px;
-}
+#loggedOutButtons{
+     top: 0;
+ }
 
-#mainScreen[logged="True"] #loginFBtn{
+#mainScreen[logged="True"] #loggedOutButtons{
     top: -100px;
     z-index: -1;
 }
 
-#signInFBtn{
-    right: 20px;
+#loggedButtons{
+    top: 0;
 }
 
-#mainScreen[logged="True"] #signInFBtn{
-    top: -100px;
-    z-index: -1;
-}
-
-#configFBtn{
-    right: 120px;
-}
-
-#mainScreen[logged="False"] #configFBtn{
-    top: -100px;
-    z-index: -1;
-}
-
-#logoutFBtn{
-    right: 20px;
-}
-
-#mainScreen[logged="False"] #logoutFBtn{
+#mainScreen[logged="False"] #loggedButtons{
     top: -100px;
     z-index: -1;
 }

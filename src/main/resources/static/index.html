@@ -25,26 +25,33 @@
         <div id="titleDiv">
             <span class="helper"></span><img src="img/title.png" alt="Logo">
         </div>
-        <div id="loginFBtn" class="floatingBtn">
-            <i class="icon-login"></i>
+        <div id="loggedOutButtons" class="buttonsBox">
+            <div id="signInFBtn" class="floatingBtn">
+                <i class="icon-user-add"></i>
+            </div>
+            <div id="loginFBtn" class="floatingBtn">
+                <i class="icon-login"></i>
+            </div>
         </div>
-        <div id="signInFBtn" class="floatingBtn">
-            <i class="icon-user-add"></i>
+        <div id="loggedButtons" class="buttonsBox">
+            <div id="logoutFBtn" class="floatingBtn">
+                <i class="icon-logout"></i>
+            </div>
+            <div id="configFBtn" class="floatingBtn">
+                <i class="icon-palette"></i>
+            </div>
+            <div id="settingFBtn" class="floatingBtn">
+                <i class="icon-tools"></i>
+            </div>
         </div>
-        <div id="logoutFBtn" class="floatingBtn">
-            <i class="icon-logout"></i>
-        </div>
-        <div id="configFBtn" class="floatingBtn">
-            <i class="icon-palette"></i>
-        </div>
-        <div id="loginDiv" class="floatingDiv" visible="False">
+        <div id="loginDiv" class="popup floatingDiv" visible="False">
             <h1>Log In</h1>
             <input id="logInLogin" type="text" placeholder="Login or e-mail">
             <input id="logInPassword" type="password" placeholder="Password">
             <input id="logInBtn" type="button" value="Log In">
             <input id="recoverBtn" type="button" value="Recover Password">
         </div>
-        <div id="signInDiv" class="floatingDiv" visible="False">
+        <div id="signInDiv" class="popup floatingDiv" visible="False">
             <h1>Create account</h1>
             <input id="signInLogin" type="text" placeholder="Login" invalid>
             <input id="signInEmail" type="text" placeholder="email">
@@ -52,9 +59,9 @@
             <input id="signInPassword2" type="password" placeholder="Repeat password">
             <input id="signInBtn" type="button" value="Create account">
         </div>
-        <div id="configDiv" visible="False">
+        <div id="configDiv" class="bigFloatingDiv popup blockPopup" visible="False">
             <h1>Personalization</h1>
-            <div id="configContentDiv">
+            <div class="configContentDiv">
                 <h2>Choose your color</h2>
                 <div id="chooseColorDiv">
                     <label id="colorLabel" style="background: #ff0000;">

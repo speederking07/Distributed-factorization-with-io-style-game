@@ -1,4 +1,5 @@
 #colorLabel{
+    cursor: pointer;
     display: inline-block;
     width: 52px;
     height: 52px;
@@ -8,6 +9,7 @@
 
 #colorLabel::before{
     content: "";
+    cursor: pointer;
     background-color: inherit;
     display: inline-block;
     width: 480px;
@@ -21,7 +23,7 @@
     display: none;
 }
 
-#configDiv{
+.bigFloatingDiv{
     box-shadow: 4px 4px 4px #999;
     transition: height 1s;
     z-index: 2;
@@ -29,14 +31,14 @@
     padding: 18px;
 }
 
-#configDiv[visible="False"]{
+.bigFloatingDiv[visible="False"]{
     height: 0;
     padding: 0 18px;
 }
 
 /*big screen*/
 @media screen and (min-width: 500px) and (min-height: 821px){
-    #configDiv{
+    .bigFloatingDiv{
         overflow: hidden;
         position: fixed;
         top: 50%;
@@ -50,7 +52,7 @@
 
 /*not height enough*/
 @media screen and (min-width: 500px) and (max-height: 820px){
-    #configDiv{
+    .bigFloatingDiv{
         position: fixed;
         top: 50%;
         left: 50%;
@@ -65,27 +67,27 @@
         width: 486px;;
     }
 
-    #configDiv::-webkit-scrollbar {
+    .bigFloatingDiv::-webkit-scrollbar {
         width: 6px;
     }
 
-    #configDiv::-webkit-scrollbar-thumb {
+    .bigFloatingDiv::-webkit-scrollbar-thumb {
         background: #888;
     }
 
-    #configDiv::-webkit-scrollbar-thumb:hover {
+    .bigFloatingDiv::-webkit-scrollbar-thumb:hover {
         background: #555;
     }
 }
 
 /*phones*/
 @media screen and (max-width: 499px){
-    #configDiv{
+    .bigFloatingDiv{
         position: fixed;
         top: 0;
         left: 0;
-        height: 100%;
-        width: 100%;
+        height: calc(100% - 36px);
+        width: calc(100% - 36px);
         overflow-x: scroll;
         overflow-y: scroll;
         -ms-overflow-style: none;
@@ -93,16 +95,16 @@
         padding: 18px;
     }
 
-    #configDiv::-webkit-scrollbar {
+    .bigFloatingDiv::-webkit-scrollbar {
         width: 6px;
         height: 6px;
     }
 
-    #configDiv::-webkit-scrollbar-thumb {
+    .bigFloatingDiv::-webkit-scrollbar-thumb {
         background: #888;
     }
 
-    #configDiv::-webkit-scrollbar-thumb:hover {
+    .bigFloatingDiv::-webkit-scrollbar-thumb:hover {
         background: #555;
     }
 
@@ -114,20 +116,21 @@
         width: 240px;
     }
 
-    #configContentDiv{
+    .configContentDiv{
         width: 240px;
         margin: 0 auto;
     }
 
 }
 
-#configDiv input[type=button]{
+.bigFloatingDiv input[type=button]{
     width: 100%;
     margin-top: 6px;
 }
 
 .patternBox{
     display: inline-block;
+    cursor: pointer;
     height: 38px;
     width: 38px;
     margin: 1px;

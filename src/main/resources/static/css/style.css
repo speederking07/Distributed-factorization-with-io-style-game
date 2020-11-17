@@ -108,18 +108,39 @@ input[type="button"]:active {
 }
 
 .floatingBtn {
-    right: 20px;
-    position: fixed;
-    width: 80px;
-    height: 80px;
     background-color: green;
     color: white;
     border-radius: 50px;
     text-align: center;
     box-shadow: 4px 4px 4px #999;
-    font-size: 29pt;
     transition: 600ms;
     cursor: pointer;
+}
+
+@media screen and (max-width: 400px) {
+    .floatingBtn {
+        margin: 10px 10px 0 0;
+        width: 60px;
+        height: 60px;
+        font-size: 24pt;
+    }
+
+    .floatingBtn i::before {
+        margin-top: 14px;
+    }
+}
+
+@media screen and (min-width: 401px) {
+    .floatingBtn {
+        margin: 20px 20px 0 0;
+        width: 80px;
+        height: 80px;
+        font-size: 29pt;
+    }
+
+    .floatingBtn i::before {
+        margin-top: 21px;
+    }
 }
 
 .floatingBtn:hover {
@@ -127,11 +148,16 @@ input[type="button"]:active {
     color: green;
 }
 
-.floatingBtn i::before {
-    margin-top: 21px;
-}
-
 .floatingBtn[active] {
     background-color: white;
     color: green;
+}
+
+.buttonsBox{
+    position: fixed;
+    right: 0;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row-reverse;
+    transition: 1s;
 }
