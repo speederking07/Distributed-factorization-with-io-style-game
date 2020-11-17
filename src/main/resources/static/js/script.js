@@ -1,8 +1,8 @@
 
 
 let k = 0.2;
-
-
+let animator;
+let then = Date.now();
 let view = undefined;
 let XX = 1;
 let YY = 1;
@@ -19,11 +19,8 @@ r = 0;
 $(document).ready(function () {
     view = new BoardView(document.getElementById('board'), board, players);
     view.killPlayer(new Player(new Color(255, 255, 0), 800, 80, [[80, 80]], 4, 0))
-    setInterval(function () {
-        window.requestAnimationFrame(function () {
-            view.drawFromPerspective(players[1]);
-        });
-    }, 40);
+    animator = new Animator(() => view.drawFromPerspective(players[2]), FRAMES_PER_SECONDS);
+    animator.start();
 
     setInterval(function () {
         for (let p of players) {

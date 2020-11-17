@@ -5,6 +5,7 @@ const LINE_WIDTH = 20;
 const ROTATION_FRAMES = 16;
 const MAX_ROTATION_DELAY = 20;
 const BACKGROUND_SHIFT = 0.25;
+const FRAMES_PER_SECONDS = 30;
 
 function mod(a, n) {
     return ((a % n) + n) % n
