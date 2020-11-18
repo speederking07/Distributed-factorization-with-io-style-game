@@ -10,3 +10,7 @@ const FRAMES_PER_SECONDS = 30;
 function mod(a, n) {
     return ((a % n) + n) % n
 }
+
+function arrayRemove(arr, value) {
+    return arr.filter(ele => ele !== value );
+}

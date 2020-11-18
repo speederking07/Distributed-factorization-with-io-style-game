@@ -31,5 +31,5 @@ function getSingleColorPattern(color){
     return new Pattern([[color]]);
 }
 
-const BASE_PATTERN = new Pattern([[new Color(0,0,0), new Color(255,255,255)],
-                                          [new Color(255,255,255), new Color(0,0,0)]]);
+const BASE_PATTERN = new Pattern([[Color.fromHex('#769887'), Color.fromHex('#b4ab8a')],
+                                          [Color.fromHex('#b4ab8a'), Color.fromHex('#769887')]]);
