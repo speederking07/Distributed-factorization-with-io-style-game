@@ -48,6 +48,10 @@
         max-height: 820px;
         transform: translate(-50%, -50%);
     }
+
+    #settingDiv{
+        max-height: 640px;
+    }
 }
 
 /*not height enough*/
@@ -77,6 +81,10 @@
 
     .bigFloatingDiv::-webkit-scrollbar-thumb:hover {
         background: #555;
+    }
+
+    #settingDiv{
+        max-height: 640px;
     }
 }
 

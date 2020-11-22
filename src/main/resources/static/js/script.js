@@ -130,3 +130,20 @@ $(window).resize(function () {
     $('#board').attr('width', $(window).width());
     $('#board').attr('height', $(window).height());
 });
+
+function popup(header, content, buttons) {
+    let btn = "";
+    for (let b of buttons){
+        console.log("()=>{(" + b[1] + ")(); closePopup();}");
+        btn += "<input type='button' value='"+b[0]+"' onclick='(()=>{(" + b[1] + ")(); closePopup();})()'>"
+    }
+    $('body').append('<div class="dialogBox popup blockPopup">' +
+        '<h1>' + header + '</h1>'+
+        '<p>' + content + '</p>' +
+        '<div>' + btn + '</div>' +
+        '</div>');
+}
+
+function closePopup() {
+    $('.dialogBox').remove();
+}

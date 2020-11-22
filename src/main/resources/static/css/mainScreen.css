@@ -160,3 +160,10 @@
     width: 0;
     padding: 0;
 }
+#settingDiv h2{
+    margin-bottom: 0.6em;
+}
+#settingDiv input[type=password], #settingDiv input[type=text]{
+    margin: 6px 0 0 0;
+    width: calc(100% - 20px);
+}
