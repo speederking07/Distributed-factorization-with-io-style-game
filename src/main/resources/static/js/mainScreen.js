@@ -7,6 +7,8 @@ $( document ).ready(function () {
 
     $('#configFBtn').click(() => btnHandler($('#configFBtn'), $('#configDiv')));
 
+    $('#settingFBtn').click(() => btnHandler($('#settingFBtn'), $('#settingDiv')));
+
     $('#logInBtn').click(function () {
         $('#mainScreen').attr('logged', 'True');
         $('#loginDiv').attr('visible', "False");

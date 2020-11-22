@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@jaames/iro"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="js/consts.js"></script>
-    <script src="js/Animator.js"></script>
+    <script src="js/animator.js"></script>
     <script src="js/boardView.js"></script>
     <script src="js/color.js"></script>
     <script src="js/pattern.js"></script>
@@ -76,6 +76,21 @@
                 <input id="saveConfig" type="button" value="Save and quit">
                 <input id="quitConfig" type="button" value="Quit without saving">
             </div>
+        </div>
+        <div id="settingDiv" class="bigFloatingDiv popup blockPopup" visible="False">
+            <h1>Settings</h1>
+            <div class="configContentDiv">
+                <h2>Change password</h2>
+                <input id="changePassword" type="password" placeholder="Password">
+                <input id="changePassword2" type="password" placeholder="Repeat Password">
+                <input id="changePasswordBtn" type="button" value="Change password">
+            </div>
+        </div>
+        <div class="dialogBox popup blockPopup">
+            <h1>Error</h1>
+            <p>This is error message</p>
+            <input type="button" value="1">
+            <input type="button" value="2">
         </div>
         <div id="startGameBar">
             <div id="startGameField" class="center">
