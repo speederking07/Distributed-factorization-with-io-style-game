@@ -20,6 +20,26 @@ class Pattern{
     getColor(x, y){
         return this.array[mod(x, this.size)][mod(y, this.size)]
     }
+
+    /**
+     * Converts pattern to JSON string
+     * @returns {string}
+     */
+    toJSON(){
+        let pattern = this.array.map(x => x.map(y => y.toHex()));
+        return JSON.stringify({size: this.size, pattern: pattern});
+    }
+
+    /**
+     * Creates pattern from JSON string
+     * @param data - JSON string
+     * @returns {Pattern} - pattern represented by this string
+     */
+    static FromJSON(data){
+        let obj = JSON.parse(data);
+        let patten = obj.pattern.map(x => x.map(y => Color.fromHex(y)));
+        return new Pattern(patten)
+    }
 }
 
 /**
