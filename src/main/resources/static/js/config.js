@@ -124,3 +124,14 @@ function openColorPicker(input){
         return false;
     }
 }
+
+function currentConfigToPattern() {
+    let pattern = [];
+    for(let x = 0; x < 6; x++){
+        pattern[x] = [];
+        for(let y = 0; y < 6; y++){
+            pattern[x][y] = Color.fromHex($('#p'+x+y).val());
+        }
+    }
+    return new Pattern(pattern)
+}
