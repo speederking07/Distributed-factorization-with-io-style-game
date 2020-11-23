@@ -36,7 +36,7 @@ class Player {
      * @param viewH - height of camera view
      */
     draw(ctx, viewX, viewY, viewW, viewH) {
-        const C = PLAYER_RADIUS;
+        const C = PLAYER_RADIUS*2;
         ctx.lineWidth = LINE_WIDTH;
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
@@ -53,6 +53,20 @@ class Player {
             ctx.fillStyle = this.color.get();
             ctx.arc(this.posX + BLOCK_SIZE / 2 - viewX, this.posY + BLOCK_SIZE / 2 - viewY, PLAYER_RADIUS, 0, 2 * Math.PI);
             ctx.fill();
+        }
+    }
+
+    displayName(ctx, viewX, viewY, viewW, viewH) {
+        const center = this.name.length * -10 + PLAYER_RADIUS;
+        const x = this.posX - viewX + center;
+        const y = this.posY - viewY - 10;
+        if(Player.visible(x, y - 30, x + this.name.length * 30, y + 30, viewX, viewY, viewW, viewH)) {
+            ctx.font = '34px Consolas';
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 4;
+            ctx.strokeText(this.name, x, y);
+            ctx.fillStyle = 'white';
+            ctx.fillText(this.name, x, y);
         }
     }
 

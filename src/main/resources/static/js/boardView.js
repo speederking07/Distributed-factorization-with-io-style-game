@@ -42,6 +42,9 @@ class BoardView {
         for (let p of this.players) {
             p.draw(this.ctx, x, y, this.width, this.height);
         }
+        for (let p of this.players) {
+            p.displayName(this.ctx, x, y, this.width, this.height);
+        }
     }
 
     /**
