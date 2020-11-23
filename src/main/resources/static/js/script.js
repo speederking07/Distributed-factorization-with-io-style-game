@@ -9,12 +9,12 @@ class Demo{
         }
         this.players = [];
         this.view = new BoardView(canvas, this.board, this.players);
-        this.animator = new Animator(() => this.view.draw(0,0), 30);
+        this.animator = new Animator(() => this.view.draw(0,0), FRAMES_PER_SECONDS);
         this.maxFrames = 60;
         this.frame = 0;
         this.key_frames = [];
         this.key_frames[0] = (() => {
-            this.players.push(new Player(Color.fromHex('#ff0000'), "P1", 8*40, -40, [[8*40, -40]], 0, 4));
+            this.players.push(new Player(Color.fromHex('#ff0000'), "P1__T__P1", 8*40, -40, [[8*40, -40]], 0, 4));
             this.players.push(new Player(Color.fromHex('#00ff00'), "P2" ,13*40, 8*-40, [[13*40, 8*-40]], 0, 4));
             this.players.push(new Player(Color.fromHex('#0000ff'), "P3",  20*40, 16*-40, [[20*40, 16*-40]], 0, 4));
             this.players.push(new Player(Color.fromHex('#ffff00'), "P4",  40*40, 8*40, [[40*40, 8*40]], -4, 0));
@@ -26,7 +26,7 @@ class Demo{
             this.players[0].movX = -4;
             this.players[0].movY = 0;
         }).bind(this);
-        this.key_frames[20] = (() => {
+        this.key_frames[22] = (() => {
             let pattern = this.players[0].pattern;
             this.players.reverse();
             this.players.pop();
@@ -96,6 +96,12 @@ class Demo{
             }
         }).bind(this), 400);
     }
+
+    kill(){
+        clearInterval(this.moveInterval);
+        clearInterval(this.framesInterval);
+        this.animator.kill()
+    }
 }
 
 let demo;
@@ -103,27 +109,6 @@ $(document).ready(function () {
     $(window).trigger('resize');
     demo = new Demo(document.getElementById('board'));
     demo.start();
-    /*view = new BoardView(document.getElementById('board'), board, players);
-    view.killPlayer(new Player(new Color(255, 255, 0), 800, 80, [[80, 80]], 4, 0))
-    animator = new Animator(() => view.drawFromPerspective(players[2]), FRAMES_PER_SECONDS);
-    animator.start();
-
-    setInterval(function () {
-        for (let p of players) {
-            p.move();
-        }
-    }, 40);
-
-    $(window).trigger('resize');
-
-    setTimeout(() => {
-        for (let x = 5; x < 8; x++) {
-            for (let y = 9; y < 50; y++) {
-                view.changeField(x, y, BASE_PATTERN, players[2].pattern);
-                board[x][y] = players[2].pattern;
-            }
-        }
-    }, 100);*/
 });
 
 $(window).resize(function () {

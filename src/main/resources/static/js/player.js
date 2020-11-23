@@ -56,6 +56,14 @@ class Player {
         }
     }
 
+    /**
+     * Function displaying names above players
+     * @param ctx - canvas context
+     * @param viewX - x coordinate of camera
+     * @param viewY - y coordinate of camera
+     * @param viewW - width of camera view
+     * @param viewH - height of camera view
+     */
     displayName(ctx, viewX, viewY, viewW, viewH) {
         const center = this.name.length * -10 + PLAYER_RADIUS;
         const x = this.posX - viewX + center;

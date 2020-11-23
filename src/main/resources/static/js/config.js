@@ -20,6 +20,18 @@ $( document ).ready(function () {
         $('#configFBtn').removeAttr('active');
     });
 
+    $('#changeGraphicalSettings').click(function (){
+        let config = [$('#namesBox').is(':checked'),
+            $('#boardAnimationsBox').is(':checked'),
+            $('#killingAnimationsBox').is(':checked')];
+        BoardView.prototype.getGraphicalSettings = () => config;
+        if(demo instanceof Demo){
+            demo.view.draw = demo.view.generateDrawFunction(config[0], config[1], config[2]);
+        }
+        $('#settingDiv').attr('visible', 'False');
+        $('#settingFBtn').removeAttr('active');
+    });
+
     generatePattern();
 });
 

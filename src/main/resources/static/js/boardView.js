@@ -5,12 +5,12 @@
  */
 class BoardView {
     /**
-     * Constructor of boardView     *
+     * Constructor of boardView
      * @param canvas - handle to canvas
      * @param board : [[Pattern]] - reference to 2d array of patterns representing current state of board
      * @param players : [Player] - reference to list of players
      */
-    constructor(canvas, board, players) {
+    constructor(canvas, board, players){
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         this.width = this.canvas.width;
@@ -22,6 +22,15 @@ class BoardView {
         this.players = players;
         this.dying = [];
         this.animations = [];
+        let config = this.getGraphicalSettings();
+        this.draw = this.generateDrawFunction(config[0], config[1], config[2]);
+    }
+
+    /**
+     * Function returning display function
+     */
+    getGraphicalSettings(){
+        return [true, true, true]
     }
 
     /**
@@ -178,5 +187,50 @@ class BoardView {
         this.ctx.lineTo(t1 + x + w / 2, t2 + y + h);
         this.ctx.closePath();
         this.ctx.fill();
+    }
+
+    /**
+     * Function generating display function
+     * @param displayNames : boolean - true if names will be displayed
+     * @param displayAnimations : boolean - true if animations will be displayed
+     * @param displayDying : boolean - true if dying players will be displayed
+     * @returns new display function
+     */
+    generateDrawFunction(displayNames, displayAnimations, displayDying){
+        let names, animations, dying;
+        if(displayNames){
+            names = ((x, y) => {
+                for (let p of this.players) {
+                    p.displayName(this.ctx, x, y, this.width, this.height);
+                }
+            }).bind(this)
+        } else{
+            names = (_x, _y) => void 0;
+        }
+        if(displayAnimations){
+            animations = ((x, y) => this.#drawBoardAnimations(x, y)).bind(this)
+        } else{
+            animations = ((_x, _y) => this.animations = []).bind(this);
+        }
+        if(displayDying){
+            dying = ((x, y) => this.#drawDying(x, y)).bind(this)
+        } else{
+            dying = ((_x, _y) => this.dying = []).bind(this);
+        }
+        return((x, y) => {
+            this.prevX = x;
+            this.prevY = y;
+            this.width = this.canvas.width;
+            this.height = this.canvas.height;
+            $('body').css('background-position', Math.floor(-x * BACKGROUND_SHIFT) + "px " + Math.floor(-y * BACKGROUND_SHIFT) + "px");
+            this.ctx.clearRect(0, 0, this.width, this.height);
+            this.#drawBoard(x, y);
+            animations(x, y);
+            dying(x, y);
+            for (let p of this.players) {
+                p.draw(this.ctx, x, y, this.width, this.height);
+            }
+            names(x, y);
+        }).bind(this)
     }
 }
