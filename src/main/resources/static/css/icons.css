@@ -1,15 +1,13 @@
 @charset "UTF-8";
 
-/* Fonts by https://fontello.com/ */
-
  @font-face {
   font-family: 'icons';
-  src: url('../font/icons.eot?51133300');
-  src: url('../font/icons.eot?51133300#iefix') format('embedded-opentype'),
-       url('../font/icons.woff2?51133300') format('woff2'),
-       url('../font/icons.woff?51133300') format('woff'),
-       url('../font/icons.ttf?51133300') format('truetype'),
-       url('../font/icons.svg?51133300#icons') format('svg');
+  src: url('../font/icons.eot?63527033');
+  src: url('../font/icons.eot?63527033#iefix') format('embedded-opentype'),
+       url('../font/icons.woff2?63527033') format('woff2'),
+       url('../font/icons.woff?63527033') format('woff'),
+       url('../font/icons.ttf?63527033') format('truetype'),
+       url('../font/icons.svg?63527033#icons') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -19,7 +17,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'icons';
-    src: url('../font/icons.svg?51133300#icons') format('svg');
+    src: url('../font/icons.svg?63527033#icons') format('svg');
   }
 }
 */
@@ -59,19 +57,12 @@
   /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
  
-.icon-plus-squared:before { content: '\229e'; } /* '⊞' */
-.icon-minus-squared:before { content: '\229f'; } /* '⊟' */
-.icon-play:before { content: '\25b6'; } /* '▶' */
+.icon-menu:before { content: '\2630'; } /* '☰' */
 .icon-tools:before { content: '\2692'; } /* '⚒' */
-.icon-cancel-circled:before { content: '\2716'; } /* '✖' */
-.icon-cancel-squared:before { content: '\274e'; } /* '❎' */
-.icon-plus-circled:before { content: '\2795'; } /* '➕' */
-.icon-minus-circled:before { content: '\2796'; } /* '➖' */
 .icon-user-add:before { content: '\e700'; } /* '' */
 .icon-login:before { content: '\e740'; } /* '' */
 .icon-logout:before { content: '\e741'; } /* '' */
-.icon-popup:before { content: '\e74c'; } /* '' */
 .icon-palette:before { content: '🎨'; } /* '\1f3a8' */
-.icon-key:before { content: '🔑'; } /* '\1f511' */
+.icon-trophy:before { content: '🏆'; } /* '\1f3c6' */
 .icon-lock:before { content: '🔒'; } /* '\1f512' */
 .icon-lock-open:before { content: '🔓'; } /* '\1f513' */

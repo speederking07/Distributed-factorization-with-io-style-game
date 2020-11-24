@@ -27,7 +27,7 @@ class BoardView {
     }
 
     /**
-     * Function returning display function
+     * Function returning display configuration
      */
     getGraphicalSettings(){
         return [true, true, true]

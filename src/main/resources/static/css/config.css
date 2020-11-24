@@ -25,76 +25,33 @@
 
 .bigFloatingDiv{
     box-shadow: 4px 4px 4px #999;
-    transition: height 1s;
+    transition: max-height 1s, padding 1s, height 1s;
     z-index: 2;
     background: url(../img/congruent_pentagon.png) repeat;
     padding: 18px;
 }
 
-.bigFloatingDiv[visible="False"], #settingDiv[visible="False"]{
-    height: 0;
-    padding: 0 18px;
-}
 
-@media screen and (min-width: 500px) and (max-height: 662px){
-    #settingDiv{
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        height: 90%;
-        transform: translate(-50%, -50%);
-        overflow-x: hidden;
-        overflow-y: scroll;
-        -ms-overflow-style: none;
-        padding: 18px;
-        width: 486px;;
-        max-height: 632px;
-    }
-}
-
-@media screen and (min-width: 500px) and (min-height: 663px) {
-    #settingDiv{
-        overflow: hidden;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        height: 90%;
-        width: 480px;
-        transform: translate(-50%, -50%);
-        max-height: 632px;
-    }
-}
 
 /*big screen*/
-@media screen and (min-width: 500px) and (min-height: 945px){
-    .bigFloatingDiv{
-        overflow: hidden;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        height: 90%;
-        width: 480px;
-        max-height: 858px;
-        transform: translate(-50%, -50%);
+@media screen and (min-width: 500px){
+    .bigFloatingDiv[visible="False"], #settingDiv[visible="False"]{
+        max-height: 0;
+        padding: 0 18px;
     }
-}
 
-
-/*not height enough*/
-@media screen and (min-width: 500px) and (max-height: 944px){
     .bigFloatingDiv{
         position: fixed;
         top: 50%;
         left: 50%;
-        height: 90%;
-        max-height: 858px;
+        max-height: 90%;
+        height: auto;
         transform: translate(-50%, -50%);
         overflow-x: hidden;
         overflow-y: scroll;
         -ms-overflow-style: none;
-        scrollbar-width: none;
         padding: 18px;
-        width: 486px;;
+        width: 486px;
     }
 
     .bigFloatingDiv::-webkit-scrollbar {
@@ -112,6 +69,11 @@
 
 /*phones*/
 @media screen and (max-width: 499px){
+    .bigFloatingDiv[visible="False"], #settingDiv[visible="False"]{
+        height: 0;
+        padding: 0 18px;
+    }
+
     .bigFloatingDiv{
         position: fixed;
         top: 0;

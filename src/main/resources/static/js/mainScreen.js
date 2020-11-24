@@ -9,6 +9,10 @@ $( document ).ready(function () {
 
     $('#settingFBtn').click(() => btnHandler($('#settingFBtn'), $('#settingDiv')));
 
+    $('#showRecoverBtn').click(() => btnHandler($('#showRecoverBtn'), $('#passwordReminderDiv')));
+
+    $('.leaderBoardFBtn').click(() => btnHandler($('.leaderBoardFBtn'), $('#leaderBoardDiv')));
+
     $('#logInBtn').click(function () {
         $('#mainScreen').attr('logged', 'True');
         $('#loginDiv').attr('visible', "False");
@@ -27,8 +31,7 @@ $( document ).ready(function () {
 
 function closeAllWindows() {
     $('.floatingBtn').each((k, v) => $(v).removeAttr('active'));
-    $('#signInDiv').attr('visible', "False");
-    $('#loginDiv').attr('visible', "False");
+    $('.floatingDiv').each((k, v) => $(v).attr('visible', "False"));
 }
 
 function loginVerify(){

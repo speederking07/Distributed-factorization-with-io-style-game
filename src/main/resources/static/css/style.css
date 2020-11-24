@@ -295,3 +295,32 @@ input[type="button"]:active {
     left: 8px;
     transform: rotate(var(--rotate-active)) scale(1);
 }
+
+table{
+    width: 100%;
+    font-size: 18pt;
+    border-collapse: collapse;
+}
+
+thead tr{
+    font-weight: bold;
+    border-bottom: 2px solid #000;
+    text-align: left;
+}
+
+tbody tr{
+    border-bottom: 1px solid #000;
+    transition: background-color 0.2s;
+}
+
+tr td, th{
+    padding: 2px 8px;
+}
+
+tr th:last-of-type, td:last-of-type{
+    text-align: right;
+}
+
+tbody tr:hover{
+    background-color: rgba(0, 0, 0, 0.06);
+}

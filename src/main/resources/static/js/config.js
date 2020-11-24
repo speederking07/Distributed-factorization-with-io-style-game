@@ -18,6 +18,7 @@ $( document ).ready(function () {
     $('#saveConfig').click(function (){
         $('#configDiv').attr('visible', 'False');
         $('#configFBtn').removeAttr('active');
+        $('.colorPickerDiv').remove();
     });
 
     $('#changeGraphicalSettings').click(function (){

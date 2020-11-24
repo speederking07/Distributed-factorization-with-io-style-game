@@ -93,7 +93,7 @@
      top: 0;
  }
 
-#mainScreen[logged="True"] #loggedOutButtons{
+#mainScreen[logged="True"] #loggedOutButtons, #mainScreen[visible="False"] #loggedOutButtons{
     top: -100px;
     z-index: -1;
 }
@@ -102,7 +102,7 @@
     top: 0;
 }
 
-#mainScreen[logged="False"] #loggedButtons{
+#mainScreen[logged="False"] #loggedButtons, #mainScreen[visible="False"] #loggedButtons{
     top: -100px;
     z-index: -1;
 }
@@ -118,6 +118,10 @@
     box-shadow: 4px 4px 4px #999;
     transition: all .5s ease-in-out;
     overflow: hidden;
+}
+
+.floatingDiv h1{
+    white-space: nowrap;
 }
 
 .floatingDiv input{
