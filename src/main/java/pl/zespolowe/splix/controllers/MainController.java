@@ -1,6 +1,7 @@
 package pl.zespolowe.splix.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,7 +18,7 @@ import java.util.Map;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Controller
-public class MainController {
+public class MainController implements ErrorController {
 
     @Autowired
     private UserService service;
@@ -58,14 +59,27 @@ public class MainController {
 
     @GetMapping(value = "/leaders", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Map<String, Long> getLeaders(){
+    public Map<String, Long> getLeaders() {
         return service.getLeaders();
     }
 
-    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+
+    //ERRORS
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
-        String message =  e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+        String message = e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+    }
+
+    @GetMapping("/error")
+    public String err() {
+        return "redirect:/";
+    }
+
+    @Override
+    public String getErrorPath() {
+        return "/";
     }
 
 }

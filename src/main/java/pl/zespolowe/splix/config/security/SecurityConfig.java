@@ -45,7 +45,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
                 .and()
-                .rememberMe().tokenValiditySeconds(84600 * 30);
+                .rememberMe().tokenValiditySeconds(84600 * 30)
+                .and()
+                .exceptionHandling().accessDeniedPage("/");
 
 
     }
