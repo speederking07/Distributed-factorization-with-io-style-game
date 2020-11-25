@@ -1,4 +1,4 @@
-$( document ).ready(function () {
+$(document).ready(function () {
     //$('#mainScreen').attr('visible', "True");
 
     $('#loginFBtn').click(() => btnHandler($('#loginFBtn'), $('#loginDiv')));
@@ -13,38 +13,109 @@ $( document ).ready(function () {
 
     $('.leaderBoardFBtn').click(() => btnHandler($('.leaderBoardFBtn'), $('#leaderBoardDiv')));
 
-    $('#logInBtn').click(function () {
-        $('#mainScreen').attr('logged', 'True');
-        $('#loginDiv').attr('visible', "False");
-        $('#loginFBtn').removeAttr('active');
+    $('.leaderBoardFBtn').click(function () {
+        $.get({
+            url: "/leaders",
+            dataType:"json",
+            success: function (data) {
+                let table = $('#leaderboardBody');
+                table.empty();
+                let i = 1;
+                for (const name in data) {
+                    table.append('<tr>')
+                    table.append('<td>' + i + '</td>')
+                    table.append('<td>' + name + '</td>')
+                    table.append('<td>' + data[name] + '</td>')
+                    table.append('</tr>')
+                    i++;
+                }
+            }
+        });
     });
 
     $('#logoutFBtn').click(function () {
-        $('#mainScreen').attr('logged', 'False');
+        $.get({
+            url: "/logout",
+            success: function (data) {
+                $('#mainScreen').attr('logged', 'False');
+            }
+        });
+    });
+    $('#logInBtn').click(function () {
+        logIn()
+    });
+    $('#signInBtn').click(function () {
+        register()
     });
 
-    $('#signInBtn').click(function () {
-        loginVerify();
-        emailVerify();
-    });
 });
+
+function objectifyForm(formArray) {
+    var returnArray = {};
+    for (var i = 0; i < formArray.length; i++) {
+        returnArray[formArray[i]['name']] = formArray[i]['value'];
+    }
+    return returnArray;
+}
+
+function register() {
+    let registerData = objectifyForm($('#registerForm').serializeArray());
+    if (!(registerData['password'].localeCompare(registerData['password2']))) {
+        signInMessage("Passwords are not identical");
+        //return;
+    }
+    delete registerData.password2;
+
+    $.post({
+        url: "/register",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        data: JSON.stringify(registerData),
+        success: function (data) {
+            signInMessage(JSON.parse(data));
+            $('#logInLogin').val(registerData['username']);
+            $('#logInPassword').val(registerData['password']);
+            logIn();
+        },
+        error: function (data) {
+            signInMessage(JSON.parse(data));
+        }
+    })
+}
+
+function logIn() {
+    $.post({
+        url: "/login",
+        data: $('#logInForm').serialize(),
+        dataType: "text",
+        success: function (data) {
+            $('#mainScreen').attr('logged', 'True');
+            $('#loginDiv').attr('visible', "False");
+            $('#loginFBtn').removeAttr('active');
+        },
+        error: function (data) {
+            logInMessage(data.responseText);
+        }
+    })
+}
+
+function signInMessage(message) {
+    alert(message);
+}
+
+function logInMessage(message) {
+    alert(message);
+}
+
 
 function closeAllWindows() {
     $('.floatingBtn').each((k, v) => $(v).removeAttr('active'));
     $('.floatingDiv').each((k, v) => $(v).attr('visible', "False"));
 }
 
-function loginVerify(){
-    return true;
-}
 
-function emailVerify(){
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test($('#signInEmail').val().toLowerCase());
-}
-
-function btnHandler(btn, div){
-    if (div.attr('visible') === 'False'){
+function btnHandler(btn, div) {
+    if (div.attr('visible') === 'False') {
         if (!blockingPopups()) {
             closeAllWindows();
             btn.attr('active', 'True');

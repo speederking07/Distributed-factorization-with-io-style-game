@@ -12,7 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import pl.zespolowe.splix.services.UserService;
 
-//TODO: dokończyć konfiguracje
 @Component
 public class AuthProvider implements AuthenticationProvider {
 
@@ -28,14 +27,8 @@ public class AuthProvider implements AuthenticationProvider {
         String password = (String) authentication.getCredentials();
         UserDetails registeredUserDetails = userService.loadUserByUsername(username);
 
-
-        if (registeredUserDetails == null) {
-            throw new BadCredentialsException("Username not found");
-        }
-
-        if (!passwordEncoder.matches(password, registeredUserDetails.getPassword())) {
+        if (!passwordEncoder.matches(password, registeredUserDetails.getPassword()))
             throw new BadCredentialsException("Password incorrect");
-        }
 
         return new UsernamePasswordAuthenticationToken(registeredUserDetails, password, registeredUserDetails.getAuthorities());
     }
@@ -43,6 +36,5 @@ public class AuthProvider implements AuthenticationProvider {
     @Override
     public boolean supports(Class<?> aClass) {
         return UsernamePasswordAuthenticationToken.class.equals(aClass);
-        //return UsernamePasswordAuthenticationToken.class.isAssignableFrom(aClass);
     }
 }

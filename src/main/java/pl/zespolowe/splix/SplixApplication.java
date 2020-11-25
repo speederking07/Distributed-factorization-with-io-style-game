@@ -9,5 +9,4 @@ public class SplixApplication {
     public static void main(String[] args) {
         SpringApplication.run(SplixApplication.class, args);
     }
-
 }

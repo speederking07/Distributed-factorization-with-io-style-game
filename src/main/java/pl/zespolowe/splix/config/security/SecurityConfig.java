@@ -6,11 +6,14 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private AuthenticationFailureHandler failureHandler;
     @Autowired
     private AuthProvider authenticationProvider;
 
@@ -22,14 +25,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-    //TODO
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http    //replacing Anonymous filter to give every anonymous user unique name
                 //.addFilterAt(new CustomAnonymousFilter(), AnonymousAuthenticationFilter.class)
+                .csrf().disable()
                 .authorizeRequests()
-                .anyRequest()
-                .permitAll();
+                .antMatchers("/", "/resources/**", "/register", "/login", "/logout", "/leaders").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/account/**").hasAnyRole("ADMIN", "USER")
+                .and()
+                .formLogin()
+                .loginPage("/")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/", true)
+                .failureHandler(failureHandler)
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .and()
+                .rememberMe().tokenValiditySeconds(84600 * 30);
+
+
     }
 
 
