@@ -16,7 +16,7 @@ $(document).ready(function () {
     $('.leaderBoardFBtn').click(function () {
         $.get({
             url: "/leaders",
-            dataType:"json",
+            dataType: "json",
             success: function (data) {
                 let table = $('#leaderboardBody');
                 table.empty();
@@ -60,25 +60,29 @@ function objectifyForm(formArray) {
 
 function register() {
     let registerData = objectifyForm($('#registerForm').serializeArray());
-    if (!(registerData['password'].localeCompare(registerData['password2']))) {
+    if (registerData['password'] !== registerData['password2']) {
         signInMessage("Passwords are not identical");
-        //return;
+        return;
     }
     delete registerData.password2;
 
     $.post({
         url: "/register",
         contentType: "application/json; charset=utf-8",
-        dataType: "json",
+        dataType: "text",
         data: JSON.stringify(registerData),
         success: function (data) {
-            signInMessage(JSON.parse(data));
-            $('#logInLogin').val(registerData['username']);
-            $('#logInPassword').val(registerData['password']);
+            $('#signInFBtn').trigger('click');
+            let login = $('#logInLogin');
+            let pass = $('#logInPassword');
+            login.val(registerData['username']);
+            pass.val(registerData['password']);
             logIn();
+            login.val("");
+            pass.val("");
         },
         error: function (data) {
-            signInMessage(JSON.parse(data));
+            signInMessage(data.responseText);
         }
     })
 }
