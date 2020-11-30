@@ -174,7 +174,7 @@ input[type="button"]:active {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: url(../img/congruent_pentagon.png) fixed;
+    background: url(../img/congruent_pentagon.png);
     box-shadow: 4px 4px 4px #999;
 }
 

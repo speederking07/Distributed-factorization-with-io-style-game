@@ -26,7 +26,7 @@ $(document).ready(function () {
                         '<td>' + i + '</td>' +
                         '<td>' + name + '</td>' +
                         '<td>' + data[name] + '</td>' +
-                        '</tr>')
+                        '</tr>');
                     i++;
                 }
             }
@@ -45,14 +45,6 @@ $(document).ready(function () {
         register();
     });
 });
-
-function objectifyForm(formArray) {
-    var returnArray = {};
-    for (var i = 0; i < formArray.length; i++) {
-        returnArray[formArray[i]['name']] = formArray[i]['value'];
-    }
-    return returnArray;
-}
 
 function closeAllWindows() {
     $('.floatingBtn').each((k, v) => $(v).removeAttr('active'));
@@ -74,4 +66,17 @@ function btnHandler(btn, div) {
 
 function blockingPopups() {
     return $('.blockPopup[visible="True"]').length > 0
+}
+
+function popup(header, content, buttons) {
+    let btn = "";
+    for (let b of buttons){
+        console.log("()=>{(" + b[1] + ")(); closePopup();}");
+        btn += "<input type='button' value='"+b[0]+"' onclick='(()=>{(" + b[1] + ")(); closePopup();})()'>"
+    }
+    $('body').append('<div class="dialogBox popup blockPopup">' +
+        '<h1>' + header + '</h1>'+
+        '<p>' + content + '</p>' +
+        '<div>' + btn + '</div>' +
+        '</div>');
 }

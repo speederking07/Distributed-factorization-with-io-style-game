@@ -83,7 +83,7 @@
     <div id="signInDiv" class="popup floatingDiv" visible="False">
         <h1>Create account</h1>
         <form id="registerForm">
-            <input id="signInLogin" name="username" type="text" placeholder="Login" invalid>
+            <input id="signInLogin" name="username" type="text" placeholder="Login">
             <input id="signInEmail" name="email" type="text" placeholder="email">
             <input id="signInPassword" name="password" type="password" placeholder="Password">
             <input id="signInPassword2" name="password2" type="password" placeholder="Repeat password">
