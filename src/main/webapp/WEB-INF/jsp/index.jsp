@@ -151,11 +151,22 @@
 
     <div id="startGameBar">
         <div id="startGameField" class="center">
-            <h1>Enter player name</h1>
-            <div>
-                <input id="playerName" type="text">
-                <input id="startGameBtn" type="button" value="Start">
-            </div>
+<c:choose>
+    <c:when test="${pageContext.request.userPrincipal.name != null}">
+<h1 id="enterNameH1">Start game</h1>
+<div>
+<input id="playerName" value="${pageContext.request.userPrincipal.name}" type="text" disabled>
+<input id="startGameBtn" type="button" value="Start">
+</div>
+    </c:when>
+    <c:otherwise>
+<h1 id="enterNameH1">Enter player name</h1>
+<div>
+<input id="playerName" type="text">
+<input id="startGameBtn" type="button" value="Start">
+</div>
+    </c:otherwise>
+</c:choose>
         </div>
     </div>
 </div>

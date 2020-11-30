@@ -26,6 +26,10 @@
     max-width: 80%;
 }
 
+#playerName:disabled{
+    background-color: white;
+    color: #555555;
+}
 
 #startGameBar{
     --h: 180px;

@@ -3,15 +3,24 @@ function logout(){
         url: "/logout",
         success: function (data) {
             $('#mainScreen').attr('logged', 'False');
+            const name_bar = $('#playerName');
+            const header = $('#enterNameH1');
+            header.html('Enter player name');
+            name_bar.val('');
+            name_bar.removeAttr('disabled');
         }
     });
 }
 
 function register() {
-    $('#signInLogin').removeAttr('invalid');
-    $('#signInEmail').removeAttr('invalid');
-    $('#signInPassword').removeAttr('invalid');
-    $('#signInPassword2').removeAttr('invalid');
+    const login = $('#signInLogin');
+    const email = $('#signInEmail');
+    const pass1 =  $('#signInPassword');
+    const pass2 = $('#signInPassword2');
+    login.removeAttr('invalid');
+    email.removeAttr('invalid');
+    pass1.removeAttr('invalid');
+    pass2.removeAttr('invalid');
     let registerData = objectifyForm($('#registerForm').serializeArray());
     if (registerData['username'].length <= 5) {
         signInMessage("login%Username cannot be blank");
@@ -39,13 +48,13 @@ function register() {
         data: JSON.stringify(registerData),
         success: function (data) {
             $('#signInFBtn').trigger('click');
-            let login = $('#logInLogin');
-            let pass = $('#logInPassword');
-            login.val(registerData['username']);
-            pass.val(registerData['password']);
+            $('#logInLogin').val(registerData['username']);
+            $('#logInPassword').val(registerData['password']);
             logIn();
-            login.val("");
-            pass.val("");
+            login.val('');
+            email.val('');
+            pass1.val('');
+            pass2.val('');
         },
         error: function (data) {
             signInMessage(data.responseText);
@@ -54,13 +63,23 @@ function register() {
 }
 
 function logIn() {
-    $('#logInLogin').removeAttr('invalid');
-    $('#logInPassword').removeAttr('invalid');
+    const login = $('#logInLogin');
+    const password = $('#logInPassword');
+    login.removeAttr('invalid');
+    password.removeAttr('invalid');
     $.post({
         url: "/login",
         data: $('#logInForm').serialize(),
         dataType: "text",
         success: function (data) {
+            const name_bar = $('#playerName');
+            const header = $('#enterNameH1');
+            header.html('Start game');
+            //TODO
+            name_bar.val(login.val());
+            name_bar.attr('disabled', '');
+            login.val('');
+            password.val('');
             $('#mainScreen').attr('logged', 'True');
             $('#loginDiv').attr('visible', "False");
             $('#loginFBtn').removeAttr('active');
