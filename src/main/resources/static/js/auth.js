@@ -64,6 +64,7 @@ function register() {
 
 function logIn() {
     const login = $('#logInLogin');
+    const name = login.val();
     const password = $('#logInPassword');
     login.removeAttr('invalid');
     password.removeAttr('invalid');
@@ -75,8 +76,7 @@ function logIn() {
             const name_bar = $('#playerName');
             const header = $('#enterNameH1');
             header.html('Start game');
-            //TODO
-            name_bar.val(login.val());
+            name_bar.val(name);
             name_bar.attr('disabled', '');
             login.val('');
             password.val('');
