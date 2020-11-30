@@ -22,11 +22,11 @@ $(document).ready(function () {
                 table.empty();
                 let i = 1;
                 for (const name in data) {
-                    table.append('<tr>')
-                    table.append('<td>' + i + '</td>')
-                    table.append('<td>' + name + '</td>')
-                    table.append('<td>' + data[name] + '</td>')
-                    table.append('</tr>')
+                    table.append('<tr>' +
+                        '<td>' + i + '</td>' +
+                        '<td>' + name + '</td>' +
+                        '<td>' + data[name] + '</td>' +
+                        '</tr>')
                     i++;
                 }
             }
