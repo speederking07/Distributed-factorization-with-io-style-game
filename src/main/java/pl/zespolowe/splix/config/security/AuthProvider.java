@@ -28,7 +28,7 @@ public class AuthProvider implements AuthenticationProvider {
         UserDetails registeredUserDetails = userService.loadUserByUsername(username);
 
         if (!passwordEncoder.matches(password, registeredUserDetails.getPassword()))
-            throw new BadCredentialsException("Password incorrect");
+            throw new BadCredentialsException("password%Password incorrect");
 
         return new UsernamePasswordAuthenticationToken(registeredUserDetails, password, registeredUserDetails.getAuthorities());
     }

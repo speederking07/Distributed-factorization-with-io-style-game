@@ -21,15 +21,15 @@ import java.util.stream.Collectors;
 public class User implements UserDetails {
 
     @Id
-    @NotBlank(message = "Username cannot be blank")
+    @NotBlank(message = "login%Username cannot be blank")
     private String username;
 
-    @NotBlank(message = "Password cannot be empty")
-    @Size(min = 5, message = "Password must be length >= 5")
+    @NotBlank(message = "password%Password cannot be empty")
+    @Size(min = 5, message = "password%Password must be length >= 5")
     private String password;
 
-    @Email(message = "Invalid email address")
-    @NotBlank(message = "Email cannot be blank")
+    @Email(message = "email%Invalid email address")
+    @NotBlank(message = "email%Email cannot be blank")
     private String email;
 
     private long score;
