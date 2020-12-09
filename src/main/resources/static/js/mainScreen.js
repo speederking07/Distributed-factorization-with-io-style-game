@@ -33,6 +33,11 @@ $(document).ready(function () {
         });
     });
 
+    $('#closeLeaderBoardBtn').click(function () {
+        $('.leaderBoardFBtn').removeAttr('active');
+        $('#leaderBoardDiv').attr('visible', 'False');
+    });
+
     $('#logoutFBtn').click(function () {
         logout();
     });

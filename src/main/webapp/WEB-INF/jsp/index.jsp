@@ -103,6 +103,7 @@
             <tbody id="leaderboardBody">
             </tbody>
         </table>
+        <input type="button" value="Close leader board" id="closeLeaderBoardBtn">
     </div>
     <div id="configDiv" class="bigFloatingDiv popup blockPopup" visible="False">
         <h1>Personalization</h1>
