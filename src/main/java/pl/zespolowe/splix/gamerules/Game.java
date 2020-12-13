@@ -9,8 +9,6 @@ public class Game {
     Board board = new Board(20,20);
     List<Checker> players = new ArrayList<>();
 
-
-
     public boolean add_player(Checker checker){
         if(players.size()<20) {
             players.add(checker);
@@ -25,8 +23,9 @@ public class Game {
         }
 
     }
-    private void close_area(Map<Point, Checker> area){
 
+    private void close_area(Checker checker){
+        board.overtake(checker);
     }
     private void resurection_player(Player player){
 
