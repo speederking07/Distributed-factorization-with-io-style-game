@@ -10,7 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import pl.zespolowe.splix.domain.Game;
 import pl.zespolowe.splix.domain.Player;
 import pl.zespolowe.splix.services.ActivePlayersRegistry;
@@ -23,8 +23,8 @@ public class GameController {
     @Autowired
     private ActivePlayersRegistry cache;
 
-    @GetMapping("/game/play")
-    public ResponseEntity<String> play(@RequestBody String username, Authentication auth, HttpSession session) {
+    @GetMapping(value = "/game/play")
+    public ResponseEntity<String> play(@RequestParam("username") String username, Authentication auth, HttpSession session) {
         Player player = cache.getPlayer(session.getId());
         if (player == null) {
             if (auth != null && auth.isAuthenticated())
@@ -40,11 +40,11 @@ public class GameController {
         if (game != null && game.isActive()) {
             //TODO
         }
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok("1");
     }
 
-    @MessageMapping("/game/{gameID}")
-    @SendTo("/topic/{gameID}")
+    @MessageMapping("/stomp/{gameID}")
+    @SendTo("/topic/stomp/{gameID}")
     public String handleMessage(SimpMessageHeaderAccessor accessor) {
         String sessionID = (String) accessor.getSessionAttributes().get("sessionId");
         Player player = cache.getPlayer(sessionID);

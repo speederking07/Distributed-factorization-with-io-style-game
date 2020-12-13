@@ -24,7 +24,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private AuthProvider authenticationProvider;
 
 
-
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         assert auth != null;
@@ -38,11 +37,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //.addFilterBefore(createCustomFilter(), AnonymousAuthenticationFilter.class)
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/resources/**", "/leaders", "/play", "/js/**", "/css/**", "/font/**", "/img/**").permitAll()
+                .antMatchers("/", "/resources/**", "/leaders", "/play", "/js/**", "/css/**", "/font/**", "/img/**", "/game/**").permitAll() // "/stomp/**", "/gameStompEndpoint", "/topic/**"
                 .antMatchers("/register", "/login").anonymous()
-                .antMatchers("/logout").authenticated()
+                .antMatchers("/logout", "/account/**").authenticated()
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/account/**").hasAnyRole("ADMIN", "USER")
                 .and()
                 .authorizeRequests().anyRequest().authenticated()
                 .and()

@@ -21,6 +21,7 @@
     <script src="js/script.js"></script>
     <script src="js/mainScreen.js"></script>
     <script src="js/config.js"></script>
+    <script src="js/game.js"></script>
     <title>Document</title>
 </head>
 <body>
@@ -151,14 +152,14 @@
 <h1 id="enterNameH1">Start game</h1>
 <div>
 <input id="playerName" value="${pageContext.request.userPrincipal.name}" type="text" disabled>
-<input id="startGameBtn" type="button" value="Start">
+<input id="startGameBtn" type="button" value="Start" onclick="play()">
 </div>
     </c:when>
     <c:otherwise>
 <h1 id="enterNameH1">Enter player name</h1>
 <div>
 <input id="playerName" type="text">
-<input id="startGameBtn" type="button" value="Start">
+<input id="startGameBtn" type="button" value="Start" onclick="play()">
 </div>
     </c:otherwise>
 </c:choose>
