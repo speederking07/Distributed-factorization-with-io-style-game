@@ -45,12 +45,11 @@ public class MainController implements ErrorController {
     }
 
     //TODO
-    @GetMapping(value = "/admin/register", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> registerAdmin(@Valid @RequestBody User user) {
+    @GetMapping(value = "/admin/set", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> registerAdmin(@Valid @RequestBody String username) {
         try {
-            user.setAdmin();
-            service.registerUser(user);
-            return ResponseEntity.ok("Registration successful");
+            service.setAdmin(username);
+            return ResponseEntity.ok("Success");
         } catch (AccountException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }

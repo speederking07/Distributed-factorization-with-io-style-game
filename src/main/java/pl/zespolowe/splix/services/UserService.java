@@ -6,10 +6,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.zespolowe.splix.domain.Role;
 import pl.zespolowe.splix.domain.User;
 import pl.zespolowe.splix.repositories.UserRepository;
 
 import javax.security.auth.login.AccountException;
+import java.sql.Date;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,8 +50,16 @@ public class UserService implements UserDetailsService {
         return result;
     }
 
+    public void setAdmin(String username) throws AccountException {
+        if (!userExists(username)) throw new AccountException("User does not exist");
+        User user = (User) loadUserByUsername(username);
+        user.addRole(Role.ADMIN);
+        saveUser(user);
+    }
+
     public void registerUser(User user) throws AccountException {
         if (userExists(user.getUsername())) throw new AccountException("User already exist");
+        user.setLastLogged(new Date(Calendar.getInstance().getTime().getTime()));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         saveUser(user);
     }

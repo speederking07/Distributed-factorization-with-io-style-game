@@ -2,7 +2,9 @@ package pl.zespolowe.splix.domain;
 
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Game {
@@ -12,9 +14,18 @@ public class Game {
     @Getter
     private final Set<Player> players;
 
+    private final List<GameListener> listeners;
+
+
     public Game(int gameID) {
         players = new HashSet<>();
+        listeners = new ArrayList<>();
         this.gameID = gameID;
+    }
+
+    //TODO: co ma dawać do listenerow
+    private void publishEvent(){
+        listeners.forEach(GameListener::event);
     }
 
     public void resign(Player player) {
@@ -23,16 +34,16 @@ public class Game {
         players.remove(player);
     }
 
-    public boolean isActive(){
+    public boolean isActive() {
         //TODO: czy gra trwa
         return true;
     }
 
-    public boolean containsPlayer(Player player){
+    public boolean containsPlayer(Player player) {
         return players.contains(player);
     }
 
-    public boolean isFull(){
+    public boolean isFull() {
         return true;
     }
 }
