@@ -8,10 +8,9 @@ public class Checker {
     private int score=0;
     private Direction direction = Direction.EAST;
 
-    Checker(Player p, int x, int y){
-        player=p;
-        point.x = x;
-        point.y=y;
+    Checker(Player pl, Point po){
+        player=pl;
+        point=po;
     }
 
     private enum Direction {
@@ -22,27 +21,22 @@ public class Checker {
     }
 
     public Point next_turn(){
+        Point point0=point;
         switch (direction) {
             case EAST:
-                //zapytaj czy mozna
-                point.x++;
-                //return point;
+                point0.x++;
             case WEST:
-                //zapytaj czy mozna
-                point.x--;
-                //return point;
+                point0.x--;
             case NORTH:
-                //zapytaj czy mozna
-                point.y++;
-                //return point;
+                point0.y++;
             case SOUTH:
-                //zapytaj czy mozna
-                point.y--;
-                //return point;
+                point0.y--;
         }
-        return point;
+        return point0;
     }
 
     public int getScore(){return score;}
     public void setScore(int x){score+=x;}
+    public void set_position(Point p){point=p;}
+
 }

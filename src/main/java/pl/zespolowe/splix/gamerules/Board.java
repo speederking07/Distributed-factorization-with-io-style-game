@@ -1,5 +1,5 @@
 package pl.zespolowe.splix.gamerules;
-
+import java.util.concurrent.ThreadLocalRandom;
 // Bimap
 import java.awt.*;
 import java.util.Map;
@@ -15,15 +15,6 @@ public class Board {
     Board(int x, int y){
         x_size=x;
         y_size=y;
-
-/*        for(int i=0; i<x;i++){
-            for(int j=0; j<y; j++){
-                Point point = new Point();
-                point.x=i;
-                point.y=j;
-                fields.put(point,null);
-            }
-        }*/
     }
 
     public void clear_board(){
@@ -55,6 +46,23 @@ public class Board {
                 fields.remove(k);
             }
         });
+    }
+    public Point find_place_for_respawn(int size_x, int size_y){
+        Point point0 = null;
+        for (int i=0;i<size_x*size_y/5;i++){
+            point0.x = ThreadLocalRandom.current().nextInt(0, size_x + 1);
+            point0.y = ThreadLocalRandom.current().nextInt(0, size_y + 1);
+            if(!fields.containsKey(point0)) return point0;
+        }
+        return null;
+    }
+
+    /** automatic
+     *
+     */
+
+    public boolean new_move(Point p, Checker ch){
+        return true;
     }
 
 
