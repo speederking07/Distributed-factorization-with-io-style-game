@@ -1,5 +1,4 @@
-
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,22 +21,18 @@
     <script src="js/script.js"></script>
     <script src="js/mainScreen.js"></script>
     <script src="js/config.js"></script>
+    <script src="js/game.js"></script>
     <title>Document</title>
 </head>
 <body>
 <canvas id="board" class="" height="400" width="500"></canvas>
 
-<c:choose>
-    <c:when test="${pageContext.request.userPrincipal.name != null}">
-<div id="mainScreen" class="toggleVisibility fullScreen" visible="True" logged="True">
-    </c:when>
-    <c:otherwise>
-<div id="mainScreen" class="toggleVisibility fullScreen" visible="True" logged="False">
-    </c:otherwise>
-</c:choose>
+<c:set value="False" var="logged"/>
+<sec:authorize access="hasAnyRole('USER', 'ADMIN')">
+    <c:set value="True" var="logged"/>
+</sec:authorize>
 
-
-<%--<div id="mainScreen" class="toggleVisibility fullScreen" visible="True" logged="False">--%>
+<div id="mainScreen" class="toggleVisibility fullScreen" visible="True" logged="${logged}">
     <div id="titleDiv">
         <span class="helper"></span><img src="img/title.png" alt="Logo">
     </div>
@@ -157,14 +152,14 @@
 <h1 id="enterNameH1">Start game</h1>
 <div>
 <input id="playerName" value="${pageContext.request.userPrincipal.name}" type="text" disabled>
-<input id="startGameBtn" type="button" value="Start">
+<input id="startGameBtn" type="button" value="Start" onclick="play()">
 </div>
     </c:when>
     <c:otherwise>
 <h1 id="enterNameH1">Enter player name</h1>
 <div>
 <input id="playerName" type="text">
-<input id="startGameBtn" type="button" value="Start">
+<input id="startGameBtn" type="button" value="Start" onclick="play()">
 </div>
     </c:otherwise>
 </c:choose>

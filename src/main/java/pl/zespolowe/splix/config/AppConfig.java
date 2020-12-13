@@ -1,24 +1,33 @@
 package pl.zespolowe.splix.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import pl.zespolowe.splix.config.security.AuthProvider;
+import pl.zespolowe.splix.domain.User;
+import pl.zespolowe.splix.services.UserService;
+
+import java.sql.Date;
+import java.util.Calendar;
 
 
 @Configuration
 @EnableWebMvc
 public class AppConfig implements WebMvcConfigurer {
 
+    @Autowired
+    private UserService userService;
 
     @Bean
-    public AuthenticationFailureHandler authenticationFailureHandler() {
+    public AuthenticationFailureHandler failureHandler() {
         return (req, res, e) -> {
             res.setStatus(400);
             res.setContentType("text/plain");
@@ -28,6 +37,16 @@ public class AppConfig implements WebMvcConfigurer {
         };
     }
 
+    @Bean
+    public AuthenticationSuccessHandler successHandler() {
+        return (req, res, authentication) -> {
+            if (authentication.getPrincipal() instanceof User) {
+                User user = (User) authentication.getPrincipal();
+                user.setLastLogged(new Date(Calendar.getInstance().getTime().getTime()));
+                userService.saveUser(user);
+            }
+        };
+    }
 
     @Bean
     public InternalResourceViewResolver viewResolver() {

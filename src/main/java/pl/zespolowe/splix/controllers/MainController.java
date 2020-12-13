@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import pl.zespolowe.splix.domain.Role;
 import pl.zespolowe.splix.domain.User;
 import pl.zespolowe.splix.services.UserService;
 
@@ -35,7 +34,7 @@ public class MainController implements ErrorController {
             service.registerUser(user);
             return ResponseEntity.ok("Registration successful");
         } catch (AccountException e) {
-            return ResponseEntity.status(500).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
@@ -46,14 +45,13 @@ public class MainController implements ErrorController {
     }
 
     //TODO
-    @GetMapping(value = "/admin/register", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> registerAdmin(@Valid @RequestBody User user) {
+    @GetMapping(value = "/admin/set", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> registerAdmin(@Valid @RequestBody String username) {
         try {
-            user.addRole(Role.ADMIN);
-            service.registerUser(user);
-            return ResponseEntity.ok("Registration successful");
+            service.setAdmin(username);
+            return ResponseEntity.ok("Success");
         } catch (AccountException e) {
-            return ResponseEntity.status(500).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
