@@ -1,5 +1,4 @@
-
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,17 +26,12 @@
 <body>
 <canvas id="board" class="" height="400" width="500"></canvas>
 
-<c:choose>
-    <c:when test="${pageContext.request.userPrincipal.name != null}">
-<div id="mainScreen" class="toggleVisibility fullScreen" visible="True" logged="True">
-    </c:when>
-    <c:otherwise>
-<div id="mainScreen" class="toggleVisibility fullScreen" visible="True" logged="False">
-    </c:otherwise>
-</c:choose>
+<c:set value="False" var="logged"/>
+<sec:authorize access="hasAnyRole('USER', 'ADMIN')">
+    <c:set value="True" var="logged"/>
+</sec:authorize>
 
-
-<%--<div id="mainScreen" class="toggleVisibility fullScreen" visible="True" logged="False">--%>
+<div id="mainScreen" class="toggleVisibility fullScreen" visible="True" logged="${logged}">
     <div id="titleDiv">
         <span class="helper"></span><img src="img/title.png" alt="Logo">
     </div>

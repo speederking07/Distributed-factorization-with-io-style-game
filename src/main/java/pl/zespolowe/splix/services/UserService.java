@@ -26,7 +26,7 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findById(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User does not exist"));
+                .orElseThrow(() -> new UsernameNotFoundException("username%User does not exist"));
     }
 
     public boolean userExists(String username) {
@@ -51,6 +51,10 @@ public class UserService implements UserDetailsService {
     public void registerUser(User user) throws AccountException {
         if (userExists(user.getUsername())) throw new AccountException("User already exist");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        saveUser(user);
+    }
+
+    public void saveUser(User user) {
         userRepository.save(user);
     }
 }

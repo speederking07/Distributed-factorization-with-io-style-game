@@ -2,6 +2,7 @@ package pl.zespolowe.splix.config.security;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,6 +28,9 @@ public class AuthProvider implements AuthenticationProvider {
         String password = (String) authentication.getCredentials();
         UserDetails registeredUserDetails = userService.loadUserByUsername(username);
 
+        if(!registeredUserDetails.isEnabled())
+            throw new AccountExpiredException("username%Account expired");
+
         if (!passwordEncoder.matches(password, registeredUserDetails.getPassword()))
             throw new BadCredentialsException("password%Password incorrect");
 
@@ -35,6 +39,6 @@ public class AuthProvider implements AuthenticationProvider {
 
     @Override
     public boolean supports(Class<?> aClass) {
-        return UsernamePasswordAuthenticationToken.class.equals(aClass);
+        return UsernamePasswordAuthenticationToken.class.equals(aClass) ;
     }
 }

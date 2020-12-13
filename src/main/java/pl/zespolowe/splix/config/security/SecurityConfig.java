@@ -6,7 +6,9 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -14,8 +16,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private AuthenticationFailureHandler failureHandler;
+
+    @Autowired
+    private AuthenticationSuccessHandler successHandler;
+
     @Autowired
     private AuthProvider authenticationProvider;
+
 
 
     @Override
@@ -27,19 +34,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http    //replacing Anonymous filter to give every anonymous user unique name
-                //.addFilterAt(new CustomAnonymousFilter(), AnonymousAuthenticationFilter.class)
+        http
+                //.addFilterBefore(createCustomFilter(), AnonymousAuthenticationFilter.class)
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/resources/**", "/register", "/login", "/logout", "/leaders").permitAll()
+                .antMatchers("/", "/resources/**", "/leaders", "/play", "/js/**", "/css/**", "/font/**", "/img/**").permitAll()
+                .antMatchers("/register", "/login").anonymous()
+                .antMatchers("/logout").authenticated()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/account/**").hasAnyRole("ADMIN", "USER")
+                .and()
+                .authorizeRequests().anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/")
                 .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/", true)
+                //.defaultSuccessUrl("/", true)
                 .failureHandler(failureHandler)
+                .successHandler(successHandler)
                 .and()
                 .logout()
                 .logoutUrl("/logout")
@@ -48,9 +60,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .rememberMe().tokenValiditySeconds(84600 * 30)
                 .and()
                 .exceptionHandling().accessDeniedPage("/");
-
-
+        http
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                .maximumSessions(1);
     }
-
 
 }
