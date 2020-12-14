@@ -1,4 +1,4 @@
-package pl.zespolowe.splix.domain;
+package pl.zespolowe.splix.domain.user;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -84,5 +84,13 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream().map(r -> new SimpleGrantedAuthority(r.toString())).collect(Collectors.toList());
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }

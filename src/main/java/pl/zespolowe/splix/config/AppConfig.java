@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import pl.zespolowe.splix.config.security.AuthProvider;
-import pl.zespolowe.splix.domain.User;
+import pl.zespolowe.splix.domain.user.User;
 import pl.zespolowe.splix.services.UserService;
 
 import java.sql.Date;

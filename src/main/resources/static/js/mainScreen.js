@@ -15,7 +15,7 @@ $(document).ready(function () {
 
     $('.leaderBoardFBtn').click(function () {
         $.get({
-            url: "/leaders",
+            url: "/game/leaders",
             dataType: "json",
             success: function (data) {
                 let table = $('#leaderboardBody');

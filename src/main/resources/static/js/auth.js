@@ -1,6 +1,6 @@
 function logout(){
     $.get({
-        url: "/logout",
+        url: "/user/logout",
         success: function (data) {
             $('#mainScreen').attr('logged', 'False');
             const name_bar = $('#playerName');

@@ -37,9 +37,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //.addFilterBefore(createCustomFilter(), AnonymousAuthenticationFilter.class)
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/resources/**", "/leaders", "/play", "/js/**", "/css/**", "/font/**", "/img/**", "/game/**").permitAll() // "/stomp/**", "/gameStompEndpoint", "/topic/**"
+                .antMatchers("/", "/resources/**", "/js/**", "/css/**", "/font/**", "/img/**", "/game/**").permitAll() // "/stomp/**", "/gameStompEndpoint", "/topic/**"
                 .antMatchers("/register", "/login").anonymous()
-                .antMatchers("/logout", "/account/**").authenticated()
+                .antMatchers("/user/**").hasRole("USER")
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .and()
                 .authorizeRequests().anyRequest().authenticated()
@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(successHandler)
                 .and()
                 .logout()
-                .logoutUrl("/logout")
+                .logoutUrl("/user/logout")
                 .logoutSuccessUrl("/")
                 .and()
                 .rememberMe().tokenValiditySeconds(84600 * 30)
