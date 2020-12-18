@@ -25,9 +25,9 @@ class Pattern{
      * Converts pattern to JSON string
      * @returns {string}
      */
-    toJSON(){
+    toJSON(color){
         let pattern = this.array.map(x => x.map(y => y.toHex()));
-        return JSON.stringify({size: this.size, pattern: pattern});
+        return JSON.stringify({size: this.size, pattern: pattern, color:color.toHex()});
     }
 
     /**

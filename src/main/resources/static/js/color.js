@@ -126,4 +126,9 @@ class Color {
         }
         return new Color(Math.floor(r * 255), Math.floor(g * 255), Math.floor(b * 255));
     }
+
+    static formJson(data){
+        const color = JSON.parse(data).color;
+        return Color.fromHex(color);
+    }
 }

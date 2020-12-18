@@ -27,7 +27,7 @@ public class UserSettings {
     private boolean dyingAnimation;
 
     @Colors
-    @Column(length = 294)
+    @Column(length = 400)
     private String colorsInCSV;
 
     public UserSettings() {
@@ -43,9 +43,8 @@ public class UserSettings {
     public static String getRandomColors() {
         Random obj = new Random();
         int rand_num = obj.nextInt(0xffffff + 1);
-        String colorCode = String.format("#%06x;", rand_num);
-        String temp = colorCode.repeat(6) + "\n";
-        return temp.repeat(6);
+        String colorCode = String.format("\"#%06x\"", rand_num);
+        return "{\"size\":1, \"color\":"+colorCode+", \"pattern\": [["+colorCode+"]]}";
     }
 
     public void updateFromDto(@NonNull UserSettingsDTO dto) {

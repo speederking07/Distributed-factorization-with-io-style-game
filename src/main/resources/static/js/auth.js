@@ -23,7 +23,7 @@ function register() {
     pass2.removeAttr('invalid');
     let registerData = objectifyForm($('#registerForm').serializeArray());
     if (registerData['username'].length <= 5) {
-        signInMessage("login%Username cannot be blank");
+        signInMessage("login%Username is too short");
         return;
     }
     if (!emailVerify(registerData['email'])) {
@@ -35,7 +35,7 @@ function register() {
         return;
     }
     if (registerData['password'].length <= 5) {
-        signInMessage("password%Password must be length >= 5");
+        signInMessage("password%Password must be length > 5");
         return;
     }
 
@@ -197,8 +197,14 @@ function logInMessage(message) {
 }
 
 function settingsMessage(message) {
-    //TODO
-    alert(message);
+    let data = message.split('%');
+    if (data[0] === "password") {
+        $("#changePassword").val('');
+        $("#changePassword2").val('');
+        popup('Error', data[1], [['ok', () => null]]);
+    } else if (data[0] === "email") {
+        popup('Error', data[1], [['ok', () => null]]);
+    }
 }
 
 function emailVerify(data) {

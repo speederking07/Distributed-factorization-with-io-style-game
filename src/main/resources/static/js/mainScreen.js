@@ -53,37 +53,6 @@ $(document).ready(function () {
     refreshSettings();
 });
 
-
-function refreshSettings() {
-    $.get({
-        url: "/user/settings",
-        dataType: "json",
-        success: function (data) {
-            alert("setting refreshed");
-            //TODO
-        }
-    });
-}
-
-function updateSettings(settings) {
-    // tak ma wygladac obiekt do tego requesta, odpowiednik UserSettingsDTO
-    //settings = JSON.stringify({namesAbove:true, boardAnimation:true, dyingAnimation:true, colorsInCSV:"#010000;#000000;#000000;#000000;#000000;#000000;\n#000000;#000000;#000000;#000000;#000000;#000000;\n#000000;#000000;#000000;#000000;#000000;#000000;\n#000000;#000000;#000000;#000000;#000000;#000000;\n#000000;#000000;#000000;#000000;#000000;#000000;\n#000000;#000000;#000000;#000000;#000000;#000000;\n"})
-    settings = JSON.stringify(settings);
-    $.post({
-        url: "/user/settings",
-        contentType: "application/json; charset=utf-8",
-        data: settings,
-        success: function () {
-            //TODO
-            alert("settings updated");
-        },
-        error: function () {
-            //TODO
-            alert("error")
-        }
-    });
-}
-
 function closeAllWindows() {
     $('.floatingBtn').each((k, v) => $(v).removeAttr('active'));
     $('.floatingDiv').each((k, v) => $(v).attr('visible', "False"));

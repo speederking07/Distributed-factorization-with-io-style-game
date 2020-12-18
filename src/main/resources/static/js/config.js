@@ -19,6 +19,20 @@ $( document ).ready(function () {
         $('#configDiv').attr('visible', 'False');
         $('#configFBtn').removeAttr('active');
         $('.colorPickerDiv').remove();
+        const settings = {
+            namesAbove: $('#namesBox').is(':checked'),
+            boardAnimation: $('#boardAnimationsBox').is(':checked'),
+            dyingAnimation: $('#killingAnimationsBox').is(':checked'),
+            colorsInCSV: currentConfigToPattern.toJSON(Color.fromHex($('#colorInput').val())),
+        };
+        updateSettings(settings);
+    });
+
+    $('#quitConfig').click(function (){
+        $('#configDiv').attr('visible', 'False');
+        $('#configFBtn').removeAttr('active');
+        $('.colorPickerDiv').remove();
+        refreshSettings();
     });
 
     $('#changeGraphicalSettings').click(function (){
@@ -31,10 +45,65 @@ $( document ).ready(function () {
         }
         $('#settingDiv').attr('visible', 'False');
         $('#settingFBtn').removeAttr('active');
+        $('#changeGraphicalSettings').trigger("click");
+        const settings = {
+            namesAbove: $('#namesBox').is(':checked'),
+            boardAnimation: $('#boardAnimationsBox').is(':checked'),
+            dyingAnimation: $('#killingAnimationsBox').is(':checked'),
+            colorsInCSV: currentConfigToPattern.toJSON(Color.fromHex($('#colorInput').val())),
+        };
+        updateSettings(settings);
     });
 
     generatePattern();
 });
+
+function refreshSettings() {
+    $.get({
+        url: "/user/settings",
+        dataType: "json",
+        success: function (data) {
+            pattern = Pattern.FromJSON(data.colorsInCSV);
+            color = Color.formJson(data.colorsInCSV);
+            if (data.namesAbove){
+                $('#namesBox').attr("checked", "");
+            } else {
+                $('#namesBox').removeAttr("checked");
+            }
+            if (data.boardAnimation){
+                $('#boardAnimationsBox').attr("checked", "");
+            } else {
+                $('#boardAnimationsBox').removeAttr("checked");
+            }
+            if (data.dyingAnimation){
+                $('#killingAnimationsBox').attr("checked", "");
+            } else {
+                $('#killingAnimationsBox').removeAttr("checked");
+            }
+            loadPattern(pattern);
+            $("#colorInput").val(color.toHex());
+            $("#colorInput").change();
+            $('#changeGraphicalSettings').trigger("click");
+        }
+    });
+}
+
+function updateSettings(settings) {
+
+    // tak ma wygladac obiekt do tego requesta, odpowiednik UserSettingsDTO
+    //settings = JSON.stringify({namesAbove:true, boardAnimation:true, dyingAnimation:true, colorsInCSV:"#010000;#000000;#000000;#000000;#000000;#000000;\n#000000;#000000;#000000;#000000;#000000;#000000;\n#000000;#000000;#000000;#000000;#000000;#000000;\n#000000;#000000;#000000;#000000;#000000;#000000;\n#000000;#000000;#000000;#000000;#000000;#000000;\n#000000;#000000;#000000;#000000;#000000;#000000;\n"})
+    const toSent = JSON.stringify(settings);
+    $.post({
+        url: "/user/settings",
+        contentType: "application/json; charset=utf-8",
+        data: toSent,
+        success: function () {
+        },
+        error: function () {
+            popup('Error', data[1], [['Never mind', () => null], ["Try again", () => updateSettings(settings)]]);
+        }
+    });
+}
 
 function generatePattern() {
     let patDiv = '';
@@ -92,6 +161,16 @@ function setAllPatternColor(color) {
         $(target).val(color);
         $(target).change();
     });
+}
+
+function loadPattern(pattern) {
+    for (const x of Array(6).keys()){
+        for (const y of Array(6).keys()) {
+            const handler = $('#p'+x+y);
+            handler.val(pattern.getColor(x,y).toHex());
+            handler.change()
+        }
+    }
 }
 
 function openColorPicker(input){
