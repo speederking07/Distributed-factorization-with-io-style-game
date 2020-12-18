@@ -1,8 +1,8 @@
 package pl.zespolowe.splix.services;
 
 import org.springframework.stereotype.Component;
-import pl.zespolowe.splix.domain.Game;
 import pl.zespolowe.splix.domain.Player;
+import pl.zespolowe.splix.gamerules.Game;
 
 import java.util.HashMap;
 import java.util.Map;

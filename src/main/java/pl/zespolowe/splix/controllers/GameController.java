@@ -10,9 +10,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import pl.zespolowe.splix.domain.Game;
 import pl.zespolowe.splix.domain.Player;
 import pl.zespolowe.splix.domain.user.User;
+import pl.zespolowe.splix.gamerules.Game;
 import pl.zespolowe.splix.services.ActivePlayersRegistry;
 
 import javax.servlet.http.HttpSession;

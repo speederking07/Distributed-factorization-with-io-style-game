@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.zespolowe.splix.domain.user.User;
 import pl.zespolowe.splix.domain.user.UserSettings;
+import pl.zespolowe.splix.gamerules.Game;
 
 import javax.security.auth.login.CredentialException;
 import java.util.Objects;

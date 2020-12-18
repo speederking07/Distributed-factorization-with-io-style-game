@@ -9,8 +9,8 @@ public class Board {
     protected static int x_size=20;
     protected static int y_size=20;
 
-    Map<Point, Checker> fields = new HashMap<Point, Checker>();
-    Map<Point, Checker> paths = new HashMap<Point, Checker>();
+    Map<Point, Checker> fields = new HashMap<>();
+    Map<Point, Checker> paths = new HashMap<>();
 
     Board(int x, int y){
         x_size=x;
@@ -62,6 +62,16 @@ public class Board {
      */
 
     public boolean new_move(Point p, Checker ch){
+        if(paths.containsKey(p)){
+            kill_player(ch);
+            return true;
+        }
+        if(p.x>=x_size || p.y>=y_size){
+            return false;
+        }
+        if(fields.get(p)==ch){
+            overtake(ch);
+        }
         return true;
     }
 
