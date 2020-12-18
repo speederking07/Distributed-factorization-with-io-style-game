@@ -20,11 +20,12 @@ public class GameRegistry {
         return new Game(1);
     }
 
-    public int addToGame() {
+    public int addToGame(Player player) {
         Game game = games.values().stream().filter(g -> !g.isFull()).findFirst().orElse(null);
         if (game == null)
             game = createGame();
-        //TODO: add to game
+        game.join(player);
+        //TODO: zwróć stan gry return game.join(player)
         return game.getGameID();
     }
 

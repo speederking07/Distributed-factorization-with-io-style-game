@@ -34,6 +34,11 @@ public class Game {
         players.remove(player);
     }
 
+    //TODO: ma zwracać aktualny stan gry, a nie void
+    public void join(Player player ){
+
+    }
+
     public boolean isActive() {
         //TODO: czy gra trwa
         return true;
