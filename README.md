@@ -20,10 +20,10 @@ Projekt studencki na zajęcia z Technologii programowania
 Tworzony przez:
 [Michał Kalina](https://github.com/KalinaMichal) , 
 [Tomek Pach](https://github.com/Masioki) oraz
-[Marek Bauer](https://github.com/speederking07) , 
-[Strona kursu](https://cs.pwr.edu.pl/lauks/pz.html)
+[Marek Bauer](https://github.com/speederking07),
+[strona kursu](https://cs.pwr.edu.pl/lauks/pz.html)
 
 ## Application description
 Obliczenia w tle, gra w Splix, tabele wynikow, rankingi, modyfikacja weza i wiele wiele wiecej!!!
 
-TBA
+TBA soon
