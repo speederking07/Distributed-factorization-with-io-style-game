@@ -2,19 +2,18 @@ var stompClient = null;
 var gameID = null;
 var username = null;
 
-$(document).ready(function () {
+window.onload = function () {
     var socket = new SockJS('/gameStompEndpoint');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         //TODO: co robic przy polaczeniu
     });
-});
+}
 
 
 
 function play() {
     var user = $("#playerName").val();
-    alert(user);
     $.get({
         url: '/game/play?username=' + user,
         dataType: "text/plain",

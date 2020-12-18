@@ -22,13 +22,15 @@
     <script src="js/mainScreen.js"></script>
     <script src="js/config.js"></script>
     <script src="js/game.js"></script>
+    <script src="js/stomp.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
     <title>Document</title>
 </head>
 <body>
 <canvas id="board" class="" height="400" width="500"></canvas>
 
 <c:set value="False" var="logged"/>
-<sec:authorize access="hasAnyRole('USER', 'ADMIN')">
+<sec:authorize access="isAuthenticated()">
     <c:set value="True" var="logged"/>
 </sec:authorize>
 
@@ -123,11 +125,11 @@
             <h2>Change password</h2>
             <input id="changePassword" type="password" placeholder="Password">
             <input id="changePassword2" type="password" placeholder="Repeat Password">
-            <input id="changePasswordBtn" type="button" value="Change password">
+            <input id="changePasswordBtn" type="button" value="Change password" onclick="changePassword()">
             <h2>Change e-mail</h2>
             <input id="changeEmail" type="password" placeholder="E-mail">
             <input id="changeEmail2" type="password" placeholder="Repeat E-mail">
-            <input id="changeEmailBtn" type="button" value="Change e-mail">
+            <input id="changeEmailBtn" type="button" value="Change e-mail" onclick="changeEmail()">
             <h2>Graphical setting</h2>
             <label class="si si-checkbox">
                 <input type="checkbox" id="boardAnimationsBox" checked/>

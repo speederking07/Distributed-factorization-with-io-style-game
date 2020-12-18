@@ -34,12 +34,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                //.addFilterBefore(createCustomFilter(), AnonymousAuthenticationFilter.class)
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/resources/**", "/js/**", "/css/**", "/font/**", "/img/**", "/game/**").permitAll() // "/stomp/**", "/gameStompEndpoint", "/topic/**"
+                .antMatchers("/stomp/**", "/gameStompEndpoint/**", "/topic/**","/", "/resources/**", "/js/**", "/css/**", "/font/**", "/img/**", "/game/**").permitAll()
                 .antMatchers("/register", "/login").anonymous()
-                .antMatchers("/user/**").hasRole("USER")
+                .antMatchers("/user/**", "/logout").authenticated()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .and()
                 .authorizeRequests().anyRequest().authenticated()
@@ -47,17 +46,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/")
                 .loginProcessingUrl("/login")
-                //.defaultSuccessUrl("/", true)
+                .defaultSuccessUrl("/", true)
                 .failureHandler(failureHandler)
                 .successHandler(successHandler)
                 .and()
                 .logout()
-                .logoutUrl("/user/logout")
+                .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
                 .and()
-                .rememberMe().tokenValiditySeconds(84600 * 30)
+                .rememberMe()
+                .tokenValiditySeconds(84600 * 30)
+                .alwaysRemember(true)
+                .useSecureCookie(true)
                 .and()
-                .exceptionHandling().accessDeniedPage("/");
+                .exceptionHandling().accessDeniedPage("/error");
         http
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)

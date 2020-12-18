@@ -49,7 +49,21 @@ $(document).ready(function () {
     $('#signInBtn').click(function () {
         register();
     });
+
+    refreshSettings();
 });
+
+
+function refreshSettings(){
+    $.get({
+        url: "/user/settings",
+        dataType: "json",
+        success: function (data) {
+            alert('names above =  ' + data["namesAbove"]);
+            //TODO
+        }
+    });
+}
 
 function closeAllWindows() {
     $('.floatingBtn').each((k, v) => $(v).removeAttr('active'));

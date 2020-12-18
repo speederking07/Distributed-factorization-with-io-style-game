@@ -1,6 +1,6 @@
-function logout(){
+function logout() {
     $.get({
-        url: "/user/logout",
+        url: "/logout",
         success: function (data) {
             $('#mainScreen').attr('logged', 'False');
             const name_bar = $('#playerName');
@@ -15,7 +15,7 @@ function logout(){
 function register() {
     const login = $('#signInLogin');
     const email = $('#signInEmail');
-    const pass1 =  $('#signInPassword');
+    const pass1 = $('#signInPassword');
     const pass2 = $('#signInPassword2');
     login.removeAttr('invalid');
     email.removeAttr('invalid');
@@ -26,7 +26,7 @@ function register() {
         signInMessage("login%Username cannot be blank");
         return;
     }
-    if (!emailVerify(registerData['email'])){
+    if (!emailVerify(registerData['email'])) {
         signInMessage("email%Email is not correct");
         return;
     }
@@ -83,12 +83,54 @@ function logIn() {
             $('#mainScreen').attr('logged', 'True');
             $('#loginDiv').attr('visible', "False");
             $('#loginFBtn').removeAttr('active');
+            refreshSettings();
         },
         error: function (data) {
             logInMessage(data.responseText);
         }
     })
 }
+
+function changePassword() {
+    let var1 = $("#changePassword").val();
+    let var2 = $("#changePassword2").val();
+    if (var1 !== var2) {
+        settingsMessage("password%Passwords are not identical");
+        return;
+    }
+    $.post({
+        url: "/user/password",
+        contentType: 'text/plain',
+        data: var1,
+        success: function (data) {
+            alert(data);
+        },
+        error: function (data) {
+            settingsMessage(data.responseText);
+        }
+    });
+}
+
+function changeEmail() {
+    let var1 = $("#changeEmail").val();
+    let var2 = $("#changeEmail2").val();
+    if (var1 !== var2) {
+        settingsMessage("email%Emails are not identical");
+        return;
+    }
+    $.post({
+        url: "/user/email",
+        contentType: 'text/plain',
+        data: var1,
+        success: function (data) {
+            alert(data);
+        },
+        error: function (data) {
+            settingsMessage(data.responseText);
+        }
+    });
+}
+
 
 function objectifyForm(formArray) {
     let returnArray = {};
@@ -101,61 +143,65 @@ function objectifyForm(formArray) {
 function signInMessage(message) {
     const login = $('#signInLogin');
     const email = $('#signInEmail');
-    const pass1 =  $('#signInPassword');
+    const pass1 = $('#signInPassword');
     const pass2 = $('#signInPassword2');
     let data = message.split('%');
-    if(data.length < 1){
+    if (data.length < 1) {
         pass1.val('');
         pass2.val('');
-        popup('Error', message, [['ok', ()=>null]]);
-    }
-    else{
-        if(data[0] === 'login'){
+        popup('Error', message, [['ok', () => null]]);
+    } else {
+        if (data[0] === 'login') {
             login.attr('invalid', '');
             pass1.val('');
             pass2.val('');
-            popup('Error', data[1], [['ok', ()=>null]]);
-        } if(data[0] === 'email'){
+            popup('Error', data[1], [['ok', () => null]]);
+        }
+        if (data[0] === 'email') {
             email.attr('invalid', '');
             pass1.val('');
             pass2.val('');
-            popup('Error', data[1], [['ok', ()=>null]]);
-        }else if (data[0] === 'password'){
+            popup('Error', data[1], [['ok', () => null]]);
+        } else if (data[0] === 'password') {
             pass1.attr('invalid', '');
             pass2.attr('invalid', '');
             pass1.val('');
             pass2.val('');
-            popup('Error', data[1], [['ok', ()=>null]]);
+            popup('Error', data[1], [['ok', () => null]]);
         }
     }
 }
 
 function logInMessage(message) {
     let data = message.split('%');
-    if(data.length < 1){
+    if (data.length < 1) {
         const login = $('#logInLogin');
         const password = $('#logInPassword');
         login.val('');
         password.val('');
-        popup('Error', message, [['ok', ()=>null]]);
-    }
-    else{
-        if(data[0] === 'password'){
+        popup('Error', message, [['ok', () => null]]);
+    } else {
+        if (data[0] === 'password') {
             const password = $('#logInPassword');
             password.attr('invalid', '');
             password.val('');
-            popup('Error', data[1], [['ok', ()=>null]]);
-        } else if (data[0] === 'login'){
+            popup('Error', data[1], [['ok', () => null]]);
+        } else if (data[0] === 'login') {
             const login = $('#logInLogin');
             const password = $('#logInPassword');
             login.attr('invalid', '');
             password.val('');
-            popup('Error', data[1], [['ok', ()=>null]]);
+            popup('Error', data[1], [['ok', () => null]]);
         }
     }
 }
 
-function emailVerify(data){
+function settingsMessage(message) {
+    //TODO
+    alert(message);
+}
+
+function emailVerify(data) {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(data.toLowerCase());
 }
