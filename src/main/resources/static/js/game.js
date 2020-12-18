@@ -23,13 +23,14 @@ function play() {
             username = user;
         },
         error: function (data) {
+            //TODO: nie można dołączyć, bo pusty string albo zajęta nazwa
             alert(data.responseText);
         }
     })
 }
 
 
-function subscribe(ID) {
+function subscribe() {
     stompClient.subscribe('/topic/stomp/' + gameID, function (move) {
         if (move.body !== "ERROR") decodeMove(JSON.parse(move.body));
     });
