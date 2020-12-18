@@ -1,4 +1,4 @@
-package pl.zespolowe.splix.domain;
+package pl.zespolowe.splix.domain.user;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -23,17 +23,16 @@ import java.util.stream.Collectors;
 @Entity
 public class User implements UserDetails {
 
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "username", nullable = false))
-    @Enumerated(EnumType.STRING)
-    private final Set<Role> roles;
     @Id
     @NotBlank(message = "username%Username cannot be blank")
     private String username;
+
     @NotBlank(message = "password%Password cannot be empty")
     @Size(min = 5, message = "password%Password must be length >= 5")
     private String password;
+
     private long score;
+
     @Basic
     private Date lastLogged;
 
@@ -41,10 +40,19 @@ public class User implements UserDetails {
     @NotBlank(message = "email%Email cannot be blank")
     private String email;
 
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "username", nullable = false))
+    @Enumerated(EnumType.STRING)
+    private final Set<Role> roles;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private UserSettings settings;
+
 
     public User() {
         roles = new HashSet<>();
         score = 0;
+        settings = new UserSettings(this);
         addRole(Role.USER);
     }
 
@@ -84,5 +92,13 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream().map(r -> new SimpleGrantedAuthority(r.toString())).collect(Collectors.toList());
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }

@@ -7,12 +7,12 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import pl.zespolowe.splix.domain.Game;
 import pl.zespolowe.splix.domain.Player;
+import pl.zespolowe.splix.domain.user.User;
 import pl.zespolowe.splix.services.ActivePlayersRegistry;
 
 import javax.servlet.http.HttpSession;
@@ -27,10 +27,11 @@ public class GameController {
     public ResponseEntity<String> play(@RequestParam("username") String username, Authentication auth, HttpSession session) {
         Player player = cache.getPlayer(session.getId());
         if (player == null) {
-            if (auth != null && auth.isAuthenticated())
-                username = ((UserDetails) auth.getPrincipal()).getUsername();
             try {
-                player = cache.addPlayer(session.getId(), username);
+                if (auth != null && auth.isAuthenticated())
+                    player = cache.addPlayer(session.getId(), (User) auth.getPrincipal());
+                else
+                    player = cache.addPlayer(session.getId(), username);
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
             }

@@ -3,7 +3,7 @@ package pl.zespolowe.splix.repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import pl.zespolowe.splix.domain.User;
+import pl.zespolowe.splix.domain.user.User;
 
 import java.util.Collection;
 

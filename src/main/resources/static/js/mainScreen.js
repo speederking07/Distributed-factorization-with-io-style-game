@@ -15,7 +15,7 @@ $(document).ready(function () {
 
     $('.leaderBoardFBtn').click(function () {
         $.get({
-            url: "/leaders",
+            url: "/game/leaders",
             dataType: "json",
             success: function (data) {
                 let table = $('#leaderboardBody');
@@ -49,7 +49,40 @@ $(document).ready(function () {
     $('#signInBtn').click(function () {
         register();
     });
+
+    refreshSettings();
 });
+
+
+function refreshSettings() {
+    $.get({
+        url: "/user/settings",
+        dataType: "json",
+        success: function (data) {
+            alert("setting refreshed");
+            //TODO
+        }
+    });
+}
+
+function updateSettings(settings) {
+    // tak ma wygladac obiekt do tego requesta, odpowiednik UserSettingsDTO
+    //settings = JSON.stringify({namesAbove:true, boardAnimation:true, dyingAnimation:true, colorsInCSV:"#010000;#000000;#000000;#000000;#000000;#000000;\n#000000;#000000;#000000;#000000;#000000;#000000;\n#000000;#000000;#000000;#000000;#000000;#000000;\n#000000;#000000;#000000;#000000;#000000;#000000;\n#000000;#000000;#000000;#000000;#000000;#000000;\n#000000;#000000;#000000;#000000;#000000;#000000;\n"})
+    settings = JSON.stringify(settings);
+    $.post({
+        url: "/user/settings",
+        contentType: "application/json; charset=utf-8",
+        data: settings,
+        success: function () {
+            //TODO
+            alert("settings updated");
+        },
+        error: function () {
+            //TODO
+            alert("error")
+        }
+    });
+}
 
 function closeAllWindows() {
     $('.floatingBtn').each((k, v) => $(v).removeAttr('active'));
@@ -75,12 +108,12 @@ function blockingPopups() {
 
 function popup(header, content, buttons) {
     let btn = "";
-    for (let b of buttons){
+    for (let b of buttons) {
         console.log("()=>{(" + b[1] + ")(); closePopup();}");
-        btn += "<input type='button' value='"+b[0]+"' onclick='(()=>{(" + b[1] + ")(); closePopup();})()'>"
+        btn += "<input type='button' value='" + b[0] + "' onclick='(()=>{(" + b[1] + ")(); closePopup();})()'>"
     }
     $('body').append('<div class="dialogBox popup blockPopup">' +
-        '<h1>' + header + '</h1>'+
+        '<h1>' + header + '</h1>' +
         '<p>' + content + '</p>' +
         '<div>' + btn + '</div>' +
         '</div>');
