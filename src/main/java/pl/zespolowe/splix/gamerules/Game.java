@@ -1,16 +1,17 @@
 package pl.zespolowe.splix.gamerules;
+
+import pl.zespolowe.splix.domain.Player;
+
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Game {
     private static final int x_size=20;
     private static final int y_size=20;
     private static final int max_players=20;
 
-    private Board board = new Board(x_size,y_size);
+    private final Board board = new Board(x_size,y_size);
     public List<Checker> players = new ArrayList<>();
 
     public boolean add_player(Player p){

@@ -1,12 +1,14 @@
 package pl.zespolowe.splix.gamerules;
 
+import pl.zespolowe.splix.domain.Player;
+
 import java.awt.*;
 
 public class Checker {
     Player player;
     private Point point;
     private int score=0;
-    private Direction direction = Direction.EAST;
+    private final Direction direction = Direction.EAST;
 
     Checker(Player pl, Point po){
         player=pl;
