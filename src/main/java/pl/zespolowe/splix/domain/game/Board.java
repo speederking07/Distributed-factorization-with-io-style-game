@@ -1,4 +1,5 @@
-package pl.zespolowe.splix.gamerules;
+package pl.zespolowe.splix.domain.game;
+
 import java.util.concurrent.ThreadLocalRandom;
 // Bimap
 import java.awt.*;
@@ -9,8 +10,8 @@ public class Board {
     protected static int x_size=20;
     protected static int y_size=20;
 
-    Map<Point, Checker> fields = new HashMap<Point, Checker>();
-    Map<Point, Checker> paths = new HashMap<Point, Checker>();
+    Map<Point, Checker> fields = new HashMap<>();
+    Map<Point, Checker> paths = new HashMap<>();
 
     Board(int x, int y){
         x_size=x;
@@ -18,8 +19,8 @@ public class Board {
     }
 
     public void clear_board(){
-        fields = new HashMap<Point, Checker>();
-        paths = new HashMap<Point, Checker>();
+        fields = new HashMap<>();
+        paths = new HashMap<>();
     }
     public void clear_players_sign(Checker checker){
         paths.forEach((k, v) -> {
@@ -47,7 +48,7 @@ public class Board {
             }
         });
     }
-    public Point find_place_for_respawn(int size_x, int size_y){
+    public Point findPlaceForRespawn(int size_x, int size_y){
         Point point0 = null;
         for (int i=0;i<size_x*size_y/5;i++){
             point0.x = ThreadLocalRandom.current().nextInt(0, size_x + 1);
@@ -61,11 +62,17 @@ public class Board {
      *
      */
 
-    public boolean new_move(Point p, Checker ch){
+    public boolean newMove(Point p, Checker ch){
+        if(paths.containsKey(p)){
+            kill_player(ch);
+            return true;
+        }
+        if(p.x>=x_size || p.y>=y_size){
+            return false;
+        }
+        if(fields.get(p)==ch){
+            overtake(ch);
+        }
         return true;
     }
-
-
-
-
 }

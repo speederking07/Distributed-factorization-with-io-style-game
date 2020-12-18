@@ -28,7 +28,7 @@ public class AuthProvider implements AuthenticationProvider {
         String password = (String) authentication.getCredentials();
         UserDetails registeredUserDetails = userService.loadUserByUsername(username);
 
-        if(!registeredUserDetails.isEnabled())
+        if (!registeredUserDetails.isEnabled())
             throw new AccountExpiredException("username%Account expired");
 
         if (!passwordEncoder.matches(password, registeredUserDetails.getPassword()))
@@ -39,6 +39,6 @@ public class AuthProvider implements AuthenticationProvider {
 
     @Override
     public boolean supports(Class<?> aClass) {
-        return UsernamePasswordAuthenticationToken.class.equals(aClass) ;
+        return UsernamePasswordAuthenticationToken.class.equals(aClass);
     }
 }
