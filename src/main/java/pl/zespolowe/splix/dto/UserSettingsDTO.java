@@ -1,9 +1,7 @@
 package pl.zespolowe.splix.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import pl.zespolowe.splix.config.validation.Colors;
 import pl.zespolowe.splix.domain.user.UserSettings;
 
 @Getter
@@ -11,9 +9,17 @@ import pl.zespolowe.splix.domain.user.UserSettings;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserSettingsDTO {
+    @NonNull
     private boolean boardAnimation;
+
+    @NonNull
     private boolean namesAbove;
+
+    @NonNull
     private boolean dyingAnimation;
+
+    @Colors
+    @NonNull
     private String colorsInCSV;
 
     public UserSettingsDTO(UserSettings settings) {

@@ -43,6 +43,14 @@ public class UserController {
         return ResponseEntity.ok(new UserSettingsDTO(user.getSettings()));
     }
 
+    @PostMapping(value = "/user/settings", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> updateSettings(@Valid @RequestBody UserSettingsDTO dto, Authentication auth) {
+        User user = (User) auth.getPrincipal();
+        user.getSettings().updateFromDto(dto);
+        service.saveUser(user);
+        return ResponseEntity.ok("");
+    }
+
     @PostMapping(value = "/user/password", consumes = TEXT_PLAIN_VALUE)
     public ResponseEntity<String> changePassword(@RequestBody String password, Authentication authentication) {
         try {
@@ -76,7 +84,7 @@ public class UserController {
 
     //TODO
     @GetMapping(value = "/admin/set", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> registerAdmin(@Valid @RequestBody String username) {
+    public ResponseEntity<String> registerAdmin(@RequestBody String username) {
         try {
             User user = service.setAdmin(username);
             log.info("Set admin: " + user);

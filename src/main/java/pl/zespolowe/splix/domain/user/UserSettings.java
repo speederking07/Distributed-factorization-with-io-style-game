@@ -1,7 +1,10 @@
 package pl.zespolowe.splix.domain.user;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
+import pl.zespolowe.splix.config.validation.Colors;
+import pl.zespolowe.splix.dto.UserSettingsDTO;
 
 import javax.persistence.*;
 import java.util.Random;
@@ -23,6 +26,7 @@ public class UserSettings {
 
     private boolean dyingAnimation;
 
+    @Colors
     @Column(length = 294)
     private String colorsInCSV;
 
@@ -42,5 +46,12 @@ public class UserSettings {
         String colorCode = String.format("#%06x;", rand_num);
         String temp = colorCode.repeat(6) + "\n";
         return temp.repeat(6);
+    }
+
+    public void updateFromDto(@NonNull UserSettingsDTO dto) {
+        this.colorsInCSV = dto.getColorsInCSV();
+        this.boardAnimation = dto.isBoardAnimation();
+        this.dyingAnimation = dto.isDyingAnimation();
+        this.namesAbove = dto.isNamesAbove();
     }
 }
