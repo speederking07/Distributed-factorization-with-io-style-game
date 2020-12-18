@@ -23,13 +23,13 @@ public class Checker {
     public Point next_turn(){
         Point point0=point;
         switch (direction) {
-            case EAST:
+            case EAST ->
                 point0.x++;
-            case WEST:
+            case WEST ->
                 point0.x--;
-            case NORTH:
+            case NORTH ->
                 point0.y++;
-            case SOUTH:
+            case SOUTH ->
                 point0.y--;
         }
         return point0;

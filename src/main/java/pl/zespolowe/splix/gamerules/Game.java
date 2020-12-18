@@ -10,8 +10,8 @@ public class Game {
     private static final int y_size=20;
     private static final int max_players=20;
 
-    private static Board board = new Board(x_size,y_size);
-    public static List<Checker> players = new ArrayList<>();
+    private Board board = new Board(x_size,y_size);
+    public List<Checker> players = new ArrayList<>();
 
     public boolean add_player(Player p){
         if(players.size()<max_players) {
