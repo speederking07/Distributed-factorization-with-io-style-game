@@ -23,28 +23,22 @@ import java.util.stream.Collectors;
 @Entity
 public class User implements UserDetails {
 
-    @Id
-    @NotBlank(message = "username%Username cannot be blank")
-    private String username;
-
-    @NotBlank(message = "password%Password cannot be empty")
-    @Size(min = 5, message = "password%Password must be length >= 5")
-    private String password;
-
-    private long score;
-
-    @Basic
-    private Date lastLogged;
-
-    @Email(message = "email%Invalid email address")
-    @NotBlank(message = "email%Email cannot be blank")
-    private String email;
-
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "username", nullable = false))
     @Enumerated(EnumType.STRING)
     private final Set<Role> roles;
-
+    @Id
+    @NotBlank(message = "username%Username cannot be blank")
+    private String username;
+    @NotBlank(message = "password%Password cannot be empty")
+    @Size(min = 5, message = "password%Password must be length >= 5")
+    private String password;
+    private long score;
+    @Basic
+    private Date lastLogged;
+    @Email(message = "email%Invalid email address")
+    @NotBlank(message = "email%Email cannot be blank")
+    private String email;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private UserSettings settings;
 

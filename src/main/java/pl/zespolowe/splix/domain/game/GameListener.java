@@ -1,4 +1,4 @@
-package pl.zespolowe.splix.domain;
+package pl.zespolowe.splix.domain.game;
 
 public interface GameListener {
     //void event(Move move);
