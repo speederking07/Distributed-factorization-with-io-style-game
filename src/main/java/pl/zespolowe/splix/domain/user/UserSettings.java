@@ -27,7 +27,7 @@ public class UserSettings {
     private boolean dyingAnimation;
 
     @Colors
-    @Column(length = 400)
+    @Column(length = 1000)
     private String colorsInCSV;
 
     public UserSettings() {

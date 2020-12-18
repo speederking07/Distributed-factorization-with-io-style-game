@@ -23,7 +23,7 @@ function register() {
     pass2.removeAttr('invalid');
     let registerData = objectifyForm($('#registerForm').serializeArray());
     if (registerData['username'].length <= 5) {
-        signInMessage("login%Username is too short");
+        signInMessage("username%Username is too short");
         return;
     }
     if (!emailVerify(registerData['email'])) {
@@ -151,7 +151,7 @@ function signInMessage(message) {
         pass2.val('');
         popup('Error', message, [['ok', () => null]]);
     } else {
-        if (data[0] === 'login') {
+        if (data[0] === 'username') {
             login.attr('invalid', '');
             pass1.val('');
             pass2.val('');
@@ -186,7 +186,7 @@ function logInMessage(message) {
             password.attr('invalid', '');
             password.val('');
             popup('Error', data[1], [['ok', () => null]]);
-        } else if (data[0] === 'login') {
+        } else if (data[0] === 'username') {
             const login = $('#logInLogin');
             const password = $('#logInPassword');
             login.attr('invalid', '');

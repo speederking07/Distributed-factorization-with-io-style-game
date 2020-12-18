@@ -23,7 +23,7 @@ $( document ).ready(function () {
             namesAbove: $('#namesBox').is(':checked'),
             boardAnimation: $('#boardAnimationsBox').is(':checked'),
             dyingAnimation: $('#killingAnimationsBox').is(':checked'),
-            colorsInCSV: currentConfigToPattern.toJSON(Color.fromHex($('#colorInput').val())),
+            colorsInCSV: currentConfigToPattern().toJSON(Color.fromHex($('#colorInput').val())),
         };
         updateSettings(settings);
     });
@@ -36,21 +36,16 @@ $( document ).ready(function () {
     });
 
     $('#changeGraphicalSettings').click(function (){
-        let config = [$('#namesBox').is(':checked'),
-            $('#boardAnimationsBox').is(':checked'),
-            $('#killingAnimationsBox').is(':checked')];
-        BoardView.prototype.getGraphicalSettings = () => config;
-        if(demo instanceof Demo){
-            demo.view.draw = demo.view.generateDrawFunction(config[0], config[1], config[2]);
-        }
+        updateDisplay();
+
         $('#settingDiv').attr('visible', 'False');
         $('#settingFBtn').removeAttr('active');
-        $('#changeGraphicalSettings').trigger("click");
+
         const settings = {
             namesAbove: $('#namesBox').is(':checked'),
             boardAnimation: $('#boardAnimationsBox').is(':checked'),
             dyingAnimation: $('#killingAnimationsBox').is(':checked'),
-            colorsInCSV: currentConfigToPattern.toJSON(Color.fromHex($('#colorInput').val())),
+            colorsInCSV: currentConfigToPattern().toJSON(Color.fromHex($('#colorInput').val())),
         };
         updateSettings(settings);
     });
@@ -81,11 +76,21 @@ function refreshSettings() {
                 $('#killingAnimationsBox').removeAttr("checked");
             }
             loadPattern(pattern);
-            $("#colorInput").val(color.toHex());
-            $("#colorInput").change();
-            $('#changeGraphicalSettings').trigger("click");
+            updateDisplay();
         }
     });
+}
+
+function updateDisplay(){
+    $("#colorInput").val(color.toHex());
+    $("#colorInput").change();
+    let config = [$('#namesBox').is(':checked'),
+        $('#boardAnimationsBox').is(':checked'),
+        $('#killingAnimationsBox').is(':checked')];
+    BoardView.prototype.getGraphicalSettings = () => config;
+    if(demo instanceof Demo){
+        demo.view.draw = demo.view.generateDrawFunction(config[0], config[1], config[2]);
+    }
 }
 
 function updateSettings(settings) {
@@ -99,8 +104,8 @@ function updateSettings(settings) {
         data: toSent,
         success: function () {
         },
-        error: function () {
-            popup('Error', data[1], [['Never mind', () => null], ["Try again", () => updateSettings(settings)]]);
+        error: function (data) {
+            popup('Error', data.responseText, [['Never mind', () => null], ["Try again", () => updateSettings(settings)]]);
         }
     });
 }
