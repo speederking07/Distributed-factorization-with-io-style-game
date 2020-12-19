@@ -39,6 +39,14 @@ public class GameListenerState{
         moves.add(new Move(ch));
     }
 
+    public void changeField(Checker ch,Point p){
+        changes.add(new Change(ch, p));
+    }
+
+    public void changeField(Point p){
+        changes.add(new Change(p));
+    }
+
 
    /* class Change{//pole ktore zminilo wlasciciela w danej turze.
         int x;
