@@ -4,29 +4,28 @@ class Connection {
     gameID;
     username;
 
-    #constructor(gameID, username){
-        this.gameID = gameID
-        this.username = username
+    constructor(gameID, username){
+        this.gameID = gameID;
+        this.username = username;
     }
 
-    async static getGameConnection(user) {
+    static getGameConnection(user) {
         return new Promise(function (resolve, reject) {
             $.get({
                 url: '/game/play?username=' + user,
-                dataType: "text/plain",
                 success: function (data) {
-                    resolve(new #Connection(data, user));
+                    resolve(new Connection(data, user));
                 },
                 error: function (data) {
-                    reject(data);
+                    reject(data.responseText);
                 }
             })
         });
     }
 
-    subscribe() {
-        stompClient.subscribe('/topic/stomp/' + this.gameID, function (move) {
-            if (move.body !== "ERROR") decodeMove(JSON.parse(move.body));
+    subscribe(update) {
+        stompClient.subscribe('/topic/stomp/' + this.gameID, function (state) {
+            update(JSON.parse(state));
         });
     }
 
@@ -38,6 +37,21 @@ class Connection {
             }));
         }
     }
+}
+
+class FakeConnection{
+    constructor(){
+        this.turn = 0;
+    }
+
+    subscribe(update){
+        update({turn: 0, kills: [], moves:[], change:[], addPlayers: [
+            {name:"me", x:20, y:20, colorsInCSV:"{\"size\":1, \"pattern\": [[\"#ff0000\"]], \"color\": \"#ff0000\"}"}
+            ]});
+    }
+
+    sendMove(_t, _m){}
+
 }
 
 window.onload = function () {

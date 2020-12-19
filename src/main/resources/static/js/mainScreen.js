@@ -50,6 +50,19 @@ $(document).ready(function () {
         register();
     });
 
+    $('#startGameBtn').click(()=>{
+        $('#mainScreen').attr("visible", "False");
+        Connection.getGameConnection($('#playerName').val()).then(connection => {
+            if(typeof demo !== 'undefined'){
+                demo.kill();
+            }
+            demo = new Game(connection, document.getElementById('board'), $('#playerName').val())
+        }).catch(error =>{
+            $('#mainScreen').attr("visible", "True");
+            popup('Error', error, [['ok', ()=>{}]]);
+        })
+    });
+
     refreshSettings();
 });
 

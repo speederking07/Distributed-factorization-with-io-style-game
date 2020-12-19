@@ -18,6 +18,9 @@ class Demo{
             this.players.push(new Player(Color.fromHex('#00ff00'), "P2" ,13*40, 8*-40, [[13*40, 8*-40]], 0, 4));
             this.players.push(new Player(Color.fromHex('#0000ff'), "P3",  20*40, 16*-40, [[20*40, 16*-40]], 0, 4));
             this.players.push(new Player(Color.fromHex('#ffff00'), "P4",  40*40, 8*40, [[40*40, 8*40]], -4, 0));
+            for (let p of this.players){
+                p.drawPath();
+            }
         }).bind(this);
         this.key_frames[11] = (() => {
             this.players[0].path.push([8*40, 10*40]);
@@ -105,10 +108,12 @@ class Demo{
 }
 
 let demo;
+
 $(document).ready(function () {
     $(window).trigger('resize');
     demo = new Demo(document.getElementById('board'));
     demo.start();
+    //demo = new Game(new FakeConnection(), document.getElementById('board'), "me");
 });
 
 $(window).resize(function () {

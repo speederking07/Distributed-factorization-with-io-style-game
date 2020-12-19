@@ -162,7 +162,7 @@
 <h1 id="enterNameH1">Enter player name</h1>
 <div>
 <input id="playerName" type="text">
-<input id="startGameBtn" type="button" value="Start" onclick="play()">
+<input id="startGameBtn" type="button" value="Start">
 </div>
     </c:otherwise>
 </c:choose>
