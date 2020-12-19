@@ -97,6 +97,7 @@ function updateSettings(settings) {
 
     // tak ma wygladac obiekt do tego requesta, odpowiednik UserSettingsDTO
     //settings = JSON.stringify({namesAbove:true, boardAnimation:true, dyingAnimation:true, colorsInCSV:"#010000;#000000;#000000;#000000;#000000;#000000;\n#000000;#000000;#000000;#000000;#000000;#000000;\n#000000;#000000;#000000;#000000;#000000;#000000;\n#000000;#000000;#000000;#000000;#000000;#000000;\n#000000;#000000;#000000;#000000;#000000;#000000;\n#000000;#000000;#000000;#000000;#000000;#000000;\n"})
+    const s = settings;
     const toSent = JSON.stringify(settings);
     $.post({
         url: "/user/settings",
@@ -105,7 +106,7 @@ function updateSettings(settings) {
         success: function () {
         },
         error: function (data) {
-            popup('Error', data.responseText, [['Never mind', () => null], ["Try again", () => updateSettings(settings)]]);
+            popup('Error', data.responseText, [['Never mind', () => null], ["Try again", () => updateSettings(s)]]);
         }
     });
 }

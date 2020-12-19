@@ -22,6 +22,7 @@
     <script src="js/mainScreen.js"></script>
     <script src="js/config.js"></script>
     <script src="js/game.js"></script>
+    <script src="js/connection.js"></script>
     <script src="js/stomp.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
     <title>Document</title>
