@@ -1,6 +1,7 @@
 package pl.zespolowe.splix.domain.game;
 
 import lombok.Getter;
+import lombok.Setter;
 import pl.zespolowe.splix.domain.game.sendElements.AddPlayer;
 import pl.zespolowe.splix.domain.game.sendElements.Change;
 import pl.zespolowe.splix.domain.game.sendElements.Move;
@@ -25,6 +26,19 @@ public class GameListenerState{
     List<Change> changes;
     List<Move> moves;
     List<AddPlayer> addedPlayers;
+
+    public void addPlayer(Checker ch){
+        addedPlayers.add(new AddPlayer(ch));
+    }
+
+    public void playersAdder(Checker ch){
+        players.add(ch.getPlayer().getUsername());
+    }
+
+    public void playerMove(Checker ch){
+        moves.add(new Move(ch));
+    }
+
 
    /* class Change{//pole ktore zminilo wlasciciela w danej turze.
         int x;

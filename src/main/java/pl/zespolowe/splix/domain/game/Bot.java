@@ -8,7 +8,7 @@ public class Bot extends Player implements GameListener {
     }
 
     @Override
-    public void event() {
+    public void event(GameListenerState move) {
 
     }
 }

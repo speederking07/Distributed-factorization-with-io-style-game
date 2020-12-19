@@ -9,11 +9,11 @@ public class Move {
     int y;
     //boolean havePath;
     String player;
-    public Move(Checker ch, Point p) {
-        this.x=p.x;
-        this.y=p.y;
+    public Move(Checker ch) {
+        this.x=ch.getPoint().x;
+        this.y=ch.getPoint().y;
         this.player=ch.getPlayer().getUsername();
-        //this.havePath= TODO://MAREK PO CO CI TO, NIECH KAZDY MA PATH
+        //this.havePath= TODO://MAREK PO CO CI TO xd, NIECH KAZDY MA PATH
 
     }
 
