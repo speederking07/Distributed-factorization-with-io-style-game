@@ -1,3 +1,6 @@
+/**
+ * Logging out user
+ */
 function logout() {
     $.get({
         url: "/logout",
@@ -12,6 +15,9 @@ function logout() {
     });
 }
 
+/**
+ * Creating new account using filled input
+ */
 function register() {
     const login = $('#signInLogin');
     const email = $('#signInEmail');
@@ -62,6 +68,9 @@ function register() {
     })
 }
 
+/**
+ * Logging user to server using filled input
+ */
 function logIn() {
     const login = $('#logInLogin');
     const name = login.val();
@@ -91,6 +100,9 @@ function logIn() {
     })
 }
 
+/**
+ * Change user password using filled input
+ */
 function changePassword() {
     let var1 = $("#changePassword").val();
     let var2 = $("#changePassword2").val();
@@ -111,6 +123,9 @@ function changePassword() {
     });
 }
 
+/**
+ * Changed user email
+ */
 function changeEmail() {
     let var1 = $("#changeEmail").val();
     let var2 = $("#changeEmail2").val();
@@ -132,6 +147,11 @@ function changeEmail() {
 }
 
 
+/**
+ * Function changing array to abject
+ *
+ * @param formArray - array to objectify
+ */
 function objectifyForm(formArray) {
     let returnArray = {};
     for (let i = 0; i < formArray.length; i++) {
@@ -140,6 +160,10 @@ function objectifyForm(formArray) {
     return returnArray;
 }
 
+/**
+ * Communicate user problem with singing in
+ * @param message - field%message
+ */
 function signInMessage(message) {
     const login = $('#signInLogin');
     const email = $('#signInEmail');
@@ -172,6 +196,10 @@ function signInMessage(message) {
     }
 }
 
+/**
+ * Communicate user problem with logging in
+ * @param message - field%message
+ */
 function logInMessage(message) {
     let data = message.split('%');
     if (data.length < 1) {
@@ -196,6 +224,10 @@ function logInMessage(message) {
     }
 }
 
+/**
+ * Communicate user problem with changing account problem
+ * @param message - field%message
+ */
 function settingsMessage(message) {
     let data = message.split('%');
     if (data[0] === "password") {
@@ -207,6 +239,11 @@ function settingsMessage(message) {
     }
 }
 
+/**
+ * Checks is email is valid email
+ * @param data - email
+ * @returns {boolean}
+ */
 function emailVerify(data) {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(data.toLowerCase());
