@@ -85,9 +85,13 @@ class FakeConnection{
  * Creates connection via WebSocket
  */
 window.onload = function () {
+    refreshWebsocketConnection();
+};
+
+function refreshWebsocketConnection(){
     let socket = new SockJS('/gameStompEndpoint');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         //TODO: co robic przy polaczeniu
     });
-};
+}

@@ -93,6 +93,7 @@ function logIn() {
             $('#loginDiv').attr('visible', "False");
             $('#loginFBtn').removeAttr('active');
             refreshSettings();
+            refreshWebsocketConnection();
         },
         error: function (data) {
             logInMessage(data.responseText);
