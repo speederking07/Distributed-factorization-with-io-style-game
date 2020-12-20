@@ -120,24 +120,24 @@ class Game {
     update(data) {
         if (this.turn === -1) {
             this.turn = data.turn;
-            this.addPlayerList(data.addPlayers);
-            this.killPlayerList(data.kills);
+            this.addPlayerList(data.addedPlayers);
+            this.killPlayerList(data.killedPlayers);
             this.moveListLate(data.moves, 1);
-            this.changeBoardList(data.change, 0);
+            this.changeBoardList(data.changes, 0);
             this.gameLoop = setInterval((() => {
                 this.play();
             }).bind(this), 1000 / (TURNS_PER_SECONDS * BLOCK_SIZE / SPEED))
         } else if (this.turn === Number(data.turn)) {
-            this.addPlayerList(data.addPlayers);
-            this.killPlayerList(data.kills);
+            this.addPlayerList(data.addedPlayers);
+            this.killPlayerList(data.killedPlayers);
             this.moveListInTime(data.moves);
-            this.changeBoardList(data.change, 0)
+            this.changeBoardList(data.changes, 0)
         } else {
             const behind = this.turn - Number(data.turn);
-            this.addPlayerList(data.addPlayers);
-            this.killPlayerList(data.kills);
+            this.addPlayerList(data.addedPlayers);
+            this.killPlayerList(data.killedPlayers);
             this.moveListLate(data.moves, behind);
-            this.changeBoardList(data.change, behind)
+            this.changeBoardList(data.changes, behind)
         }
 
     }

@@ -45,9 +45,9 @@ class BoardView {
         this.height = this.canvas.height;
         $('body').css('background-position', Math.floor(-x * BACKGROUND_SHIFT) + "px " + Math.floor(-y * BACKGROUND_SHIFT) + "px");
         this.ctx.clearRect(0, 0, this.width, this.height);
-        this.#drawBoard(x, y);
-        this.#drawBoardAnimations(x, y);
-        this.#drawDying(x, y);
+        this.drawBoard(x, y);
+        this.drawBoardAnimations(x, y);
+        this.drawDying(x, y);
         for (let p of this.players) {
             p.draw(this.ctx, x, y, this.width, this.height);
         }
@@ -76,7 +76,7 @@ class BoardView {
             && (y + 2) * BLOCK_SIZE > this.prevY && (y - 2) * BLOCK_SIZE < this.prevY + this.height) {
             let t = this;
             this.animations.push([function (vX, vY, frame) {
-                t.#drawRotation(x, y, vX, vY, patternFrom.getColor(x, y).get(), patternTo.getColor(x, y).get(), frame);
+                t.drawRotation(x, y, vX, vY, patternFrom.getColor(x, y).get(), patternTo.getColor(x, y).get(), frame);
             }, ROTATION_FRAMES + Math.floor(Math.random() * (MAX_ROTATION_DELAY))]);
         }
     }
@@ -95,7 +95,7 @@ class BoardView {
      * @param viewX - x coordinate
      * @param viewY - y coordinate
      */
-    #drawBoard(viewX, viewY) {
+    drawBoard(viewX, viewY) {
         const row = Math.ceil(this.height / BLOCK_SIZE) + 1;
         const col = Math.ceil(this.width / BLOCK_SIZE) + 1;
         const arrayX = Math.floor(viewX / BLOCK_SIZE);
@@ -114,7 +114,7 @@ class BoardView {
      * @param viewX - x coordinate
      * @param viewY - y coordinate
      */
-    #drawDying(viewX, viewY) {
+    drawDying(viewX, viewY) {
         for (let i = 0; i < this.dying.length; i++) {
             this.dying[i][0].drawDying(this.ctx, viewX, viewY, this.width, this.height, this.dying[i][1]);
             this.dying[i][1] += 1;
@@ -130,7 +130,7 @@ class BoardView {
      * @param viewX - x coordinate
      * @param viewY - y coordinate
      */
-    #drawBoardAnimations(viewX, viewY) {
+    drawBoardAnimations(viewX, viewY) {
         for (let i = 0; i < this.animations.length; i++) {
             this.animations[i][0](viewX, viewY, this.animations[i][1]);
             this.animations[i][1] -= 1;
@@ -151,7 +151,7 @@ class BoardView {
      * @param colorTo - new color
      * @param frame - frame of animation
      */
-    #drawRotation(x, y, viewX, viewY, colorFrom, colorTo, frame) {
+    drawRotation(x, y, viewX, viewY, colorFrom, colorTo, frame) {
         if ((x + 2) * BLOCK_SIZE > viewX && (x - 2) * BLOCK_SIZE < viewX + this.width && (y + 2) * BLOCK_SIZE > viewY && (y - 2) * BLOCK_SIZE < viewY + this.height) {
             if (frame <= ROTATION_FRAMES) {
                 if (frame * 2 < ROTATION_FRAMES) {
@@ -160,7 +160,7 @@ class BoardView {
                     this.ctx.fillStyle = colorFrom;
                 }
                 this.ctx.clearRect(x * BLOCK_SIZE - viewX, y * BLOCK_SIZE - viewY, BLOCK_SIZE, BLOCK_SIZE);
-                this.#drawRotationRect(x * BLOCK_SIZE - viewX, y * BLOCK_SIZE - viewY, BLOCK_SIZE, BLOCK_SIZE, (Math.PI / ROTATION_FRAMES) * frame);
+                this.drawRotationRect(x * BLOCK_SIZE - viewX, y * BLOCK_SIZE - viewY, BLOCK_SIZE, BLOCK_SIZE, (Math.PI / ROTATION_FRAMES) * frame);
             } else {
                 this.ctx.fillStyle = colorFrom;
                 this.ctx.fillRect(x * BLOCK_SIZE - viewX + 1, y * BLOCK_SIZE - viewY + 1, BLOCK_SIZE - 2, BLOCK_SIZE - 2)
@@ -177,7 +177,7 @@ class BoardView {
      * @param rotation - angle of rotation in radians
      * @param shape - perspective of viewer (at 0 only width is changed)
      */
-    #drawRotationRect(x, y, w, h, rotation, shape = 0.2) {
+    drawRotationRect(x, y, w, h, rotation, shape = 0.2) {
         this.ctx.beginPath();
         let t1 = w * Math.cos(rotation) / 2;
         let t2 = w * shape * Math.sin(rotation) / 2;
@@ -208,12 +208,12 @@ class BoardView {
             names = (_x, _y) => void 0;
         }
         if (displayAnimations) {
-            animations = ((x, y) => this.#drawBoardAnimations(x, y)).bind(this)
+            animations = ((x, y) => this.drawBoardAnimations(x, y)).bind(this)
         } else {
             animations = ((_x, _y) => this.animations = []).bind(this);
         }
         if (displayDying) {
-            dying = ((x, y) => this.#drawDying(x, y)).bind(this)
+            dying = ((x, y) => this.drawDying(x, y)).bind(this)
         } else {
             dying = ((_x, _y) => this.dying = []).bind(this);
         }
@@ -224,7 +224,7 @@ class BoardView {
             this.height = this.canvas.height;
             $('body').css('background-position', Math.floor(-x * BACKGROUND_SHIFT) + "px " + Math.floor(-y * BACKGROUND_SHIFT) + "px");
             this.ctx.clearRect(0, 0, this.width, this.height);
-            this.#drawBoard(x, y);
+            this.drawBoard(x, y);
             animations(x, y);
             dying(x, y);
             for (let p of this.players) {

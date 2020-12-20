@@ -36,11 +36,16 @@ class Player {
         this.drawingPath = false;
     }
 
+    /**
+     * Creates player from server's data
+     * @param data
+     * @returns {Player}
+     */
     static fromServer(data) {
         let posX = (data.x - 1) * BLOCK_SIZE - 3 * SPEED;
         let posY = data.y * BLOCK_SIZE;
-        let color = Color.formJson(data.colorsInCSV);
-        let pattern = Pattern.FromJSON(data.colorsInCSV);
+        let color = Color.formJson(data.color);
+        let pattern = Pattern.FromJSON(data.color);
         return new Player(color, data.name, posX, posY, [], 2, 0, pattern,
             {x: data.x, y: data.y}, {x: data.x - 1, y: data.y}, {x: data.x - 2, y: data.y});
     }
@@ -77,9 +82,9 @@ class Player {
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
         ctx.strokeStyle = this.color.darken().get();
-        this.#drawPath(ctx, viewX, viewY, viewW, viewH, 2);
+        this.displayPath(ctx, viewX, viewY, viewW, viewH, 2);
         ctx.strokeStyle = this.color.get();
-        this.#drawPath(ctx, viewX, viewY, viewW, viewH);
+        this.displayPath(ctx, viewX, viewY, viewW, viewH);
         if (this.posX >= viewX - C && this.posX <= viewX + viewW + C && this.posY >= viewY - C && this.posY <= viewY + viewH + C) {
             ctx.beginPath();
             ctx.fillStyle = this.color.darken().get();
@@ -130,7 +135,7 @@ class Player {
             ctx.lineCap = "round";
             ctx.lineJoin = "round";
             ctx.strokeStyle = this.color.get();
-            this.#drawPath(ctx, viewX, viewY, viewW, viewH);
+            this.drawPath(ctx, viewX, viewY, viewW, viewH);
         }
         if (this.posX >= viewX - C && this.posX <= viewX + viewW + C && this.posY >= viewY - C && this.posY <= viewY + viewH + C) {
             ctx.beginPath();
@@ -246,7 +251,7 @@ class Player {
      * @param shift - number of pixels to shift path position to right and dawn
      * @param C - extension of field of view for drawing optimization
      */
-    #drawPath(ctx, viewX, viewY, viewW, viewH, shift = 0, C = PLAYER_RADIUS) {
+    displayPath(ctx, viewX, viewY, viewW, viewH, shift = 0, C = PLAYER_RADIUS) {
         let drawing = false;
         let prev = [this.posX, this.posY];
         for (let i = this.path.length - 1; i >= 0; i--) {
