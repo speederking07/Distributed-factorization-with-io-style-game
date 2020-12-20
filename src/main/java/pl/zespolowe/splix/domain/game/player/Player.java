@@ -1,23 +1,20 @@
-package pl.zespolowe.splix.domain.game;
+package pl.zespolowe.splix.domain.game.player;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.zespolowe.splix.domain.game.Game;
 import pl.zespolowe.splix.domain.user.User;
 import pl.zespolowe.splix.domain.user.UserSettings;
 
 import javax.security.auth.login.CredentialException;
 import java.util.Objects;
 
+@Getter
 public class Player {
 
-    @Getter
-    private final String username;
-
-    @Getter
     @Setter
     private Game game;
-
-    @Getter
+    private final String username;
     private String colorsInCsv;
 
     public Player(String username) throws CredentialException {

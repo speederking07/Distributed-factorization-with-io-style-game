@@ -44,7 +44,7 @@ public class UserSettings {
         Random obj = new Random();
         int rand_num = obj.nextInt(0xffffff + 1);
         String colorCode = String.format("\"#%06x\"", rand_num);
-        return "{\"size\":1, \"color\":"+colorCode+", \"pattern\": [["+colorCode+"]]}";
+        return "{\"size\":1, \"color\":" + colorCode + ", \"pattern\": [[" + colorCode + "]]}";
     }
 
     public void updateFromDto(@NonNull UserSettingsDTO dto) {

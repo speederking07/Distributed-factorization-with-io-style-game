@@ -9,13 +9,13 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
 import pl.zespolowe.splix.services.ActivePlayersRegistry;
-import pl.zespolowe.splix.services.GameRegistry;
+import pl.zespolowe.splix.services.GameService;
 
 @Component
 public class SubscriptionInterceptor implements ChannelInterceptor {
 
     @Autowired
-    private GameRegistry gameRegistry;
+    private GameService gameService;
 
     @Autowired
     private ActivePlayersRegistry playersRegistry;
@@ -34,6 +34,6 @@ public class SubscriptionInterceptor implements ChannelInterceptor {
     private boolean validateSubscription(String sessionID, String destination) {
         if (destination == null) return false;
         int gameID = Integer.parseInt(destination.substring(6));
-        return gameRegistry.containsPlayer(gameID, playersRegistry.getPlayer(sessionID));
+        return gameService.containsPlayer(gameID, playersRegistry.getPlayer(sessionID));
     }
 }

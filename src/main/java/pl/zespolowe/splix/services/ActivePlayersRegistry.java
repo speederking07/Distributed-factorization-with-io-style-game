@@ -1,7 +1,7 @@
 package pl.zespolowe.splix.services;
 
 import org.springframework.stereotype.Component;
-import pl.zespolowe.splix.domain.game.Player;
+import pl.zespolowe.splix.domain.game.player.Player;
 import pl.zespolowe.splix.domain.user.User;
 
 import javax.security.auth.login.CredentialException;

@@ -1,4 +1,7 @@
-package pl.zespolowe.splix.domain.game;
+package pl.zespolowe.splix.domain.game.player;
+
+import pl.zespolowe.splix.domain.game.GameListener;
+import pl.zespolowe.splix.domain.game.GameListenerState;
 
 import javax.security.auth.login.CredentialException;
 
