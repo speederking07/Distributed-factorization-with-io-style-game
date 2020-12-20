@@ -9,10 +9,7 @@ import pl.zespolowe.splix.domain.game.overtakeElements.OverTake;
 import pl.zespolowe.splix.domain.game.player.Player;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 class Board {
@@ -84,12 +81,20 @@ class Board {
 
     public void killPlayer(Checker checker) {
         clearPlayersSign(checker);
-        fields.forEach((k, v) -> {
-            if (v == checker) {
-                fields.remove(k);
-                gls.killPlayer(v);
+        Iterator<Map.Entry<Point, Checker>> iterator = fields.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<Point, Checker> entry = iterator.next();
+            if (entry.getValue().equals(checker)) {
+                gls.killPlayer(entry.getValue());
+                iterator.remove();
             }
-        });
+        }
+//        fields.forEach((k, v) -> {
+//            if (v == checker) {
+//                fields.remove(k);
+//                gls.killPlayer(v);
+//            }
+//        });
     }
 
     public Checker respawnPlayer(int size_x, int size_y, Player p) {

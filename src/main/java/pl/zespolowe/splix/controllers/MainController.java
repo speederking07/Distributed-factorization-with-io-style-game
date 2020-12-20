@@ -46,13 +46,13 @@ public class MainController implements ErrorController {
     }
 
     @GetMapping("/error")
-    public String err() {
-        return "redirect:/";
+    public ResponseEntity<String> err() {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
     }
 
     @Override
     public String getErrorPath() {
-        return "/";
+        return "/error";
     }
 
 }
