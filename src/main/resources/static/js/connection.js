@@ -1,14 +1,29 @@
 let stompClient = null;
 
+/**
+ * Class responsible of handling connection via WebSocket
+ *
+ * @author Marek Bauer
+ * @author Tomasz Pach
+ */
 class Connection {
-    gameID;
-    username;
-
+    /**
+     * Constructor of Connection
+     *
+     * @param gameID - Id of game to connect
+     * @param username - name using in game
+     */
     constructor(gameID, username){
         this.gameID = gameID;
         this.username = username;
     }
 
+    /**
+     * Get get a promise of connection to server
+     *
+     * @param user - username to use
+     * @returns {Promise<unknown>}
+     */
     static getGameConnection(user) {
         return new Promise(function (resolve, reject) {
             $.get({
@@ -23,12 +38,24 @@ class Connection {
         });
     }
 
+    /**
+     * Set listener of server connection
+     *
+     * @param update - function to be called whenever information is received from server
+     */
     subscribe(update) {
         stompClient.subscribe('/topic/stomp/' + this.gameID, function (state) {
+            console.log(state);
             update(JSON.parse(state.body));
         });
     }
 
+    /**
+     * Send information about move to server
+     *
+     * @param turn - number of turn
+     * @param move - string representing direction 'NORTH', 'WEST' etc.
+     */
     sendMove(turn, move) {
         if (stompClient != null && this.gameID != null) {
             stompClient.send('/stomp/' + this.gameID, {}, JSON.stringify({
@@ -54,6 +81,9 @@ class FakeConnection{
 
 }
 
+/**
+ * Creates connection via WebSocket
+ */
 window.onload = function () {
     let socket = new SockJS('/gameStompEndpoint');
     stompClient = Stomp.over(socket);
