@@ -56,7 +56,7 @@ $(document).ready(function () {
             if(typeof demo !== 'undefined'){
                 demo.kill();
             }
-            demo = new Game(connection, document.getElementById('board'), $('#playerName').val())
+            demo = new Game(connection, document.getElementById('board'), $('#playerName').val(), closeGame)
         }).catch(error =>{
             $('#mainScreen').attr("visible", "True");
             popup('Error', error, [['ok', ()=>{}]]);
@@ -99,4 +99,15 @@ function popup(header, content, buttons) {
         '<p>' + content + '</p>' +
         '<div>' + btn + '</div>' +
         '</div>');
+}
+
+function closeGame(){
+    $('#mainScreen').attr("visible", "True");
+    setTimeout(() => {
+        if(typeof demo !== 'undefined') {
+            demo.kill()
+        }
+        demo = new Demo(document.getElementById('board'));
+        demo.start();
+    }, 2000);
 }

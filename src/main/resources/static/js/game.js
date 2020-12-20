@@ -1,5 +1,6 @@
 class Game{
-    constructor(connection, canvas, playerName){
+    constructor(connection, canvas, playerName, whenFinished){
+        this.whenFinished = whenFinished;
         this.players = [];
         this.canvas = canvas;
         this.playersMap = new Map();
@@ -75,6 +76,7 @@ class Game{
         for (let p of killedPlayers){
             if(p === this.playerName){
                 this.alive = false;
+                this.whenFinished();
             }
             this.playersMap.delete(p);
             const index = Game.findPlayerIndexByName(this.players, p);
