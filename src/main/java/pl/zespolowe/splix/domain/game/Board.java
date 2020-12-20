@@ -5,6 +5,9 @@ package pl.zespolowe.splix.domain.game;
  *
  */
 
+import pl.zespolowe.splix.domain.game.overtakeElements.OverTake;
+
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 // Bimap
@@ -54,6 +57,36 @@ public class Board {
     }
 
     public void overtake(Checker checker) {
+        OverTake ovt = new OverTake();
+        Point p2 = checker.getPoint();
+        Point p1 = checker.getPath();
+        Set<Point> myFields = new HashSet<>();
+        Set<Point> finalMyFields = myFields;
+        Set<Point> finalMyPaths = myFields;
+        fields.forEach((k, v) -> {
+            if (v == checker) {
+                finalMyFields.add(k);
+            }
+        });
+        paths.forEach((k, v) -> {
+            if (v == checker) {
+                finalMyPaths.add(k);
+            }
+        });
+        //zdobacz obwod (return Set<Point>)
+        myFields=ovt.getCircuit(finalMyFields);
+        Set<Point> myPath = new HashSet<>();
+        //wsadz obwod w findpath
+        myPath=ovt.findPath(p1, p2, myFields, new HashSet<>());
+        //polacz sciezke z tym co zwroci find path
+        myPath.addAll(finalMyPaths);
+        myPath.addAll(finalMyFields);
+
+
+
+
+
+        //zamaluj pole z tego co polaczyles
         //TODO: Znajdz co zostalo otoczone i to zamaluj chyba bym potrzebowal serwera do tego chlopaki
         //TODO: GLS CHANGE NA WIELU ELEMENTACH
         clear_players_sign(checker);
@@ -105,19 +138,44 @@ public class Board {
 
     public Set<Checker> newMove(Set<Checker> checkers, GameListenerState glstmp) {
         gls = glstmp;
+
         for (Checker ch : checkers) {
+            Point oldPoint = ch.getPoint();
             Point p = ch.next_turn();
             if (paths.containsKey(p)) {
                 //drobna uwaga: zabijam tego ktorego slad zostal najechany
                 kill_player(paths.get(p));
             }
             else if (!(p.x >= x_size && p.y >= y_size)) {
-                ch.set_position(ch.next_turn());
-                if (fields.get(p) == ch) {
-                    overtake(ch);
+                //jesli byl u siebie i nie jest to nowy path
+                //jesli byl u siebie i jest to nic
+                if (fields.get(oldPoint).equals(ch)) {//byl u siebie
+                    if (fields.get(p).equals(ch)){//i jest u siebie
+                        ch.set_position(ch.next_turn());
+                        gls.playerMove(ch,false);
+                    }
+                    else{
+                        ch.setPath(p);
+                        ch.set_position(ch.next_turn());
+                        gls.playerMove(ch,true);
+                        paths.put(ch.getPoint(),ch);
+                    }
                 }
-                paths.put(ch.getPoint(),ch);
-                gls.playerMove(ch,true);
+                //jesli nie byl u siebie i jest to overtake
+                //jesli nie byl u siebie i jest to kolejny path
+                else{//nie byl u siebie
+                    if (fields.get(p).equals(ch)) {// i jest u siebie
+                        ch.set_position(ch.next_turn());
+                        overtake(ch);
+                        ch.setPath(new Point());
+                        gls.playerMove(ch,false);
+                    }
+                    else{//i nie jest u siebie
+                        ch.set_position(ch.next_turn());
+                        paths.put(ch.getPoint(),ch);
+                        gls.playerMove(ch,true);
+                    }
+                }
             }
         }
         return checkers;

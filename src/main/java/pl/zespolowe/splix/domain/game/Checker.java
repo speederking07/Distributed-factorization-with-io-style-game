@@ -2,6 +2,7 @@ package pl.zespolowe.splix.domain.game;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 
 import java.awt.*;
 
@@ -13,6 +14,10 @@ public class Checker {
     private Point point;
     @Getter
     private int score = 0;
+
+    @Setter
+    @Getter
+    private Point path;
 
     Checker(@NonNull Player pl, Point po) {
         player = pl;

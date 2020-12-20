@@ -77,12 +77,8 @@ public class Game implements ObservableGame  {
         gameListenerState= new GameListenerState(turn);
         players=board.newMove(players, gameListenerState);
         gameListenerState=board.getGameListenerState();
-        for(Checker ch: players){//dajmy mu liste checkerow i listnera on tam poustawia co trza i zwroci listnera i liste checkerow
-            Point p=ch.next_turn();
-            //if(board.newMove(p,ch)) ch.set_position(p);
-            //gameListenerState=//to co zwroci
-            //players=board.getCheckers();
-        }
+        //dajmy mu liste checkerow i listnera on tam poustawia co trza i zwroci listnera i liste checkerow
+
     }
     @Override
     public void addListener(@NonNull GameListener listener) {
