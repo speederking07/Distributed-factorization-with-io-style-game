@@ -109,7 +109,7 @@ class Player {
         const center = this.name.length * -10 + PLAYER_RADIUS;
         const x = this.posX - viewX + center;
         const y = this.posY - viewY - 10;
-        if (Player.visible(x, y - 30, x + this.name.length * 30, y + 30, viewX, viewY, viewW, viewH)) {
+        if (Player.visible(x + viewX, y + viewY - 30, x + viewX + this.name.length * 30, y + 30 + viewY, viewX, viewY, viewW, viewH)) {
             ctx.font = '34px Consolas';
             ctx.strokeStyle = 'black';
             ctx.lineWidth = 4;

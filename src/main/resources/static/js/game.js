@@ -17,9 +17,9 @@ class Game {
         this.players = [];
         this.canvas = canvas;
         this.playersMap = new Map();
-        this.board = Array(1000);
-        for (let i = 0; i < 1000; i++) {
-            this.board[i] = Array(1000);
+        this.board = Array(BOARD_SIZE);
+        for (let i = 0; i < BOARD_SIZE; i++) {
+            this.board[i] = Array(BOARD_SIZE);
             this.board[i].fill(BASE_PATTERN);
         }
         this.view = new BoardView(canvas, this.board, this.players);

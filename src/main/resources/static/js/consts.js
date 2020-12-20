@@ -10,6 +10,7 @@ const SPEED = 2; //Number of pixels to move on one step
 const TURNS_PER_SECONDS = 4; //Number of tiles to move to in single seconds
 const NUMBER_OF_STEPS = BLOCK_SIZE / SPEED; //Number of steps to move from one tile to another
 const MOVE_WINDOW = Math.floor(2 * NUMBER_OF_STEPS / 3); //Number of step after witch player can not change direction
+const BOARD_SIZE = 1000; //Size of board on witch game takes place
 
 function mod(a, n) {
     return ((a % n) + n) % n
