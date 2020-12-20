@@ -81,14 +81,12 @@ public class Board {
         //polacz sciezke z tym co zwroci find path
         myPath.addAll(finalMyPaths);
         myPath.addAll(finalMyFields);
-
-
-
-
-
         //zamaluj pole z tego co polaczyles
-        //TODO: Znajdz co zostalo otoczone i to zamaluj chyba bym potrzebowal serwera do tego chlopaki
-        //TODO: GLS CHANGE NA WIELU ELEMENTACH
+        Set<Point> taken = ovt.paintPolygon(myPath);
+        for(Point tmp: taken){
+            fields.put(tmp,checker);
+            gls.changeField(checker,tmp);
+        }
         clear_players_sign(checker);
     }
 
