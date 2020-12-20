@@ -2,15 +2,14 @@ package pl.zespolowe.splix.domain.game;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import pl.zespolowe.splix.domain.game.player.Player;
 import pl.zespolowe.splix.dto.SimpleMove;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class Game implements ObservableGame {
     private final static int x_size = 20;
     private final static int y_size = 20;
@@ -24,7 +23,8 @@ public class Game implements ObservableGame {
     private final Board board;
     private GameListenerState gameListenerState;
     private int turn;
-    private Set<Checker> players;
+    private final Set<Checker> players;
+
 
     public Game(int gameID) {
         this.players = new HashSet<>();
@@ -33,20 +33,27 @@ public class Game implements ObservableGame {
         this.board = new Board(x_size, y_size);
         this.turn = 0;
         this.gameListenerState = new GameListenerState(0);
+        log.info("NEW GAME: " + gameID);
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                newTurn();
+            }
+        }, 1000, 250);
     }
 
     private void publishEvent() {
         listeners.forEach(l -> l.event(gameListenerState));
     }
 
-    private void kill_player(Checker checker) {
+    private void killPlayer(Checker checker) {
         players.remove(checker);
         board.killPlayer(checker);
     }
 
     public void move(SimpleMove move, Player player) {
         //TODO: niech się dzieje magia
-        System.out.println("MOVE: " + player);
+        log.info("MOVE: " + player);
     }
 
     public void resign(Player player) {
@@ -54,7 +61,7 @@ public class Game implements ObservableGame {
                 .filter(t -> t.getPlayer().equals(player))
                 .collect(Collectors.toList());
         if (!(ch.get(0) == null))
-            kill_player(ch.get(0));
+            killPlayer(ch.get(0));
     }
 
     public boolean isActive() {
@@ -86,13 +93,16 @@ public class Game implements ObservableGame {
         return null;
     }
 
+
     public void newTurn() {
+        log.info("NEXT TURN");
         turn++;
         gameListenerState = new GameListenerState(turn);
-        players = board.newMove(players, gameListenerState);
-        gameListenerState = board.getGameListenerState();
+        //TODO: to daje NullPointer
+        //players = board.newMove(players, gameListenerState);
+        //gameListenerState = board.getGameListenerState();
         //dajmy mu liste checkerow i listnera on tam poustawia co trza i zwroci listnera i liste checkerow
-
+        publishEvent();
     }
 
     @Override
