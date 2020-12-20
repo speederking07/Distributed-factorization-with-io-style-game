@@ -18,7 +18,7 @@ import org.springframework.web.socket.messaging.SessionUnsubscribeEvent;
 import pl.zespolowe.splix.domain.game.GameListener;
 import pl.zespolowe.splix.domain.game.player.Player;
 import pl.zespolowe.splix.domain.user.User;
-import pl.zespolowe.splix.dto.IncomingMove;
+import pl.zespolowe.splix.dto.SimpleMove;
 import pl.zespolowe.splix.exceptions.GameException;
 import pl.zespolowe.splix.services.ActivePlayersService;
 import pl.zespolowe.splix.services.GameService;
@@ -85,11 +85,10 @@ public class GameController {
      */
     @MessageMapping("/stomp/{gameID}")
     //@SendTo("/topic/stomp/{gameID}")
-    public void handleMessage(@Payload IncomingMove move, SimpMessageHeaderAccessor accessor) {
+    public void handleMessage(@Payload SimpleMove move, SimpMessageHeaderAccessor accessor) {
         String sessionID = (String) accessor.getSessionAttributes().get("sessionID");
         Player player = playersService.getPlayer(sessionID);
-
-
+        if (player != null) player.move(move);
     }
 
 

@@ -3,6 +3,7 @@ package pl.zespolowe.splix.domain.game;
 import lombok.Getter;
 import lombok.NonNull;
 import pl.zespolowe.splix.domain.game.player.Player;
+import pl.zespolowe.splix.dto.SimpleMove;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -31,22 +32,29 @@ public class Game implements ObservableGame {
         this.gameID = gameID;
         this.board = new Board(x_size, y_size);
         this.turn = 0;
-        this.gameListenerState = new GameListenerState(0); //TODO: null pointer bez tego
+        this.gameListenerState = new GameListenerState(0);
     }
 
-    //TODO: co ma dawać do listenerow - ok
     private void publishEvent() {
         listeners.forEach(l -> l.event(gameListenerState));
     }
 
+    private void kill_player(Checker checker) {
+        players.remove(checker);
+        board.killPlayer(checker);
+    }
+
+    public void move(SimpleMove move, Player player) {
+        //TODO: niech się dzieje magia
+        System.out.println("MOVE: " + player);
+    }
+
     public void resign(Player player) {
-        //TODO: co sie dzieje, gdy gracz sie rozlacza - Bereitet
         List<Checker> ch = players.stream()
                 .filter(t -> t.getPlayer().equals(player))
                 .collect(Collectors.toList());
-        if (!(ch.get(0) == null)) {
+        if (!(ch.get(0) == null))
             kill_player(ch.get(0));
-        }
     }
 
     public boolean isActive() {
@@ -61,7 +69,6 @@ public class Game implements ObservableGame {
         return players.size() >= max_players;
     }
 
-    //TODO: ma zwracać aktualny stan gry, a nie void - Bereitet
     public boolean join(Player p) {
         if (!isFull()) {
             Checker ch = board.respawnPlayer(x_size, y_size, p);
@@ -69,15 +76,12 @@ public class Game implements ObservableGame {
             players.add(ch);
             gameListenerState.addPlayer(ch);
             return true;
-        } else return false;
+        }
+        return false;
     }
 
-    private void kill_player(Checker checker) {
-        players.remove(checker);
-        board.killPlayer(checker);
-    }
 
-    public GameCurrentState getGameCurrentState(){
+    public GameCurrentState getGameCurrentState() {
         //TODO: Na pełną wersję ta metoda za zwracać ten objekt reprezentujący obecny stan gry dla nowych graczy
         return null;
     }

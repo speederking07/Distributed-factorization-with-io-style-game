@@ -5,6 +5,7 @@ import lombok.Setter;
 import pl.zespolowe.splix.domain.game.Game;
 import pl.zespolowe.splix.domain.user.User;
 import pl.zespolowe.splix.domain.user.UserSettings;
+import pl.zespolowe.splix.dto.SimpleMove;
 
 import javax.security.auth.login.CredentialException;
 import java.util.Objects;
@@ -43,6 +44,14 @@ public class Player {
         if (game != null) game.resign(this);
     }
 
+    /**
+     * Perform move in current game
+     * @param move
+     */
+    public void move(SimpleMove move) {
+        if (game != null) game.move(move, this);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -54,5 +63,12 @@ public class Player {
     @Override
     public int hashCode() {
         return Objects.hash(username);
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "username='" + username + '\'' +
+                '}';
     }
 }

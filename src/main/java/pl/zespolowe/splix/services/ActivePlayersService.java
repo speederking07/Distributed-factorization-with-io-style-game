@@ -1,5 +1,6 @@
 package pl.zespolowe.splix.services;
 
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import pl.zespolowe.splix.domain.game.player.Player;
 import pl.zespolowe.splix.domain.user.User;
@@ -33,6 +34,7 @@ public class ActivePlayersService {
      * @param sessionID
      * @return Player assigned to session
      */
+    @Nullable
     public Player getPlayer(String sessionID) {
         return players.get(sessionID);
     }

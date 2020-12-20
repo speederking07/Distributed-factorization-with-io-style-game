@@ -7,7 +7,7 @@ import pl.zespolowe.splix.domain.game.Direction;
 
 @Getter
 @Setter
-public class IncomingMove {
+public class SimpleMove {
     private int turn;
     private Direction move;
 }
