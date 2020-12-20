@@ -64,7 +64,7 @@ public class Board {
         fields.forEach((k, v) -> {
             if (v == checker) {
                 fields.remove(k);
-                gls.changeField(k);
+                gls.killPlayer(v);
             }
         });
     }
@@ -92,7 +92,7 @@ public class Board {
                 fields.put(new Point(point0.x+1,point0.y+2),ch);
                 gls.changeField(ch,new Point(point0.x+1,point0.y+2));
 
-                gls.playersAdder(ch);
+                gls.addPlayer(ch);
                 return ch;
             }
         }
