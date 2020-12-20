@@ -82,13 +82,13 @@ class Board {
     }
 
     public void killPlayer(Checker checker) {
-        clearPlayersSign(checker);
+        clearPlayersSign(checker);/*
         fields.forEach((k, v) -> {
             if (v == checker) {
                 fields.remove(k);
                 gls.killPlayer(v);
             }
-        });
+        });*/
     }
 
     public Checker respawnPlayer(int size_x, int size_y, Player p) {

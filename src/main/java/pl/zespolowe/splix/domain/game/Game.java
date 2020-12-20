@@ -43,7 +43,7 @@ public class Game implements ObservableGame {
         List<Checker> ch = players.stream()
                 .filter(t -> t.getPlayer().equals(player))
                 .collect(Collectors.toList());
-        if(!(ch.get(0)==null)){
+        if(!(ch==null)){
         kill_player(ch.get(0));}
     }
 
