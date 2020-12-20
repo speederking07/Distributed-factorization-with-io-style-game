@@ -20,13 +20,14 @@ class Board {
     private final Map<Point, Checker> paths;
     protected int x_size;
     protected int y_size;
-    private GameListenerState gls=new GameListenerState(0);
+    private GameListenerState gls;
 
     Board(int x, int y) {
         this.x_size = x;
         this.y_size = y;
         this.fields = new HashMap<>();
         this.paths = new HashMap<>();
+        this.gls = new GameListenerState(0); // TODO: bez tej inicjalizacji idzie NullPointer
     }
 
   /*  public void clear_board() {

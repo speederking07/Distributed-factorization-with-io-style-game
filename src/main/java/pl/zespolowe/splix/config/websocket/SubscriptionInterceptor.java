@@ -24,7 +24,7 @@ public class SubscriptionInterceptor implements ChannelInterceptor {
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(message);
         if (StompCommand.SUBSCRIBE.equals(headerAccessor.getCommand())) {
-            String sessionID = (String) headerAccessor.getSessionAttributes().get("sessionId");
+            String sessionID = (String) headerAccessor.getSessionAttributes().get("sessionID");
             if (!validateSubscription(sessionID, headerAccessor.getDestination()))
                 throw new MessagingException("Permission denied for this topic");
         }
@@ -33,7 +33,7 @@ public class SubscriptionInterceptor implements ChannelInterceptor {
 
     private boolean validateSubscription(String sessionID, String destination) {
         if (destination == null) return false;
-        int gameID = Integer.parseInt(destination.substring(6));
+        int gameID = Integer.parseInt(destination.substring(13));
         return gameService.containsPlayer(gameID, playersRegistry.getPlayer(sessionID));
     }
 }

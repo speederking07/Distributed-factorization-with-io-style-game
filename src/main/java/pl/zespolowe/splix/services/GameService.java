@@ -19,7 +19,7 @@ public class GameService {
     }
 
     private Game createGame() {
-        int id = games.keySet().stream().max(Integer::compare).orElse(0);
+        int id = games.keySet().stream().max(Integer::compare).orElse(0) + 1;
         Game game = new Game(id);
         games.put(id, game);
         return game;

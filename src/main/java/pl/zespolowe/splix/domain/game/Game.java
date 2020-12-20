@@ -21,7 +21,7 @@ public class Game implements ObservableGame {
     @Getter
     private final List<GameListener> listeners;
     private final Board board;
-    private GameListenerState gameListenerState=new GameListenerState(0);
+    private GameListenerState gameListenerState;
     private int turn;
     private Set<Checker> players;
 
@@ -31,6 +31,7 @@ public class Game implements ObservableGame {
         this.gameID = gameID;
         this.board = new Board(x_size, y_size);
         this.turn = 0;
+        this.gameListenerState = new GameListenerState(0); //TODO: null pointer bez tego
     }
 
     //TODO: co ma dawać do listenerow - ok

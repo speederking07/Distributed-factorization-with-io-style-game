@@ -42,6 +42,7 @@ public class GameController {
                     player = cache.addPlayer(session.getId(), (User) auth.getPrincipal());
                 else player = cache.addPlayer(session.getId(), username);
             } catch (Exception e) {
+                e.printStackTrace();
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
             }
         }

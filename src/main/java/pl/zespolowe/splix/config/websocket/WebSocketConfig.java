@@ -34,7 +34,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         assert registry != null;
         registry
                 .addEndpoint("/gameStompEndpoint")
-                .setHandshakeHandler(new CustomHandshakeHandler())
+                .addInterceptors(new CustomHandshakeHandler())
                 .withSockJS();
     }
 
