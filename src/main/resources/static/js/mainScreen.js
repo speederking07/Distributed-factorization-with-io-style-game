@@ -1,8 +1,6 @@
-let conn;
+let conn; //TODO: Delete after testing
 
 $(document).ready(function () {
-    //$('#mainScreen').attr('visible', "True");
-
     $('#loginFBtn').click(() => btnHandler($('#loginFBtn'), $('#loginDiv')));
 
     $('#signInFBtn').click(() => btnHandler($('#signInFBtn'), $('#signInDiv')));
@@ -52,28 +50,37 @@ $(document).ready(function () {
         register();
     });
 
-    $('#startGameBtn').click(()=>{
+    $('#startGameBtn').click(() => {
         $('#mainScreen').attr("visible", "False");
         Connection.getGameConnection($('#playerName').val()).then(connection => {
             conn = connection;
-            if(typeof demo !== 'undefined'){
+            if (typeof demo !== 'undefined') {
                 demo.kill();
             }
             demo = new Game(connection, document.getElementById('board'), $('#playerName').val(), closeGame)
-        }).catch(error =>{
+        }).catch(error => {
             $('#mainScreen').attr("visible", "True");
-            popup('Error', error, [['ok', ()=>{}]]);
+            popup('Error', error, [['ok', () => {
+            }]]);
         })
     });
 
     refreshSettings();
 });
 
+/**
+ * Close all visible windows
+ */
 function closeAllWindows() {
     $('.floatingBtn').each((k, v) => $(v).removeAttr('active'));
     $('.floatingDiv').each((k, v) => $(v).attr('visible', "False"));
 }
 
+/**
+ * Handle clicking on specific floating button
+ * @param btn - handler of button
+ * @param div - div to appear after clicking
+ */
 function btnHandler(btn, div) {
     if (div.attr('visible') === 'False') {
         if (!blockingPopups()) {
@@ -87,14 +94,24 @@ function btnHandler(btn, div) {
     }
 }
 
+/**
+ * Checks if there is visible window with class blockPopup
+ * @returns {boolean}
+ */
 function blockingPopups() {
     return $('.blockPopup[visible="True"]').length > 0
 }
 
+/**
+ * Display popup window
+ *
+ * @param header{String} - title of popup
+ * @param content{String}  - message of popup
+ * @param buttons - list of buttons under message in format [['text_on_btn_1', function_to_call], ['text2', function_2]]
+ */
 function popup(header, content, buttons) {
     let btn = "";
     for (let b of buttons) {
-        console.log("()=>{(" + b[1] + ")(); closePopup();}");
         btn += "<input type='button' value='" + b[0] + "' onclick='(()=>{(" + b[1] + ")(); closePopup();})()'>"
     }
     $('body').append('<div class="dialogBox popup blockPopup">' +
@@ -104,10 +121,13 @@ function popup(header, content, buttons) {
         '</div>');
 }
 
-function closeGame(){
+/**
+ * Close game and show menu after dying
+ */
+function closeGame() {
     $('#mainScreen').attr("visible", "True");
     setTimeout(() => {
-        if(typeof demo !== 'undefined') {
+        if (typeof demo !== 'undefined') {
             demo.kill()
         }
         demo = new Demo(document.getElementById('board'));
