@@ -1,3 +1,6 @@
+/**
+ * Class representing ongoing game, responsible of processing communication and sync with displaying
+ */
 class Game{
     constructor(connection, canvas, playerName, whenFinished){
         this.whenFinished = whenFinished;
@@ -18,6 +21,7 @@ class Game{
         this.connection = connection;
         this.connection.subscribe(this.update.bind(this));
         this.gameLoop = null;
+        let listener = SwipeListener(document);
         $(document).keydown((function(e){
             if (e.which === 37 || e.which === 65 || e.which === 97) {
                 this.setNextMove('WEST');
@@ -26,6 +30,21 @@ class Game{
             } else if (e.which === 39 || e.which === 68 || e.which === 100) {
                 this.setNextMove('EAST');
             } else if (e.which === 40 || e.which === 83 || e.which === 115) {
+                this.setNextMove('SOUTH');
+            }
+        }).bind(this));
+        $(document).on("swipe", (function(e){
+            let directions = e.detail.directions;
+            if (directions.left) {
+                this.setNextMove('WEST');
+            }
+            else if (directions.right) {
+                this.setNextMove('EAST');
+            }
+            else if (directions.top) {
+                this.setNextMove('NORTH');
+            }
+            else if (directions.bottom) {
                 this.setNextMove('SOUTH');
             }
         }).bind(this));
@@ -101,13 +120,24 @@ class Game{
     changeBoardList(changes, behind){
         if(behind <= 1){
             for(let c of changes){
-                const patTo = this.playersMap.get(c.player).pattern;
+                let patTo;
+                if(c === ""){
+                    patTo = BASE_PATTERN;
+                }else {
+                    patTo = this.playersMap.get(c.player).pattern;
+                }
                 this.view.changeField(c.x, c.y, this.board[c.x][c.y], patTo);
                 this.board[c.x][c.y] = patTo;
             }
         } else {
             for(let c of changes) {
-                this.board[c.x][c.y] = this.playersMap.get(c.player).pattern;
+                let patTo;
+                if(c === ""){
+                    patTo = BASE_PATTERN;
+                }else {
+                    patTo = this.playersMap.get(c.player).pattern;
+                }
+                this.board[c.x][c.y] = patTo;
             }
         }
     }
@@ -175,7 +205,9 @@ class Game{
 
     kill(){
         this.animator.stop();
-        clearInterval(this.gameLoop)
+        clearInterval(this.gameLoop);
+        $(document).off('keydown');
+        $(document).off('swipe');
     }
 
     static findPlayerIndexByName(players, name){

@@ -110,6 +110,7 @@ class Demo{
 let demo;
 
 $(document).ready(function () {
+    SwipeListener(document);
     $(window).trigger('resize');
     demo = new Demo(document.getElementById('board'));
     demo.start();
