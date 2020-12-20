@@ -3,6 +3,8 @@
  *
  * @author Marek Bauer
  */
+
+//TODO: Comments
 class Player {
     /**
      * Constructor of player
@@ -15,8 +17,12 @@ class Player {
      * @param movX - current speed of player
      * @param movY - current speed of player
      * @param pattern : Pattern - pattern of this player
+     * @param futurePos
+     * @param currentPos
+     * @param prevPos
      */
-    constructor(color, name, posX, posY, path, movX, movY, pattern = getSingleColorPattern(color)) {
+    constructor(color, name, posX, posY, path, movX, movY, pattern = getSingleColorPattern(color),
+                futurePos = null, currentPos={x: posX/BLOCK_SIZE, y: posY/BLOCK_SIZE}, prevPos=null) {
         this.color = color;
         this.name = name;
         this.posX = posX;
@@ -25,6 +31,19 @@ class Player {
         this.movX = movX;
         this.movY = movY;
         this.pattern = pattern;
+        this.futurePos = futurePos;
+        this.currentPos = currentPos;
+        this.prevPos = prevPos;
+        this.drawingPath = false;
+    }
+    
+    static fromServer(data){
+        let posX = (data.x-1) * BLOCK_SIZE - 3*SPEED;
+        let posY = data.y * BLOCK_SIZE;
+        let color = Color.formJson(data.colorsInCSV);
+        let pattern = Pattern.FromJSON(data.colorsInCSV);
+        return new Player(color, data.name, posX, posY, [], 2, 0, pattern,
+            {x: data.x, y: data.y}, {x: data.x-1, y: data.y}, {x: data.x-2, y: data.y});
     }
 
     /**
@@ -104,12 +123,73 @@ class Player {
         }
     }
 
+    computeStep(){
+        if(this.movX >= 0){
+            return (this.posX - Math.floor(this.posX/BLOCK_SIZE)*BLOCK_SIZE)/SPEED
+        } else if (this.movX < 0){
+            return BLOCK_SIZE/SPEED - (this.posX - Math.floor(this.posX/BLOCK_SIZE)*BLOCK_SIZE)/SPEED
+        } else if(this.movY >= 0){
+            return (this.posY - Math.floor(this.posY/BLOCK_SIZE)*BLOCK_SIZE)/SPEED
+        } else {
+            return BLOCK_SIZE/SPEED - (this.posY - Math.floor(this.posY/BLOCK_SIZE)*BLOCK_SIZE)/SPEED
+        }
+    }
+
+    makePositionAdjustments(currX, currY){
+        const step = this.computeStep();
+        if(this.path !== []){
+            this.path.push([currX*BLOCK_SIZE, currY*BLOCK_SIZE])
+        }
+        this.movX = (this.currentPos.x - this.prevPos.x)*SPEED;
+        this.movY = (this.currentPos.y - this.prevPos.y)*SPEED;
+        this.posX = this.prevPos.x * BLOCK_SIZE + movX * step;
+        this.posY = this.prevPos.y * BLOCK_SIZE + movY * step;
+    }
+
+    setPrevPos(x, y){
+        this.prevPos = {x: x, y: y}
+    }
+
+    setFuturePos(x, y){
+        this.futurePos = {x: x, y: y}
+    }
+
+    drawPath(){
+        this.drawingPath = true;
+    }
+
+    closePath(){
+        this.drawingPath = false;
+    }
+
     /**
      * Call this function to add current speed to position
      */
     move() {
         this.posX += this.movX;
         this.posY += this.movY;
+        if(mod(this.posX, BLOCK_SIZE) === 0 && mod(this.posY, BLOCK_SIZE) === 0){
+            if(this.futurePos === null){
+                this.futurePos = {x: (this.posX+(this.movX/SPEED)*BLOCK_SIZE)/BLOCK_SIZE,
+                                  y: (this.posY+(this.movY/SPEED)*BLOCK_SIZE)/BLOCK_SIZE}
+            } else {
+                const pX = this.movX;
+                const pY = this.movY;
+                this.movX = (this.futurePos.x - this.currentPos.x)*SPEED;
+                this.movY = (this.futurePos.y - this.currentPos.y)*SPEED;
+                if ((pX !== this.movX || pY !== this.movY) && this.path !== []) {
+                    this.path.push([this.posX, this.posY])
+                }
+            }
+            if(this.drawingPath === true && this.path === []){
+                this.path.push([this.posX, this.posY])
+            } else if (this.drawingPath === false){
+                this.path = []
+            }
+            this.prevPos = this.currentPos;
+            this.currentPos = this.futurePos;
+            this.futurePos = null;
+        }
     }
 
     /**
