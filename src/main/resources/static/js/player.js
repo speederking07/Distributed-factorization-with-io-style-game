@@ -4,7 +4,6 @@
  * @author Marek Bauer
  */
 
-//TODO: Comments
 class Player {
     /**
      * Constructor of player
@@ -22,7 +21,7 @@ class Player {
      * @param prevPos
      */
     constructor(color, name, posX, posY, path, movX, movY, pattern = getSingleColorPattern(color),
-                futurePos = null, currentPos={x: posX/BLOCK_SIZE, y: posY/BLOCK_SIZE}, prevPos=null) {
+                futurePos = null, currentPos = {x: posX / BLOCK_SIZE, y: posY / BLOCK_SIZE}, prevPos = null) {
         this.color = color;
         this.name = name;
         this.posX = posX;
@@ -36,14 +35,14 @@ class Player {
         this.prevPos = prevPos;
         this.drawingPath = false;
     }
-    
-    static fromServer(data){
-        let posX = (data.x-1) * BLOCK_SIZE - 3*SPEED;
+
+    static fromServer(data) {
+        let posX = (data.x - 1) * BLOCK_SIZE - 3 * SPEED;
         let posY = data.y * BLOCK_SIZE;
         let color = Color.formJson(data.colorsInCSV);
         let pattern = Pattern.FromJSON(data.colorsInCSV);
         return new Player(color, data.name, posX, posY, [], 2, 0, pattern,
-            {x: data.x, y: data.y}, {x: data.x-1, y: data.y}, {x: data.x-2, y: data.y});
+            {x: data.x, y: data.y}, {x: data.x - 1, y: data.y}, {x: data.x - 2, y: data.y});
     }
 
     /**
@@ -55,7 +54,7 @@ class Player {
      * @param viewH - height of camera view
      */
     draw(ctx, viewX, viewY, viewW, viewH) {
-        const C = PLAYER_RADIUS*2;
+        const C = PLAYER_RADIUS * 2;
         ctx.lineWidth = LINE_WIDTH;
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
@@ -87,7 +86,7 @@ class Player {
         const center = this.name.length * -10 + PLAYER_RADIUS;
         const x = this.posX - viewX + center;
         const y = this.posY - viewY - 10;
-        if(Player.visible(x, y - 30, x + this.name.length * 30, y + 30, viewX, viewY, viewW, viewH)) {
+        if (Player.visible(x, y - 30, x + this.name.length * 30, y + 30, viewX, viewY, viewW, viewH)) {
             ctx.font = '34px Consolas';
             ctx.strokeStyle = 'black';
             ctx.lineWidth = 4;
@@ -123,42 +122,67 @@ class Player {
         }
     }
 
-    computeStep(){
-        if(this.movX >= 0){
-            return (this.posX - Math.floor(this.posX/BLOCK_SIZE)*BLOCK_SIZE)/SPEED
-        } else if (this.movX < 0){
-            return BLOCK_SIZE/SPEED - (this.posX - Math.floor(this.posX/BLOCK_SIZE)*BLOCK_SIZE)/SPEED
-        } else if(this.movY >= 0){
-            return (this.posY - Math.floor(this.posY/BLOCK_SIZE)*BLOCK_SIZE)/SPEED
+    /**
+     * Computing how many steps form previous position is player
+     * @returns {number}
+     */
+    computeStep() {
+        if (this.movX >= 0) {
+            return (this.posX - Math.floor(this.posX / BLOCK_SIZE) * BLOCK_SIZE) / SPEED
+        } else if (this.movX < 0) {
+            return BLOCK_SIZE / SPEED - (this.posX - Math.floor(this.posX / BLOCK_SIZE) * BLOCK_SIZE) / SPEED
+        } else if (this.movY >= 0) {
+            return (this.posY - Math.floor(this.posY / BLOCK_SIZE) * BLOCK_SIZE) / SPEED
         } else {
-            return BLOCK_SIZE/SPEED - (this.posY - Math.floor(this.posY/BLOCK_SIZE)*BLOCK_SIZE)/SPEED
+            return BLOCK_SIZE / SPEED - (this.posY - Math.floor(this.posY / BLOCK_SIZE) * BLOCK_SIZE) / SPEED
         }
     }
 
-    makePositionAdjustments(currX, currY){
+    /**
+     * Change current position target in case of wrong predictions
+     * @param currX
+     * @param currY
+     */
+    makePositionAdjustments(currX, currY) {
         const step = this.computeStep();
-        if(this.path !== []){
-            this.path.push([currX*BLOCK_SIZE, currY*BLOCK_SIZE])
+        if (this.path !== []) {
+            this.path.push([currX * BLOCK_SIZE, currY * BLOCK_SIZE])
         }
-        this.movX = (this.currentPos.x - this.prevPos.x)*SPEED;
-        this.movY = (this.currentPos.y - this.prevPos.y)*SPEED;
+        this.movX = (this.currentPos.x - this.prevPos.x) * SPEED;
+        this.movY = (this.currentPos.y - this.prevPos.y) * SPEED;
         this.posX = this.prevPos.x * BLOCK_SIZE + movX * step;
         this.posY = this.prevPos.y * BLOCK_SIZE + movY * step;
     }
 
-    setPrevPos(x, y){
+    /**
+     * Set position from witch player is going
+     * @param x
+     * @param y
+     */
+    setPrevPos(x, y) {
         this.prevPos = {x: x, y: y}
     }
 
-    setFuturePos(x, y){
+    /**
+     * Set position to witch player is going to go in next turn
+     * @param x
+     * @param y
+     */
+    setFuturePos(x, y) {
         this.futurePos = {x: x, y: y}
     }
 
-    drawPath(){
+    /**
+     * Players started path
+     */
+    drawPath() {
         this.drawingPath = true;
     }
 
-    closePath(){
+    /**
+     * Player stoped his path
+     */
+    closePath() {
         this.drawingPath = false;
     }
 
@@ -168,22 +192,24 @@ class Player {
     move() {
         this.posX += this.movX;
         this.posY += this.movY;
-        if(mod(this.posX, BLOCK_SIZE) === 0 && mod(this.posY, BLOCK_SIZE) === 0){
-            if(this.futurePos === null){
-                this.futurePos = {x: (this.posX+(this.movX/SPEED)*BLOCK_SIZE)/BLOCK_SIZE,
-                                  y: (this.posY+(this.movY/SPEED)*BLOCK_SIZE)/BLOCK_SIZE}
+        if (mod(this.posX, BLOCK_SIZE) === 0 && mod(this.posY, BLOCK_SIZE) === 0) {
+            if (this.futurePos === null) {
+                this.futurePos = {
+                    x: (this.posX + (this.movX / SPEED) * BLOCK_SIZE) / BLOCK_SIZE,
+                    y: (this.posY + (this.movY / SPEED) * BLOCK_SIZE) / BLOCK_SIZE
+                }
             } else {
                 const pX = this.movX;
                 const pY = this.movY;
-                this.movX = (this.futurePos.x - this.currentPos.x)*SPEED;
-                this.movY = (this.futurePos.y - this.currentPos.y)*SPEED;
+                this.movX = (this.futurePos.x - this.currentPos.x) * SPEED;
+                this.movY = (this.futurePos.y - this.currentPos.y) * SPEED;
                 if ((pX !== this.movX || pY !== this.movY) && this.path !== []) {
                     this.path.push([this.posX, this.posY])
                 }
             }
-            if(this.drawingPath === true && this.path === []){
+            if (this.drawingPath === true && this.path === []) {
                 this.path.push([this.posX, this.posY])
-            } else if (this.drawingPath === false){
+            } else if (this.drawingPath === false) {
                 this.path = []
             }
             this.prevPos = this.currentPos;
