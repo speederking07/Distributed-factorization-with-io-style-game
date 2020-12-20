@@ -156,7 +156,7 @@
 <h1 id="enterNameH1">Start game</h1>
 <div>
 <input id="playerName" value="${pageContext.request.userPrincipal.name}" type="text" disabled>
-<input id="startGameBtn" type="button" value="Start" onclick="play()">
+<input id="startGameBtn" type="button" value="Start">
 </div>
     </c:when>
     <c:otherwise>
