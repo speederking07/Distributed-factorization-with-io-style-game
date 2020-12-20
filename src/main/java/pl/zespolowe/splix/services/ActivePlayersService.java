@@ -1,6 +1,6 @@
 package pl.zespolowe.splix.services;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import pl.zespolowe.splix.domain.game.player.Player;
 import pl.zespolowe.splix.domain.user.User;
 
@@ -8,11 +8,11 @@ import javax.security.auth.login.CredentialException;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
-public class ActivePlayersRegistry {
+@Service
+public class ActivePlayersService {
     private final Map<String, Player> players;
 
-    public ActivePlayersRegistry() {
+    public ActivePlayersService() {
         players = new HashMap<>();
     }
 

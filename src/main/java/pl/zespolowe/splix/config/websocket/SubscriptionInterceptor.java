@@ -8,7 +8,7 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
-import pl.zespolowe.splix.services.ActivePlayersRegistry;
+import pl.zespolowe.splix.services.ActivePlayersService;
 import pl.zespolowe.splix.services.GameService;
 
 @Component
@@ -18,7 +18,7 @@ public class SubscriptionInterceptor implements ChannelInterceptor {
     private GameService gameService;
 
     @Autowired
-    private ActivePlayersRegistry playersRegistry;
+    private ActivePlayersService playersRegistry;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
