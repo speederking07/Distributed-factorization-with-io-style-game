@@ -32,7 +32,7 @@ public class Game implements ObservableGame  {
         this.gameID = gameID;
     }
     GameListenerState gameListenerState;
-    //TODO: co ma dawać do listenerow - Bereitet
+    //TODO: co ma dawać do listenerow - ok
     private void publishEvent(){
         listeners.forEach(l -> l.event(gameListenerState));
     }

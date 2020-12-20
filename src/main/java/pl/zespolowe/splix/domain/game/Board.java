@@ -92,6 +92,7 @@ public class Board {
                 fields.put(new Point(point0.x+1,point0.y+2),ch);
                 gls.changeField(ch,new Point(point0.x+1,point0.y+2));
 
+                gls.playersAdder(ch);
                 return ch;
             }
         }
@@ -115,8 +116,8 @@ public class Board {
                 if (fields.get(p) == ch) {
                     overtake(ch);
                 }
-                gls.playersAdder(ch);
-                gls.playerMove(ch);
+                paths.put(ch.getPoint(),ch);
+                gls.playerMove(ch,true);
             }
         }
         return checkers;
