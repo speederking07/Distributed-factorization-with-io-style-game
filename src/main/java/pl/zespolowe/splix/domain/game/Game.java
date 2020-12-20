@@ -21,7 +21,7 @@ public class Game implements ObservableGame {
     @Getter
     private final List<GameListener> listeners;
     private final Board board;
-    private GameListenerState gameListenerState;
+    private GameListenerState gameListenerState=new GameListenerState(0);
     private int turn;
     private Set<Checker> players;
 
@@ -43,7 +43,8 @@ public class Game implements ObservableGame {
         List<Checker> ch = players.stream()
                 .filter(t -> t.getPlayer().equals(player))
                 .collect(Collectors.toList());
-        kill_player(ch.get(0));
+        if(!(ch.get(0)==null)){
+        kill_player(ch.get(0));}
     }
 
     public boolean isActive() {

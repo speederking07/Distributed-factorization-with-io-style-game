@@ -20,7 +20,7 @@ class Board {
     private final Map<Point, Checker> paths;
     protected int x_size;
     protected int y_size;
-    private GameListenerState gls;
+    private GameListenerState gls=new GameListenerState(0);
 
     Board(int x, int y) {
         this.x_size = x;
