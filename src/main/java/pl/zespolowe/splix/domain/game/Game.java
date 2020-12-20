@@ -12,6 +12,7 @@ public class Game implements ObservableGame  {
     private final int x_size=20;
     private final int y_size=20;
     private final int max_players=20;
+    private int turn=0;
 
     private final Board board = new Board(x_size,y_size);
 
@@ -20,7 +21,7 @@ public class Game implements ObservableGame  {
     private final int gameID;
 
     @Getter
-    private final Set<Checker> players;
+    private Set<Checker> players;
 
     private final List<GameListener> listeners;
 
@@ -30,10 +31,10 @@ public class Game implements ObservableGame  {
         listeners = new ArrayList<>();
         this.gameID = gameID;
     }
-
-    //TODO: co ma dawać do listenerow
+    GameListenerState gameListenerState;
+    //TODO: co ma dawać do listenerow - ok
     private void publishEvent(){
-        listeners.forEach(GameListener::event);
+        listeners.forEach(l -> l.event(gameListenerState));
     }
 
     public void resign(Player player) {
@@ -57,9 +58,10 @@ public class Game implements ObservableGame  {
     //TODO: ma zwracać aktualny stan gry, a nie void - Bereitet
     public boolean join(Player p){
         if(!isFull()) {
-            Point pin = board.findPlaceForRespawn(x_size,y_size);
-            if(pin == null)return false;
-            players.add(new Checker(p, pin));
+            Checker ch=board.respawnPlayer(x_size,y_size,p);
+            if(ch==null) return false;
+            players.add(ch);
+            gameListenerState.addPlayer(ch);
             return true;
         }
         else return false;
@@ -70,14 +72,16 @@ public class Game implements ObservableGame  {
         board.kill_player(checker);
     }
 
-    private void close_area(Checker checker){
-        board.overtake(checker);
-    }
-
-    public void next_turn(){
-        for(Checker ch: players){
+    public void newTurn(){
+        turn++;
+        gameListenerState= new GameListenerState(turn);
+        players=board.newMove(players, gameListenerState);
+        gameListenerState=board.getGameListenerState();
+        for(Checker ch: players){//dajmy mu liste checkerow i listnera on tam poustawia co trza i zwroci listnera i liste checkerow
             Point p=ch.next_turn();
-            if(board.newMove(p,ch)) ch.set_position(p);
+            //if(board.newMove(p,ch)) ch.set_position(p);
+            //gameListenerState=//to co zwroci
+            //players=board.getCheckers();
         }
     }
     @Override

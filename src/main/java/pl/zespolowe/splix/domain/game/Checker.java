@@ -1,13 +1,17 @@
 package pl.zespolowe.splix.domain.game;
 
+import lombok.Getter;
 import lombok.NonNull;
 
 import java.awt.*;
 
 public class Checker {
     private final Direction direction = Direction.EAST;
+    @Getter
     Player player;
+    @Getter
     private Point point;
+    @Getter
     private int score = 0;
 
     Checker(@NonNull Player pl, Point po) {
