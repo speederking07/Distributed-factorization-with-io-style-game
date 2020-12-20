@@ -25,6 +25,11 @@ import pl.zespolowe.splix.services.GameService;
 
 import javax.servlet.http.HttpSession;
 
+/**
+ * Controller handling game endpoints
+ *
+ * @author Tomasz
+ */
 @Controller
 public class GameController {
 
@@ -37,6 +42,14 @@ public class GameController {
     @Autowired
     private SimpMessagingTemplate messaging;
 
+    /**
+     * Play the game
+     *
+     * @param username url parameter - username
+     * @param auth
+     * @param session  HTTP session
+     * @return assigned Game ID or error message
+     */
     @GetMapping(value = "/game/play")
     public ResponseEntity<String> play(@RequestParam("username") String username, Authentication auth, HttpSession session) {
         Player player = playersService.getPlayer(session.getId());
@@ -64,7 +77,12 @@ public class GameController {
 
     //WEBSOCKET
 
-
+    /**
+     * Handles incoming websocket messages
+     *
+     * @param move     move performed by user
+     * @param accessor headers
+     */
     @MessageMapping("/stomp/{gameID}")
     //@SendTo("/topic/stomp/{gameID}")
     public void handleMessage(@Payload IncomingMove move, SimpMessageHeaderAccessor accessor) {
@@ -80,6 +98,7 @@ public class GameController {
         String sessionID = (String) StompHeaderAccessor.wrap(event.getMessage()).getSessionAttributes().get("sessionID");
         playersService.playerDisconnected(sessionID);
     }
+
 
     @EventListener
     public void handleUnsubscribe(SessionUnsubscribeEvent event) {

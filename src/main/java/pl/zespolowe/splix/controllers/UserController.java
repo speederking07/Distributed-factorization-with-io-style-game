@@ -19,6 +19,12 @@ import javax.validation.Valid;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 
+/**
+ * Controller handling any actions changing User account data
+ *
+ * @author Tomasz
+ * @see User
+ */
 @Slf4j
 @Controller
 public class UserController {
@@ -26,6 +32,12 @@ public class UserController {
     @Autowired
     private UserService service;
 
+    /**
+     * Register new user
+     *
+     * @param user filled user object
+     * @return success/error message
+     */
     @PostMapping(value = "/register", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<String> register(@Valid @RequestBody User user) {
         try {
@@ -37,12 +49,24 @@ public class UserController {
         }
     }
 
+    /**
+     * @param authentication
+     * @return user preferences
+     * @see pl.zespolowe.splix.domain.user.UserSettings
+     */
     @GetMapping(value = "/user/settings", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<UserSettingsDTO> getSettings(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         return ResponseEntity.ok(new UserSettingsDTO(user.getSettings()));
     }
 
+    /**
+     * Update user settings
+     *
+     * @param dto  User setting dto
+     * @param auth
+     * @return 200 if settings valid
+     */
     @PostMapping(value = "/user/settings", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateSettings(@Valid @RequestBody UserSettingsDTO dto, Authentication auth) {
         User user = (User) auth.getPrincipal();
@@ -51,6 +75,13 @@ public class UserController {
         return ResponseEntity.ok("");
     }
 
+    /**
+     * Update user password
+     *
+     * @param password       new password
+     * @param authentication
+     * @return success/error message
+     */
     @PostMapping(value = "/user/password", consumes = TEXT_PLAIN_VALUE)
     public ResponseEntity<String> changePassword(@RequestBody String password, Authentication authentication) {
         try {
@@ -63,6 +94,13 @@ public class UserController {
         }
     }
 
+    /**
+     * Update user email
+     *
+     * @param email          new email
+     * @param authentication
+     * @return success/error message
+     */
     @PostMapping(value = "/user/email", consumes = TEXT_PLAIN_VALUE)
     public ResponseEntity<String> changeEmail(@RequestBody String email, Authentication authentication) {
         try {

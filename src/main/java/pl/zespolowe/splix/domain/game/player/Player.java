@@ -9,12 +9,17 @@ import pl.zespolowe.splix.domain.user.UserSettings;
 import javax.security.auth.login.CredentialException;
 import java.util.Objects;
 
+/**
+ * Wrapper for User used in game logic
+ *
+ * @author Tomasz
+ */
 @Getter
 public class Player {
 
+    private final String username;
     @Setter
     private Game game;
-    private final String username;
     private String colorsInCsv;
 
     public Player(String username) throws CredentialException {
@@ -29,7 +34,11 @@ public class Player {
         this.colorsInCsv = user.getSettings().getColorsInCSV();
     }
 
-
+    /**
+     * Resign from current game
+     *
+     * @see Game
+     */
     public void resign() {
         if (game != null) game.resign(this);
     }

@@ -8,7 +8,7 @@
    Copyright (C) 2017 [Deepak Kumar](https://www.kreatio.com)
  */
 
-(function() {
+(function () {
     var Byte, Client, Frame, Stomp,
         hasProp = {}.hasOwnProperty,
         slice = [].slice;
@@ -18,7 +18,7 @@
         NULL: '\x00'
     };
 
-    Frame = (function() {
+    Frame = (function () {
         var unmarshallSingle;
 
         function Frame(command1, headers1, body1, escapeHeaderValues1) {
@@ -28,7 +28,7 @@
             this.escapeHeaderValues = escapeHeaderValues1 != null ? escapeHeaderValues1 : false;
         }
 
-        Frame.prototype.toString = function() {
+        Frame.prototype.toString = function () {
             var lines, name, ref, skipContentLength, value;
             lines = [this.command];
             skipContentLength = (this.headers['content-length'] === false) ? true : false;
@@ -52,7 +52,7 @@
             return lines.join(Byte.LF);
         };
 
-        Frame.sizeOfUTF8 = function(s) {
+        Frame.sizeOfUTF8 = function (s) {
             if (s) {
                 return encodeURI(s).match(/%..|./g).length;
             } else {
@@ -60,8 +60,9 @@
             }
         };
 
-        unmarshallSingle = function(data, escapeHeaderValues) {
-            var body, chr, command, divider, headerLines, headers, i, idx, j, k, len, len1, line, ref, ref1, ref2, start, trim;
+        unmarshallSingle = function (data, escapeHeaderValues) {
+            var body, chr, command, divider, headerLines, headers, i, idx, j, k, len, len1, line, ref, ref1, ref2,
+                start, trim;
             if (escapeHeaderValues == null) {
                 escapeHeaderValues = false;
             }
@@ -69,7 +70,7 @@
             headerLines = data.substring(0, divider).split(Byte.LF);
             command = headerLines.shift();
             headers = {};
-            trim = function(str) {
+            trim = function (str) {
                 return str.replace(/^\s+|\s+$/g, '');
             };
             ref = headerLines.reverse();
@@ -100,7 +101,7 @@
             return new Frame(command, headers, body, escapeHeaderValues);
         };
 
-        Frame.unmarshall = function(datas, escapeHeaderValues) {
+        Frame.unmarshall = function (datas, escapeHeaderValues) {
             var frame, frames, last_frame, r;
             if (escapeHeaderValues == null) {
                 escapeHeaderValues = false;
@@ -110,7 +111,7 @@
                 frames: [],
                 partial: ''
             };
-            r.frames = (function() {
+            r.frames = (function () {
                 var j, len1, ref, results;
                 ref = frames.slice(0, -1);
                 results = [];
@@ -129,17 +130,17 @@
             return r;
         };
 
-        Frame.marshall = function(command, headers, body, escapeHeaderValues) {
+        Frame.marshall = function (command, headers, body, escapeHeaderValues) {
             var frame;
             frame = new Frame(command, headers, body, escapeHeaderValues);
             return frame.toString() + Byte.NULL;
         };
 
-        Frame.frEscape = function(str) {
+        Frame.frEscape = function (str) {
             return ("" + str).replace(/\\/g, "\\\\").replace(/\r/g, "\\r").replace(/\n/g, "\\n").replace(/:/g, "\\c");
         };
 
-        Frame.frUnEscape = function(str) {
+        Frame.frUnEscape = function (str) {
             return ("" + str).replace(/\\r/g, "\r").replace(/\\n/g, "\n").replace(/\\c/g, ":").replace(/\\\\/g, "\\");
         };
 
@@ -147,11 +148,11 @@
 
     })();
 
-    Client = (function() {
+    Client = (function () {
         var now;
 
         function Client(ws_fn) {
-            this.ws_fn = function() {
+            this.ws_fn = function () {
                 var ws;
                 ws = ws_fn();
                 ws.binaryType = "arraybuffer";
@@ -169,12 +170,12 @@
             this.partialData = '';
         }
 
-        Client.prototype.debug = function(message) {
+        Client.prototype.debug = function (message) {
             var ref;
             return typeof window !== "undefined" && window !== null ? (ref = window.console) != null ? ref.log(message) : void 0 : void 0;
         };
 
-        now = function() {
+        now = function () {
             if (Date.now) {
                 return Date.now();
             } else {
@@ -182,7 +183,7 @@
             }
         };
 
-        Client.prototype._transmit = function(command, headers, body) {
+        Client.prototype._transmit = function (command, headers, body) {
             var out;
             out = Frame.marshall(command, headers, body, this.escapeHeaderValues);
             if (typeof this.debug === "function") {
@@ -201,12 +202,12 @@
             }
         };
 
-        Client.prototype._setupHeartbeat = function(headers) {
+        Client.prototype._setupHeartbeat = function (headers) {
             var ref, ref1, serverIncoming, serverOutgoing, ttl, v;
             if ((ref = headers.version) !== Stomp.VERSIONS.V1_1 && ref !== Stomp.VERSIONS.V1_2) {
                 return;
             }
-            ref1 = (function() {
+            ref1 = (function () {
                 var j, len1, ref1, results;
                 ref1 = headers['heart-beat'].split(",");
                 results = [];
@@ -221,8 +222,8 @@
                 if (typeof this.debug === "function") {
                     this.debug("send PING every " + ttl + "ms");
                 }
-                this.pinger = Stomp.setInterval(ttl, (function(_this) {
-                    return function() {
+                this.pinger = Stomp.setInterval(ttl, (function (_this) {
+                    return function () {
                         _this.ws.send(Byte.LF);
                         return typeof _this.debug === "function" ? _this.debug(">>> PING") : void 0;
                     };
@@ -233,8 +234,8 @@
                 if (typeof this.debug === "function") {
                     this.debug("check PONG every " + ttl + "ms");
                 }
-                return this.ponger = Stomp.setInterval(ttl, (function(_this) {
-                    return function() {
+                return this.ponger = Stomp.setInterval(ttl, (function (_this) {
+                    return function () {
                         var delta;
                         delta = now() - _this.serverActivity;
                         if (delta > ttl * 2) {
@@ -248,7 +249,7 @@
             }
         };
 
-        Client.prototype._parseConnect = function() {
+        Client.prototype._parseConnect = function () {
             var args, closeEventCallback, connectCallback, errorCallback, headers;
             args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
             headers = {};
@@ -269,7 +270,7 @@
             return [headers, connectCallback, errorCallback, closeEventCallback];
         };
 
-        Client.prototype.connect = function() {
+        Client.prototype.connect = function () {
             var args, out;
             args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
             this.escapeHeaderValues = false;
@@ -279,7 +280,7 @@
             return this._connect();
         };
 
-        Client.prototype._connect = function() {
+        Client.prototype._connect = function () {
             var UTF8ArrayToStr, closeEventCallback, errorCallback, headers;
             headers = this.headers;
             errorCallback = this.errorCallback;
@@ -292,8 +293,8 @@
                 this.debug("Opening Web Socket...");
             }
             this.ws = this.ws_fn();
-            UTF8ArrayToStr = (function(_this) {
-                return function(array) {
+            UTF8ArrayToStr = (function (_this) {
+                return function (array) {
                     var c, char2, char3, i, len, out;
                     out = "";
                     len = array.length;
@@ -325,8 +326,8 @@
                     return out;
                 };
             })(this);
-            this.ws.onmessage = (function(_this) {
-                return function(evt) {
+            this.ws.onmessage = (function (_this) {
+                return function (evt) {
                     var arr, client, data, frame, j, len1, messageID, onreceive, ref, subscription, unmarshalledData;
                     data = typeof ArrayBuffer !== 'undefined' && evt.data instanceof ArrayBuffer ? (arr = new Uint8Array(evt.data), typeof _this.debug === "function" ? _this.debug("--- got data length: " + arr.length) : void 0, UTF8ArrayToStr(arr)) : evt.data;
                     _this.serverActivity = now();
@@ -373,13 +374,13 @@
                                     } else {
                                         messageID = frame.headers["message-id"];
                                     }
-                                    frame.ack = function(headers) {
+                                    frame.ack = function (headers) {
                                         if (headers == null) {
                                             headers = {};
                                         }
                                         return client.ack(messageID, subscription, headers);
                                     };
-                                    frame.nack = function(headers) {
+                                    frame.nack = function (headers) {
                                         if (headers == null) {
                                             headers = {};
                                         }
@@ -419,8 +420,8 @@
                     }
                 };
             })(this);
-            this.ws.onclose = (function(_this) {
-                return function(closeEvent) {
+            this.ws.onclose = (function (_this) {
+                return function (closeEvent) {
                     var msg;
                     msg = "Whoops! Lost connection to " + _this.ws.url;
                     if (typeof _this.debug === "function") {
@@ -436,8 +437,8 @@
                     return _this._schedule_reconnect();
                 };
             })(this);
-            return this.ws.onopen = (function(_this) {
-                return function() {
+            return this.ws.onopen = (function (_this) {
+                return function () {
                     if (typeof _this.debug === "function") {
                         _this.debug('Web Socket Opened...');
                     }
@@ -448,13 +449,13 @@
             })(this);
         };
 
-        Client.prototype._schedule_reconnect = function() {
+        Client.prototype._schedule_reconnect = function () {
             if (this.reconnect_delay > 0) {
                 if (typeof this.debug === "function") {
                     this.debug("STOMP: scheduling reconnection in " + this.reconnect_delay + "ms");
                 }
-                return this._reconnector = setTimeout((function(_this) {
-                    return function() {
+                return this._reconnector = setTimeout((function (_this) {
+                    return function () {
                         if (_this.connected) {
                             return typeof _this.debug === "function" ? _this.debug('STOMP: already connected') : void 0;
                         } else {
@@ -468,7 +469,7 @@
             }
         };
 
-        Client.prototype.disconnect = function(disconnectCallback, headers) {
+        Client.prototype.disconnect = function (disconnectCallback, headers) {
             var error;
             if (headers == null) {
                 headers = {};
@@ -489,7 +490,7 @@
             }
         };
 
-        Client.prototype._cleanUp = function() {
+        Client.prototype._cleanUp = function () {
             if (this._reconnector) {
                 clearTimeout(this._reconnector);
             }
@@ -504,7 +505,7 @@
             }
         };
 
-        Client.prototype.send = function(destination, headers, body) {
+        Client.prototype.send = function (destination, headers, body) {
             if (headers == null) {
                 headers = {};
             }
@@ -515,7 +516,7 @@
             return this._transmit("SEND", headers, body);
         };
 
-        Client.prototype.subscribe = function(destination, callback, headers) {
+        Client.prototype.subscribe = function (destination, callback, headers) {
             var client;
             if (headers == null) {
                 headers = {};
@@ -529,13 +530,13 @@
             client = this;
             return {
                 id: headers.id,
-                unsubscribe: function(hdrs) {
+                unsubscribe: function (hdrs) {
                     return client.unsubscribe(headers.id, hdrs);
                 }
             };
         };
 
-        Client.prototype.unsubscribe = function(id, headers) {
+        Client.prototype.unsubscribe = function (id, headers) {
             if (headers == null) {
                 headers = {};
             }
@@ -544,7 +545,7 @@
             return this._transmit("UNSUBSCRIBE", headers);
         };
 
-        Client.prototype.begin = function(transaction_id) {
+        Client.prototype.begin = function (transaction_id) {
             var client, txid;
             txid = transaction_id || "tx-" + this.counter++;
             this._transmit("BEGIN", {
@@ -553,28 +554,28 @@
             client = this;
             return {
                 id: txid,
-                commit: function() {
+                commit: function () {
                     return client.commit(txid);
                 },
-                abort: function() {
+                abort: function () {
                     return client.abort(txid);
                 }
             };
         };
 
-        Client.prototype.commit = function(transaction_id) {
+        Client.prototype.commit = function (transaction_id) {
             return this._transmit("COMMIT", {
                 transaction: transaction_id
             });
         };
 
-        Client.prototype.abort = function(transaction_id) {
+        Client.prototype.abort = function (transaction_id) {
             return this._transmit("ABORT", {
                 transaction: transaction_id
             });
         };
 
-        Client.prototype.ack = function(messageID, subscription, headers) {
+        Client.prototype.ack = function (messageID, subscription, headers) {
             if (headers == null) {
                 headers = {};
             }
@@ -587,7 +588,7 @@
             return this._transmit("ACK", headers);
         };
 
-        Client.prototype.nack = function(messageID, subscription, headers) {
+        Client.prototype.nack = function (messageID, subscription, headers) {
             if (headers == null) {
                 headers = {};
             }
@@ -609,25 +610,25 @@
             V1_0: '1.0',
             V1_1: '1.1',
             V1_2: '1.2',
-            supportedVersions: function() {
+            supportedVersions: function () {
                 return '1.2,1.1,1.0';
             }
         },
-        client: function(url, protocols) {
+        client: function (url, protocols) {
             var ws_fn;
             if (protocols == null) {
                 protocols = ['v10.stomp', 'v11.stomp', 'v12.stomp'];
             }
-            ws_fn = function() {
+            ws_fn = function () {
                 var klass;
                 klass = Stomp.WebSocketClass || WebSocket;
                 return new klass(url, protocols);
             };
             return new Client(ws_fn);
         },
-        over: function(ws) {
+        over: function (ws) {
             var ws_fn;
-            ws_fn = typeof ws === "function" ? ws : function() {
+            ws_fn = typeof ws === "function" ? ws : function () {
                 return ws;
             };
             return new Client(ws_fn);
@@ -635,11 +636,11 @@
         Frame: Frame
     };
 
-    Stomp.setInterval = function(interval, f) {
+    Stomp.setInterval = function (interval, f) {
         return setInterval(f, interval);
     };
 
-    Stomp.clearInterval = function(id) {
+    Stomp.clearInterval = function (id) {
         return clearInterval(id);
     };
 

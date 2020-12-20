@@ -16,6 +16,11 @@ import java.util.Map;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+/**
+ * Controller handling basic endpoints like index or error
+ *
+ * @author Tomasz
+ */
 @Controller
 @Slf4j
 public class MainController implements ErrorController {
@@ -24,12 +29,17 @@ public class MainController implements ErrorController {
     private UserService service;
 
 
+    /**
+     * @return Main application page
+     */
     @GetMapping("/")
     public String getMainPage() {
         return "index";
     }
 
-
+    /**
+     * @return users with highest score
+     */
     @GetMapping(value = "/game/leaders", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public Map<String, Long> getLeaders() {

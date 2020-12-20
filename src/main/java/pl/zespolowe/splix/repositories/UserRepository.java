@@ -7,6 +7,9 @@ import pl.zespolowe.splix.domain.user.User;
 
 import java.util.Collection;
 
+/**
+ * @author Tomasz
+ */
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
 

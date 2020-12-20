@@ -18,6 +18,11 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+/**
+ * User data
+ *
+ * @author Tomasz
+ */
 @Getter
 @Setter
 @Entity
@@ -63,7 +68,11 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-
+    /**
+     * Assign new role for user
+     *
+     * @see Role
+     */
     public void addRole(Role role) {
         roles.add(role);
     }

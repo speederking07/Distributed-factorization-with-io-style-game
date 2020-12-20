@@ -1,5 +1,10 @@
 package pl.zespolowe.splix.domain.user;
 
+/**
+ * User role in application
+ *
+ * @author Tomasz
+ */
 public enum Role {
     USER,
     ADMIN;

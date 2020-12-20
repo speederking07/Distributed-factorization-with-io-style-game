@@ -1,15 +1,15 @@
-#titleDiv{
+#titleDiv {
     text-align: center;
     white-space: nowrap;
     height: 50%;
     transition: opacity 2s linear;
 }
 
-.toggleVisibility[visible="False"] #titleDiv{
+.toggleVisibility[visible="False"] #titleDiv {
     opacity: 0;
 }
 
-.toggleVisibility[visible="True"] #titleDiv{
+.toggleVisibility[visible="True"] #titleDiv {
     opacity: 100%;
 }
 
@@ -19,19 +19,19 @@
     vertical-align: middle;
 }
 
-#titleDiv img{
+#titleDiv img {
     display: inline-block;
     vertical-align: middle;
     max-height: 90%;
     max-width: 80%;
 }
 
-#playerName:disabled{
+#playerName:disabled {
     background-color: white;
     color: #555555;
 }
 
-#startGameBar{
+#startGameBar {
     --h: 180px;
     position: absolute;
     width: 100%;
@@ -42,76 +42,76 @@
     box-shadow: 4px 4px 4px #999;
 }
 
-.toggleVisibility[visible="True"] #startGameBar{
+.toggleVisibility[visible="True"] #startGameBar {
     left: 0;
 }
 
-.toggleVisibility[visible="False"] #startGameBar{
+.toggleVisibility[visible="False"] #startGameBar {
     left: 100%;
 }
 
-#startGameField{
+#startGameField {
     margin-top: -60px;
     margin-left: -200px;
     height: 120px;
     width: 400px;
 }
 
-#startGameField h1{
+#startGameField h1 {
     text-align: center;
     margin: 6px 0;
     font-size: 34pt;
 }
 
-#startGameField input[type="text"]{
+#startGameField input[type="text"] {
     width: calc(80% - 26px);
 }
 
-#startGameField input[type="button"]{
+#startGameField input[type="button"] {
     width: 20%;
 }
 
 @media screen and (max-width: 400px) {
-    #startGameField h1{
+    #startGameField h1 {
         font-size: 26pt;
     }
 
-    #startGameField input[type="text"]{
+    #startGameField input[type="text"] {
         width: calc(100% - 40px);
         margin: 0 10px;
     }
 
-    #startGameField input[type="button"]{
+    #startGameField input[type="button"] {
         margin: 6px 10px;
         width: calc(100% - 20px);
     }
 
-    #startGameField{
+    #startGameField {
         width: 100%;
         margin: -60px 0 0 0;
         left: 0;
     }
 }
 
-#loggedOutButtons{
-     top: 0;
- }
-
-#mainScreen[logged="True"] #loggedOutButtons, #mainScreen[visible="False"] #loggedOutButtons{
-    top: -100px;
-    z-index: -1;
-}
-
-#loggedButtons{
+#loggedOutButtons {
     top: 0;
 }
 
-#mainScreen[logged="False"] #loggedButtons, #mainScreen[visible="False"] #loggedButtons{
+#mainScreen[logged="True"] #loggedOutButtons, #mainScreen[visible="False"] #loggedOutButtons {
     top: -100px;
     z-index: -1;
 }
 
-.floatingDiv{
+#loggedButtons {
+    top: 0;
+}
+
+#mainScreen[logged="False"] #loggedButtons, #mainScreen[visible="False"] #loggedButtons {
+    top: -100px;
+    z-index: -1;
+}
+
+.floatingDiv {
     position: fixed;
     top: 120px;
     right: 20px;
@@ -124,21 +124,21 @@
     overflow: hidden;
 }
 
-.floatingDiv h1{
+.floatingDiv h1 {
     white-space: nowrap;
 }
 
-.floatingDiv input{
+.floatingDiv input {
     margin: 2px 0;
     width: calc(100% - 20px);
 }
 
-.floatingDiv input[type="button"]{
+.floatingDiv input[type="button"] {
     margin: 2px 0;
     width: 100%;
 }
 
-.floatingDiv h1{
+.floatingDiv h1 {
     margin-top: 0;
 }
 
@@ -163,15 +163,17 @@
     }
 }
 
-.floatingDiv[visible="False"]{
-    height: 0!important;
+.floatingDiv[visible="False"] {
+    height: 0 !important;
     width: 0;
     padding: 0;
 }
-#settingDiv h2{
+
+#settingDiv h2 {
     margin-bottom: 0.6em;
 }
-#settingDiv input[type=password], #settingDiv input[type=text]{
+
+#settingDiv input[type=password], #settingDiv input[type=text] {
     margin: 6px 0 0 0;
     width: calc(100% - 20px);
 }

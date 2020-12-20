@@ -18,7 +18,11 @@ import pl.zespolowe.splix.services.UserService;
 import java.sql.Date;
 import java.util.Calendar;
 
-
+/**
+ * Main configuration
+ *
+ * @author Tomasz
+ */
 @Configuration
 @EnableWebMvc
 public class AppConfig implements WebMvcConfigurer {
@@ -26,6 +30,9 @@ public class AppConfig implements WebMvcConfigurer {
     @Autowired
     private UserService userService;
 
+    /**
+     * @see AuthenticationFailureHandler
+     */
     @Bean
     public AuthenticationFailureHandler failureHandler() {
         return (req, res, e) -> {
@@ -37,6 +44,9 @@ public class AppConfig implements WebMvcConfigurer {
         };
     }
 
+    /**
+     * @see AuthenticationSuccessHandler
+     */
     @Bean
     public AuthenticationSuccessHandler successHandler() {
         return (req, res, authentication) -> {
@@ -71,6 +81,9 @@ public class AppConfig implements WebMvcConfigurer {
                         "classpath:/static/font/");
     }
 
+    /**
+     * @return Password encoder using BCrypt algorithm
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

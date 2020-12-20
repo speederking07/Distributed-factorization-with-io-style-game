@@ -13,7 +13,7 @@ class Connection {
      * @param gameID - Id of game to connect
      * @param username - name using in game
      */
-    constructor(gameID, username){
+    constructor(gameID, username) {
         this.gameID = gameID;
         this.username = username;
     }
@@ -66,18 +66,26 @@ class Connection {
     }
 }
 
-class FakeConnection{
-    constructor(){
+class FakeConnection {
+    constructor() {
         this.turn = 0;
     }
 
-    subscribe(update){
-        update({turn: 0, kills: [], moves:[], change:[], addPlayers: [
-            {name:"me", x:20, y:20, colorsInCSV:"{\"size\":1, \"pattern\": [[\"#ff0000\"]], \"color\": \"#ff0000\"}"}
-            ]});
+    subscribe(update) {
+        update({
+            turn: 0, kills: [], moves: [], change: [], addPlayers: [
+                {
+                    name: "me",
+                    x: 20,
+                    y: 20,
+                    colorsInCSV: "{\"size\":1, \"pattern\": [[\"#ff0000\"]], \"color\": \"#ff0000\"}"
+                }
+            ]
+        });
     }
 
-    sendMove(_t, _m){}
+    sendMove(_t, _m) {
+    }
 
 }
 
@@ -88,7 +96,7 @@ window.onload = function () {
     refreshWebsocketConnection();
 };
 
-function refreshWebsocketConnection(){
+function refreshWebsocketConnection() {
     let socket = new SockJS('/gameStompEndpoint');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {

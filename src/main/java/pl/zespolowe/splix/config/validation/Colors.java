@@ -4,6 +4,9 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
 
+/**
+ * @author Tomasz
+ */
 @Documented
 @Constraint(validatedBy = ColorsFormatValidator.class)
 @Target({ElementType.METHOD, ElementType.FIELD})

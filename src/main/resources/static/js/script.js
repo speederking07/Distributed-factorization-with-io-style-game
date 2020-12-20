@@ -1,7 +1,7 @@
 r = 0;
 
-class Demo{
-    constructor(canvas){
+class Demo {
+    constructor(canvas) {
         this.board = Array(100);
         for (let i = 0; i < 100; i++) {
             this.board[i] = Array(100);
@@ -9,23 +9,23 @@ class Demo{
         }
         this.players = [];
         this.view = new BoardView(canvas, this.board, this.players);
-        this.animator = new Animator(() => this.view.draw(0,0), FRAMES_PER_SECONDS);
+        this.animator = new Animator(() => this.view.draw(0, 0), FRAMES_PER_SECONDS);
         this.maxFrames = 60;
         this.frame = 0;
         this.key_frames = [];
         this.key_frames[0] = (() => {
-            this.players.push(new Player(Color.fromHex('#ff0000'), "P1__T__P1", 8*40, -40, [[8*40, -40]], 0, 4));
-            this.players.push(new Player(Color.fromHex('#00ff00'), "P2" ,13*40, 8*-40, [[13*40, 8*-40]], 0, 4));
-            this.players.push(new Player(Color.fromHex('#0000ff'), "P3",  20*40, 16*-40, [[20*40, 16*-40]], 0, 4));
-            this.players.push(new Player(Color.fromHex('#ffff00'), "P4",  40*40, 8*40, [[40*40, 8*40]], -4, 0));
-            for (let p of this.players){
+            this.players.push(new Player(Color.fromHex('#ff0000'), "P1__T__P1", 8 * 40, -40, [[8 * 40, -40]], 0, 4));
+            this.players.push(new Player(Color.fromHex('#00ff00'), "P2", 13 * 40, 8 * -40, [[13 * 40, 8 * -40]], 0, 4));
+            this.players.push(new Player(Color.fromHex('#0000ff'), "P3", 20 * 40, 16 * -40, [[20 * 40, 16 * -40]], 0, 4));
+            this.players.push(new Player(Color.fromHex('#ffff00'), "P4", 40 * 40, 8 * 40, [[40 * 40, 8 * 40]], -4, 0));
+            for (let p of this.players) {
                 p.drawPath();
             }
         }).bind(this);
         this.key_frames[11] = (() => {
-            this.players[0].path.push([8*40, 10*40]);
-            this.players[0].posX = 8*40;
-            this.players[0].posY = 10*40;
+            this.players[0].path.push([8 * 40, 10 * 40]);
+            this.players[0].posX = 8 * 40;
+            this.players[0].posY = 10 * 40;
             this.players[0].movX = -4;
             this.players[0].movY = 0;
         }).bind(this);
@@ -46,9 +46,9 @@ class Demo{
             this.players.pop();
         }).bind(this);
         this.key_frames[25] = (() => {
-            this.players[0].path.push([13*40, 17*40]);
-            this.players[0].posX = 13*40;
-            this.players[0].posY = 17*40;
+            this.players[0].path.push([13 * 40, 17 * 40]);
+            this.players[0].posX = 13 * 40;
+            this.players[0].posY = 17 * 40;
             this.players[0].movX = -4;
             this.players[0].movY = 0;
         }).bind(this);
@@ -78,17 +78,17 @@ class Demo{
         }).bind(this);
     }
 
-    start(){
+    start() {
         this.animator.start();
         this.moveInterval = setInterval((() => {
-            if(document.hasFocus()){
+            if (document.hasFocus()) {
                 for (let p of this.players) {
                     p.move();
                 }
             }
         }).bind(this), 40);
         this.framesInterval = setInterval((() => {
-            if(document.hasFocus()) {
+            if (document.hasFocus()) {
                 if (this.key_frames[this.frame] !== undefined) {
                     this.key_frames[this.frame]();
                 }
@@ -100,7 +100,7 @@ class Demo{
         }).bind(this), 400);
     }
 
-    kill(){
+    kill() {
         clearInterval(this.moveInterval);
         clearInterval(this.framesInterval);
         this.animator.kill()

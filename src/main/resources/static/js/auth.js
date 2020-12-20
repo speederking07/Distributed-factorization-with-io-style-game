@@ -11,6 +11,7 @@ function logout() {
             header.html('Enter player name');
             name_bar.val('');
             name_bar.removeAttr('disabled');
+            refreshWebsocketConnection();
         }
     });
 }

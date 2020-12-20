@@ -9,6 +9,11 @@ import pl.zespolowe.splix.dto.UserSettingsDTO;
 import javax.persistence.*;
 import java.util.Random;
 
+/**
+ * User preferences
+ *
+ * @author Tomasz
+ */
 @Getter
 @Setter
 @Entity
@@ -40,6 +45,9 @@ public class UserSettings {
         this.user = user;
     }
 
+    /**
+     * @return random pattern
+     */
     public static String getRandomColors() {
         Random obj = new Random();
         int rand_num = obj.nextInt(0xffffff + 1);
@@ -47,6 +55,9 @@ public class UserSettings {
         return "{\"size\":1, \"color\":" + colorCode + ", \"pattern\": [[" + colorCode + "]]}";
     }
 
+    /**
+     * Update class fields from Data Transfer Object
+     */
     public void updateFromDto(@NonNull UserSettingsDTO dto) {
         this.colorsInCSV = dto.getColorsInCSV();
         this.boardAnimation = dto.isBoardAnimation();

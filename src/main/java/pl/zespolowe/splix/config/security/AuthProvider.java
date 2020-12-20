@@ -13,6 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import pl.zespolowe.splix.services.UserService;
 
+/**
+ * @author Tomasz
+ */
 @Component
 public class AuthProvider implements AuthenticationProvider {
 

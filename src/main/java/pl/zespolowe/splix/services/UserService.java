@@ -21,6 +21,9 @@ import java.util.stream.Collectors;
 
 import static java.util.Collections.reverse;
 
+/**
+ * @author Tomasz
+ */
 @Service
 public class UserService implements UserDetailsService {
 
@@ -33,6 +36,12 @@ public class UserService implements UserDetailsService {
     @Autowired
     private Validator validator;
 
+    /**
+     * Load user from database
+     *
+     * @param username
+     * @throws UsernameNotFoundException username not found
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository
@@ -44,6 +53,9 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(username).isPresent();
     }
 
+    /**
+     * @return 10 players with highest score
+     */
     public Map<String, Long> getLeaders() {
         Collection<User> users = userRepository.getTopUsers();
         Map<String, Long> temp = users.stream().collect(Collectors.toMap(User::getUsername, User::getScore));
@@ -59,6 +71,13 @@ public class UserService implements UserDetailsService {
         return result;
     }
 
+    /**
+     * Changes user password
+     *
+     * @param user
+     * @param password
+     * @throws Exception password not valid
+     */
     public void changePassword(@NonNull User user, String password) throws Exception {
         String temp = user.getPassword();
         user.setPassword(passwordEncoder.encode(password));
@@ -70,6 +89,13 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    /**
+     * Changes user email
+     *
+     * @param user
+     * @param email
+     * @throws Exception email not valid
+     */
     public void changeEmail(@NonNull User user, String email) throws Exception {
         String temp = user.getEmail();
         user.setEmail(email);
@@ -81,6 +107,13 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    /**
+     * Gives user Administrator privilege
+     *
+     * @param username
+     * @return
+     * @throws AccountException user does not exist
+     */
     public User setAdmin(String username) throws AccountException {
         if (!userExists(username)) throw new AccountException("User does not exist");
         User user = (User) loadUserByUsername(username);
@@ -89,6 +122,10 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
+    /**
+     * @param user
+     * @throws AccountException username already exists
+     */
     public void registerUser(@NonNull User user) throws AccountException {
         if (userExists(user.getUsername())) throw new AccountException("User already exist");
         user.setLastLogged(new Date(Calendar.getInstance().getTime().getTime()));
@@ -96,6 +133,11 @@ public class UserService implements UserDetailsService {
         saveUser(user);
     }
 
+    /**
+     * Save user to database
+     *
+     * @param user
+     */
     public void saveUser(@NonNull User user) {
         userRepository.save(user);
     }

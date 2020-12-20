@@ -61,6 +61,49 @@ class Game {
     }
 
     /**
+     * Return index of player in list of specific name
+     *
+     * @param players - list of player
+     * @param name - name to be found
+     * @returns {number} - index of player with specific name
+     */
+    static findPlayerIndexByName(players, name) {
+        for (let i = 0; i < players.length; i++) {
+            if (name === players[i].name) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Converting x, y coordinates to direction
+     *
+     * @param x
+     * @param y
+     * @returns {string} - direction string
+     */
+    static posToMove(x, y) {
+        if (y > 0) return 'SOUTH';
+        else if (y < 0) return 'NORTH';
+        else if (x < 0) return 'WEST';
+        else return 'EAST';
+    }
+
+    /**
+     * Converts direction string to coordinates
+     *
+     * @param dir - direction
+     * @returns {number[]} - [x coordinate, y coordinate]
+     */
+    static directionToMove(dir) {
+        if (dir === 'NORTH') return [0, -1];
+        else if (dir === 'SOUTH') return [0, 1];
+        else if (dir === 'EAST') return [1, 0];
+        else if (dir === 'WEST') return [-1, 0];
+    }
+
+    /**
      * Set next move of player
      *
      * @param nextMove - sting representing direction 'NORTH', 'SOUTH' etc.
@@ -260,48 +303,5 @@ class Game {
         clearInterval(this.gameLoop);
         $(document).off('keydown');
         $(document).off('swipe');
-    }
-
-    /**
-     * Return index of player in list of specific name
-     *
-     * @param players - list of player
-     * @param name - name to be found
-     * @returns {number} - index of player with specific name
-     */
-    static findPlayerIndexByName(players, name) {
-        for (let i = 0; i < players.length; i++) {
-            if (name === players[i].name) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    /**
-     * Converting x, y coordinates to direction
-     *
-     * @param x
-     * @param y
-     * @returns {string} - direction string
-     */
-    static posToMove(x, y) {
-        if (y > 0) return 'SOUTH';
-        else if (y < 0) return 'NORTH';
-        else if (x < 0) return 'WEST';
-        else return 'EAST';
-    }
-
-    /**
-     * Converts direction string to coordinates
-     *
-     * @param dir - direction
-     * @returns {number[]} - [x coordinate, y coordinate]
-     */
-    static directionToMove(dir) {
-        if (dir === 'NORTH') return [0, -1];
-        else if (dir === 'SOUTH') return [0, 1];
-        else if (dir === 'EAST') return [1, 0];
-        else if (dir === 'WEST') return [-1, 0];
     }
 }

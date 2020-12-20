@@ -3,6 +3,9 @@ package pl.zespolowe.splix.config.validation;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+/**
+ * @author Tomasz
+ */
 public class ColorsFormatValidator implements ConstraintValidator<Colors, String> {
     @Override
     public void initialize(Colors constraintAnnotation) {

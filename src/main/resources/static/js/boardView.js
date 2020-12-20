@@ -10,7 +10,7 @@ class BoardView {
      * @param board : [[Pattern]] - reference to 2d array of patterns representing current state of board
      * @param players : [Player] - reference to list of players
      */
-    constructor(canvas, board, players){
+    constructor(canvas, board, players) {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         this.width = this.canvas.width;
@@ -29,7 +29,7 @@ class BoardView {
     /**
      * Function returning display configuration
      */
-    getGraphicalSettings(){
+    getGraphicalSettings() {
         return [true, true, true]
     }
 
@@ -196,28 +196,28 @@ class BoardView {
      * @param displayDying : boolean - true if dying players will be displayed
      * @returns new display function
      */
-    generateDrawFunction(displayNames, displayAnimations, displayDying){
+    generateDrawFunction(displayNames, displayAnimations, displayDying) {
         let names, animations, dying;
-        if(displayNames){
+        if (displayNames) {
             names = ((x, y) => {
                 for (let p of this.players) {
                     p.displayName(this.ctx, x, y, this.width, this.height);
                 }
             }).bind(this)
-        } else{
+        } else {
             names = (_x, _y) => void 0;
         }
-        if(displayAnimations){
+        if (displayAnimations) {
             animations = ((x, y) => this.#drawBoardAnimations(x, y)).bind(this)
-        } else{
+        } else {
             animations = ((_x, _y) => this.animations = []).bind(this);
         }
-        if(displayDying){
+        if (displayDying) {
             dying = ((x, y) => this.#drawDying(x, y)).bind(this)
-        } else{
+        } else {
             dying = ((_x, _y) => this.dying = []).bind(this);
         }
-        return((x, y) => {
+        return ((x, y) => {
             this.prevX = x;
             this.prevY = y;
             this.width = this.canvas.width;

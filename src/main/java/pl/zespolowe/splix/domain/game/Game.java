@@ -44,8 +44,9 @@ public class Game implements ObservableGame {
         List<Checker> ch = players.stream()
                 .filter(t -> t.getPlayer().equals(player))
                 .collect(Collectors.toList());
-        if(!(ch.get(0)==null)){
-        kill_player(ch.get(0));}
+        if (!(ch.get(0) == null)) {
+            kill_player(ch.get(0));
+        }
     }
 
     public boolean isActive() {

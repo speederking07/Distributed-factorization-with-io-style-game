@@ -46,6 +46,24 @@ class Player {
     }
 
     /**
+     * Function checking if is rectangle ((x1, y1), (x2, y2)) has common points with ((vX, vY), (vX + vW, vY + vH))
+     * @param x1 - coordinate of first rectangle
+     * @param y1 - coordinate of first rectangle
+     * @param x2 - coordinate of first rectangle
+     * @param y2 - coordinate of first rectangle
+     * @param vX - coordinate of second rectangle
+     * @param vY - coordinate of second rectangle
+     * @param vW - width of second rectangle
+     * @param vH - height of second rectangle
+     * @returns {boolean} - result
+     */
+    static visible(x1, y1, x2, y2, vX, vY, vW, vH) {
+        if (x1 > x2) x2 = [x1, x1 = x2][0];
+        if (y1 > y2) y2 = [y1, y1 = y2][0];
+        return !(x1 > vX + vW || x2 < vX || y1 > vY + vH || y2 < vY);
+    }
+
+    /**
      * Function displaying player on canvas
      * @param ctx - canvas context
      * @param viewX - x coordinate of camera
@@ -250,23 +268,5 @@ class Player {
             prev = this.path[i];
         }
         if (drawing) ctx.stroke();
-    }
-
-    /**
-     * Function checking if is rectangle ((x1, y1), (x2, y2)) has common points with ((vX, vY), (vX + vW, vY + vH))
-     * @param x1 - coordinate of first rectangle
-     * @param y1 - coordinate of first rectangle
-     * @param x2 - coordinate of first rectangle
-     * @param y2 - coordinate of first rectangle
-     * @param vX - coordinate of second rectangle
-     * @param vY - coordinate of second rectangle
-     * @param vW - width of second rectangle
-     * @param vH - height of second rectangle
-     * @returns {boolean} - result
-     */
-    static visible(x1, y1, x2, y2, vX, vY, vW, vH) {
-        if (x1 > x2) x2 = [x1, x1 = x2][0];
-        if (y1 > y2) y2 = [y1, y1 = y2][0];
-        return !(x1 > vX + vW || x2 < vX || y1 > vY + vH || y2 < vY);
     }
 }

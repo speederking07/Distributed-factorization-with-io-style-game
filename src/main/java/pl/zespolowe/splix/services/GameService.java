@@ -10,6 +10,9 @@ import pl.zespolowe.splix.exceptions.GameException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Tomasz
+ */
 @Service
 public class GameService {
     private final Map<Integer, Game> games;
@@ -25,6 +28,15 @@ public class GameService {
         return game;
     }
 
+    /**
+     * Find and add Player to Game
+     *
+     * @param player
+     * @return gameID
+     * @throws GameException cannot join any game
+     * @see Player
+     * @see Game
+     */
     public synchronized int addToGame(Player player) throws GameException {
         Game game = games.values().stream().filter(g -> !g.isFull())
                 .findFirst()
@@ -34,6 +46,14 @@ public class GameService {
         return game.getGameID();
     }
 
+    /**
+     * Add GameListener to specified Game
+     *
+     * @param gameID
+     * @param listener
+     * @throws GameException no game with such gameID
+     * @see Game
+     */
     public synchronized void addListener(int gameID, @NonNull GameListener listener) throws GameException {
         Game game = games.get(gameID);
         if (game == null) throw new GameException("No such game");
@@ -42,6 +62,12 @@ public class GameService {
             game.addListener(listener);
     }
 
+    /**
+     * @param gameID
+     * @param player
+     * @return true if Game contains Player, false otherwise
+     * @see Game#containsPlayer(Player)
+     */
     public boolean containsPlayer(int gameID, Player player) {
         Game game = games.get(gameID);
         return game != null && game.containsPlayer(player);

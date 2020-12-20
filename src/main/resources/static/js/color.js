@@ -16,32 +16,6 @@ class Color {
     }
 
     /**
-     * Returns string representing color in RGB format
-     * @returns {string}
-     */
-    get() {
-        return "rgb(" + this.r + "," + this.g + "," + this.b + ")";
-    }
-
-    /**
-     * Returns darker color
-     * @returns {Color}
-     */
-    darken() {
-        let hsl = Color.#rgbToHsl(this.r, this.g, this.b);
-        return Color.#hslToColor(hsl[0], hsl[1], hsl[2] / 2)
-    }
-
-    /**
-     * Returns lighten color
-     * @returns {Color}
-     */
-    lighten() {
-        let hsl = Color.#rgbToHsl(this.r, this.g, this.b);
-        return Color.#hslToColor(hsl[0], hsl[1], hsl[2] / 2 + 0.5)
-    }
-
-    /**
      * Constructs color from hex string
      * @param str - string representing color in hex format #000000
      * @returns {Color}
@@ -49,15 +23,6 @@ class Color {
     static fromHex(str) {
         let num = parseInt(str.replace('#', '0x'));
         return new Color(Math.floor(num / 65536) % 256, Math.floor(num / 256) % 256, num % 256)
-    }
-
-    /**
-     * Returns string representing color in hex format
-     * @returns {string}
-     */
-    toHex() {
-        return '#' + ("0" + (this.r.toString(16))).slice(-2) + ("0" + (this.g.toString(16))).slice(-2) +
-            ("0" + (this.b.toString(16))).slice(-2)
     }
 
     /**
@@ -141,5 +106,40 @@ class Color {
     static formJson(data) {
         const color = JSON.parse(data).color;
         return Color.fromHex(color);
+    }
+
+    /**
+     * Returns string representing color in RGB format
+     * @returns {string}
+     */
+    get() {
+        return "rgb(" + this.r + "," + this.g + "," + this.b + ")";
+    }
+
+    /**
+     * Returns darker color
+     * @returns {Color}
+     */
+    darken() {
+        let hsl = Color.#rgbToHsl(this.r, this.g, this.b);
+        return Color.#hslToColor(hsl[0], hsl[1], hsl[2] / 2)
+    }
+
+    /**
+     * Returns lighten color
+     * @returns {Color}
+     */
+    lighten() {
+        let hsl = Color.#rgbToHsl(this.r, this.g, this.b);
+        return Color.#hslToColor(hsl[0], hsl[1], hsl[2] / 2 + 0.5)
+    }
+
+    /**
+     * Returns string representing color in hex format
+     * @returns {string}
+     */
+    toHex() {
+        return '#' + ("0" + (this.r.toString(16))).slice(-2) + ("0" + (this.g.toString(16))).slice(-2) +
+            ("0" + (this.b.toString(16))).slice(-2)
     }
 }

@@ -1,4 +1,4 @@
-#colorLabel{
+#colorLabel {
     cursor: pointer;
     display: inline-block;
     width: 52px;
@@ -7,7 +7,7 @@
     z-index: 3;
 }
 
-#colorLabel::before{
+#colorLabel::before {
     content: "";
     cursor: pointer;
     background-color: inherit;
@@ -19,11 +19,11 @@
     z-index: 2;
 }
 
-#colorLabel input{
+#colorLabel input {
     display: none;
 }
 
-.bigFloatingDiv{
+.bigFloatingDiv {
     box-shadow: 4px 4px 4px #999;
     transition: max-height 1s, padding 1s, height 1s;
     z-index: 2;
@@ -32,15 +32,14 @@
 }
 
 
-
 /*big screen*/
-@media screen and (min-width: 500px){
-    .bigFloatingDiv[visible="False"], #settingDiv[visible="False"]{
+@media screen and (min-width: 500px) {
+    .bigFloatingDiv[visible="False"], #settingDiv[visible="False"] {
         max-height: 0;
         padding: 0 18px;
     }
 
-    .bigFloatingDiv{
+    .bigFloatingDiv {
         position: fixed;
         top: 50%;
         left: 50%;
@@ -68,13 +67,13 @@
 }
 
 /*phones*/
-@media screen and (max-width: 499px){
-    .bigFloatingDiv[visible="False"], #settingDiv[visible="False"]{
+@media screen and (max-width: 499px) {
+    .bigFloatingDiv[visible="False"], #settingDiv[visible="False"] {
         height: 0;
         padding: 0 18px;
     }
 
-    .bigFloatingDiv{
+    .bigFloatingDiv {
         position: fixed;
         top: 0;
         left: 0;
@@ -100,27 +99,27 @@
         background: #555;
     }
 
-    .extended{
+    .extended {
         display: none;
     }
 
-    #colorLabel::before{
+    #colorLabel::before {
         width: 240px;
     }
 
-    .configContentDiv{
+    .configContentDiv {
         width: 240px;
         margin: 0 auto;
     }
 
 }
 
-.bigFloatingDiv input[type=button]{
+.bigFloatingDiv input[type=button] {
     width: 100%;
     margin-top: 6px;
 }
 
-.patternBox{
+.patternBox {
     display: inline-block;
     cursor: pointer;
     height: 38px;
@@ -131,15 +130,15 @@
     background-color: red;
 }
 
-.extended .patternBox{
+.extended .patternBox {
     background-color: #ff9ba0;
 }
 
-#choosePatternDiv input[type="color"]{
+#choosePatternDiv input[type="color"] {
     display: none;
 }
 
-#choosePatternDiv div{
+#choosePatternDiv div {
     height: 40px;
     min-width: 240px;
 }
@@ -155,7 +154,7 @@
     left: 50%;
 }
 
-.colorPickerDiv input[type=button]{
+.colorPickerDiv input[type=button] {
     margin-top: 6px;
     width: 100%;
 }

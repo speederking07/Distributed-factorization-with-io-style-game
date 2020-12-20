@@ -3,16 +3,16 @@
  *
  * @author Marek Bauer
  */
-class Animator{
+class Animator {
     /**
      * Class constructor
      * @param drawFunction - the function which supposed to be called
      * @param FPS - frame rate
      */
-    constructor(drawFunction, FPS){
+    constructor(drawFunction, FPS) {
         this.then = Date.now();
         this.print = drawFunction;
-        this.fpsInterval = 1000/FPS;
+        this.fpsInterval = 1000 / FPS;
         this.alive = false;
         this.live = this.live.bind(this)
     }
@@ -20,8 +20,8 @@ class Animator{
     /**
      * Animation function
      */
-    live(){
-        if(!this.alive) return;
+    live() {
+        if (!this.alive) return;
         requestAnimationFrame(this.live);
         let now = Date.now();
         let elapsed = now - this.then;
@@ -34,7 +34,7 @@ class Animator{
     /**
      * Start animation
      */
-    start(){
+    start() {
         this.then = Date.now();
         this.alive = true;
         requestAnimationFrame(this.live);
@@ -43,7 +43,7 @@ class Animator{
     /**
      * Stop animation
      */
-    kill(){
+    kill() {
         this.alive = false;
     }
 }
