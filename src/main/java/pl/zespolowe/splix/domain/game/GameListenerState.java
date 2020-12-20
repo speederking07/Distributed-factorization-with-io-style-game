@@ -22,7 +22,7 @@ public class GameListenerState{
     //lista ruchow - moves
     //lista nowych graczy - players
 
-    List<String >players;
+    List<String >players;//TODO: zmiana na tych co zabici zmien nazwe
     List<Change> changes;
     List<Move> moves;
     List<AddPlayer> addedPlayers;
@@ -35,8 +35,16 @@ public class GameListenerState{
         players.add(ch.getPlayer().getUsername());
     }
 
-    public void playerMove(Checker ch){
-        moves.add(new Move(ch));
+    public void playerMove(Checker ch, boolean havePath){
+        moves.add(new Move(ch,havePath));
+    }
+
+    public void changeField(Checker ch,Point p){
+        changes.add(new Change(ch, p));
+    }
+
+    public void changeField(Point p){
+        changes.add(new Change(p));
     }
 
 

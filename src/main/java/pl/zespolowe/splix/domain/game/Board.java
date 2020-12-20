@@ -1,4 +1,9 @@
 package pl.zespolowe.splix.domain.game;
+/***
+ *
+ * @author Michal Kalina
+ *
+ */
 
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
@@ -29,8 +34,13 @@ public class Board {
         paths.forEach((k, v) -> {
             if (v == checker) {
                 paths.remove(k);
-                //gls.
-                //TODO: GLS USUN SLAD ALE SPRAWDZ CZY W FIELDS COS JEST NA TYM MIEJSCU
+                //fields.containsKey(k) ? gls.changeField(fields.get(k),k) :  gls.changeField(k);
+                if(fields.containsKey(k)){
+                    gls.changeField(fields.get(k),k);
+                }
+                else {
+                    gls.changeField(k);
+                }
             }
         });
     }
@@ -50,21 +60,41 @@ public class Board {
     }
 
     public void kill_player(Checker checker) {
-        paths.forEach((k, v) -> {
+        clear_players_sign(checker);
+        fields.forEach((k, v) -> {
             if (v == checker) {
-                paths.remove(k);
                 fields.remove(k);
-                //TODO: GLS.ADD CHANGE
+                gls.changeField(k);
             }
         });
     }
 
-    public Point findPlaceForRespawn(int size_x, int size_y) {
+    public Checker respawnPlayer(int size_x, int size_y, Player p) {
         Point point0 = null;
         for (int i = 0; i < size_x * size_y / 5; i++) {
-            point0.x = ThreadLocalRandom.current().nextInt(0, size_x + 1);
-            point0.y = ThreadLocalRandom.current().nextInt(0, size_y + 1);
-            if (!fields.containsKey(point0)) return point0;//TODO: GLS CHANGE
+            //tu dalem od 2 do x-1 zeby sie nie respil przy scianie tak bardzo
+            point0.x = ThreadLocalRandom.current().nextInt(2, size_x -1);
+            point0.y = ThreadLocalRandom.current().nextInt(2, size_y -1);
+            if (!fields.containsKey(point0)){
+                Checker ch = new Checker(p, point0);
+                fields.put(new Point(point0.x,point0.y),ch);
+                //gls.changeField(ch,point0);
+
+                fields.put(new Point(point0.x,point0.y+1),ch);
+                gls.changeField(ch,new Point(point0.x,point0.y+1));
+
+                fields.put(new Point(point0.x+1,point0.y+1),ch);
+                gls.changeField(ch,new Point(point0.x+1,point0.y+1));
+
+                fields.put(new Point(point0.x,point0.y+2),ch);
+                gls.changeField(ch,new Point(point0.x,point0.y+2));
+
+                fields.put(new Point(point0.x+1,point0.y+2),ch);
+                gls.changeField(ch,new Point(point0.x+1,point0.y+2));
+
+                gls.playersAdder(ch);
+                return ch;
+            }
         }
         return null;
     }
@@ -78,15 +108,16 @@ public class Board {
         for (Checker ch : checkers) {
             Point p = ch.next_turn();
             if (paths.containsKey(p)) {
-                kill_player(ch);
+                //drobna uwaga: zabijam tego ktorego slad zostal najechany
+                kill_player(paths.get(p));
             }
             else if (!(p.x >= x_size && p.y >= y_size)) {
                 ch.set_position(ch.next_turn());
                 if (fields.get(p) == ch) {
                     overtake(ch);
                 }
-                gls.playersAdder(ch);
-                gls.playerMove(ch);
+                paths.put(ch.getPoint(),ch);
+                gls.playerMove(ch,true);
             }
         }
         return checkers;

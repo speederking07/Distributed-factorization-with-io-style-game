@@ -32,7 +32,7 @@ public class Game implements ObservableGame  {
         this.gameID = gameID;
     }
     GameListenerState gameListenerState;
-    //TODO: co ma dawać do listenerow
+    //TODO: co ma dawać do listenerow - ok
     private void publishEvent(){
         listeners.forEach(l -> l.event(gameListenerState));
     }
@@ -58,9 +58,8 @@ public class Game implements ObservableGame  {
     //TODO: ma zwracać aktualny stan gry, a nie void - Bereitet
     public boolean join(Player p){
         if(!isFull()) {
-            Point pin = board.findPlaceForRespawn(x_size,y_size);
-            if(pin == null)return false;
-            Checker ch=new Checker(p, pin);
+            Checker ch=board.respawnPlayer(x_size,y_size,p);
+            if(ch==null) return false;
             players.add(ch);
             gameListenerState.addPlayer(ch);
             return true;

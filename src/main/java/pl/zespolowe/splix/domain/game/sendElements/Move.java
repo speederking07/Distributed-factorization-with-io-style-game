@@ -7,13 +7,13 @@ import java.awt.*;
 public class Move {
     int x;
     int y;
-    //boolean havePath;
+    boolean havePath;
     String player;
-    public Move(Checker ch) {
+    public Move(Checker ch,boolean isPath) {
         this.x=ch.getPoint().x;
         this.y=ch.getPoint().y;
         this.player=ch.getPlayer().getUsername();
-        //this.havePath= TODO://MAREK PO CO CI TO xd, NIECH KAZDY MA PATH
+        this.havePath=isPath;// TODO://MAREK PO CO CI TO xd, NIECH KAZDY MA PATH
 
     }
 
