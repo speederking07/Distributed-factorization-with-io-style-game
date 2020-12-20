@@ -77,7 +77,7 @@
     <div id="passwordReminderDiv" class="popup floatingDiv" visible="False">
         <h1>Recover password</h1>
         <input id="recoverEmail" type="text" placeholder="e-mail">
-        <input id="recoverBtn" type="button" value="Recover Password">
+        <input id="recoverBtn" type="button" value="Recover Password" onclick="recoverPassword()">
     </div>
     <div id="signInDiv" class="popup floatingDiv" visible="False">
         <h1>Create account</h1>

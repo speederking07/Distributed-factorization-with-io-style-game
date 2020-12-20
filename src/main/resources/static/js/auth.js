@@ -16,6 +16,18 @@ function logout() {
     });
 }
 
+function recoverPassword(){
+    $.get({
+        url: '/recover?username=' + $("#recoverEmail").val(),
+        success: function (data) {
+            alert("Check email")
+        },
+        error: function (data) {
+            alert(data.responseText);
+        }
+    })
+}
+
 /**
  * Creating new account using filled input
  */

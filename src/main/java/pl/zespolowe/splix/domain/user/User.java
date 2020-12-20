@@ -2,6 +2,8 @@ package pl.zespolowe.splix.domain.user;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,10 +13,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.sql.Date;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -53,9 +52,13 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
+    @OneToMany(mappedBy = "user")
+    @Fetch(FetchMode.SELECT)
+    private List<RecoveryToken> recoveryTokens;
 
     public User() {
         roles = new HashSet<>();
+        recoveryTokens = new ArrayList<>();
         score = 0;
         settings = new UserSettings(this);
         addRole(Role.USER);
@@ -75,6 +78,10 @@ public class User implements UserDetails {
      */
     public void addRole(Role role) {
         roles.add(role);
+    }
+
+    public void addToken(RecoveryToken token) {
+        recoveryTokens.add(token);
     }
 
     @Override

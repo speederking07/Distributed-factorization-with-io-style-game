@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.zespolowe.splix.domain.user.RecoveryToken;
 import pl.zespolowe.splix.domain.user.Role;
 import pl.zespolowe.splix.domain.user.User;
 import pl.zespolowe.splix.repositories.UserRepository;
@@ -34,7 +35,34 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Autowired
+    private MailService mailService;
+
+    @Autowired
     private Validator validator;
+
+    private RecoveryToken generateToken(User user) {
+        RecoveryToken token = new RecoveryToken();
+        token.setToken(UUID.randomUUID().toString());
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        token.setValidTo(calendar.getTime());
+
+        token.setUser(user);
+        return token;
+    }
+
+    public void recoverPassword(String username) throws Exception {
+        User user = (User) loadUserByUsername(username);
+        RecoveryToken token = generateToken(user);
+        user.addToken(token);
+
+        //TODO: usunac po zrobieniu strony do odzyskiwania hasla
+        user.setPassword(passwordEncoder.encode(token.getToken()));
+
+        saveUser(user);
+        mailService.sendPasswordRecovery(user.getEmail(), token);
+    }
 
     /**
      * Load user from database

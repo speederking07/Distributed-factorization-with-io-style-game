@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import pl.zespolowe.splix.services.UserService;
 
@@ -28,6 +29,16 @@ public class MainController implements ErrorController {
     @Autowired
     private UserService service;
 
+
+    @GetMapping("/recover")
+    public ResponseEntity<String> recoverPassword(@RequestParam("username") String username) {
+        try {
+            service.recoverPassword(username);
+            return ResponseEntity.ok("Check your email");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 
     /**
      * @return Main application page
