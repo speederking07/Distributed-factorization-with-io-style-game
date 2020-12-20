@@ -77,6 +77,11 @@ public class Game implements ObservableGame {
         board.killPlayer(checker);
     }
 
+    public GameCurrentState getGameCurrentState(){
+        //TODO: Na pełną wersję ta metoda za zwracać ten objekt reprezentujący obecny stan gry dla nowych graczy
+        return null;
+    }
+
     public void newTurn() {
         turn++;
         gameListenerState = new GameListenerState(turn);

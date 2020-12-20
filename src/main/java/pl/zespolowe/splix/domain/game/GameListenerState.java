@@ -17,14 +17,14 @@ public class GameListenerState {
     //liste change'ow - change
     //lista ruchow - moves
     //lista nowych graczy - players
-    private int turnNumer;
+    private int turn;
     private List<String> killedPlayers;
     private List<Change> changes;
     private List<Move> moves;
     private List<AddPlayer> addedPlayers;
 
     public GameListenerState(int turn) {
-        this.turnNumer = turn;
+        this.turn = turn;
         this.killedPlayers = new ArrayList<>();
         this.changes = new ArrayList<>();
         this.moves = new ArrayList<>();
