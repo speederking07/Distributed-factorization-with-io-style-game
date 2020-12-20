@@ -1,3 +1,5 @@
+let conn;
+
 $(document).ready(function () {
     //$('#mainScreen').attr('visible', "True");
 
@@ -53,6 +55,7 @@ $(document).ready(function () {
     $('#startGameBtn').click(()=>{
         $('#mainScreen').attr("visible", "False");
         Connection.getGameConnection($('#playerName').val()).then(connection => {
+            conn = connection;
             if(typeof demo !== 'undefined'){
                 demo.kill();
             }
