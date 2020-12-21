@@ -118,6 +118,7 @@ class Game {
      * @param data - data from server
      */
     update(data) {
+        console.log(this.turn - Number(data.turn));
         if (this.turn === -1) {
             this.turn = data.turn;
             this.gameStart = Date.now()-250*data.turn;
@@ -128,7 +129,7 @@ class Game {
             this.gameLoop = setInterval((() => {
                 this.play();
             }).bind(this), 1000 / (TURNS_PER_SECONDS * BLOCK_SIZE / SPEED))
-        } else if (this.turn === Number(data.turn)) {
+        } else if (this.turn <= Number(data.turn)) {
             this.addPlayerList(data.addedPlayers);
             this.killPlayerList(data.killedPlayers);
             this.moveListInTime(data.moves);
@@ -182,9 +183,9 @@ class Game {
      */
     moveListInTime(moves) {
         for (let m of moves) {
-            let p = this.playersMap.get(m.name);
+            let p = this.playersMap.get(m.player);
             p.setFuturePos(m.x, m.y);
-            if (m.path) {
+            if (m.havePath) {
                 p.drawPath();
             } else {
                 p.closePath();
@@ -232,9 +233,9 @@ class Game {
     moveListLate(moves, turnsBehind) {
         if (turnsBehind === 1) {
             for (let m of moves) {
-                let p = this.playersMap.get(m.name);
+                let p = this.playersMap.get(m.player);
                 p.makePositionAdjustments(m.x, m.y);
-                if (m.path) {
+                if (m.havePath) {
                     p.drawPath();
                 } else {
                     p.closePath();
@@ -242,9 +243,9 @@ class Game {
             }
         } else if (turnsBehind === 2) {
             for (let m of moves) {
-                let p = this.playersMap.get(m.name);
+                let p = this.playersMap.get(m.player);
                 p.setPrevPos(m.x, m.y);
-                if (m.path) {
+                if (m.havePath) {
                     p.drawPath();
                 } else {
                     p.closePath();
@@ -271,8 +272,8 @@ class Game {
             mY = d[1];
         }
         main.setFuturePos(mX + curr.x, mY + curr.y);
-        this.turn = Math.floor((Date.now() - this.gameStart)/250);
-        this.connection.sendMove(this.turn + 1, this.nextMove)
+        this.turn = Math.floor((Date.now() - this.gameStart)/250) + 1;
+        this.connection.sendMove(this.turn, this.nextMove)
     }
 
     /**
