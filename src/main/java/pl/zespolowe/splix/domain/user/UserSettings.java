@@ -50,9 +50,42 @@ public class UserSettings {
      */
     public static String getRandomColors() {
         Random obj = new Random();
-        int rand_num = obj.nextInt(0xffffff + 1);
-        String colorCode = String.format("\"#%06x\"", rand_num);
+        String colorCode = hslColor(obj.nextFloat(), 1.0f, 0.5f);
         return "{\"size\":1, \"color\":" + colorCode + ", \"pattern\": [[" + colorCode + "]]}";
+    }
+
+    static public String hslColor(float h, float s, float l) {
+        float q, p, r, g, b;
+
+        if (s == 0) {
+            r = g = b = l; // achromatic
+        } else {
+            q = l < 0.5 ? (l * (1 + s)) : (l + s - l * s);
+            p = 2 * l - q;
+            r = hue2rgb(p, q, h + 1.0f / 3);
+            g = hue2rgb(p, q, h);
+            b = hue2rgb(p, q, h - 1.0f / 3);
+        }
+        return String.format("\"#%02x%02x%02x\"",Math.round(r * 255), Math.round(g * 255) ,Math.round(b * 255));
+    }
+
+    private static float hue2rgb(float p, float q, float h) {
+        if (h < 0) {
+            h += 1;
+        }
+        if (h > 1) {
+            h -= 1;
+        }
+        if (6 * h < 1) {
+            return p + ((q - p) * 6 * h);
+        }
+        if (2 * h < 1) {
+            return q;
+        }
+        if (3 * h < 2) {
+            return p + ((q - p) * 6 * ((2.0f / 3.0f) - h));
+        }
+        return p;
     }
 
     /**
