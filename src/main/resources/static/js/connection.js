@@ -45,7 +45,6 @@ class Connection {
      */
     subscribe(update) {
         stompClient.subscribe('/topic/stomp/' + this.gameID, function (state) {
-            console.log(state.body);
             update(JSON.parse(state.body));
         });
     }

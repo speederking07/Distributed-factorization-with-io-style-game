@@ -120,6 +120,7 @@ class Game {
     update(data) {
         if (this.turn === -1) {
             this.turn = data.turn;
+            this.gameStart = Date.now()-250*data.turn;
             this.addPlayerList(data.addedPlayers);
             this.killPlayerList(data.killedPlayers);
             this.moveListLate(data.moves, 1);
@@ -270,6 +271,7 @@ class Game {
             mY = d[1];
         }
         main.setFuturePos(mX + curr.x, mY + curr.y);
+        this.turn = Math.floor((Date.now() - this.gameStart)/250);
         this.connection.sendMove(this.turn + 1, this.nextMove)
     }
 
