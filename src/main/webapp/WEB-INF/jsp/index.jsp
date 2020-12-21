@@ -21,6 +21,7 @@
     <script src="js/script.js"></script>
     <script src="js/mainScreen.js"></script>
     <script src="js/config.js"></script>
+    <script src="js/demo.js"></script>
     <script src="js/game.js"></script>
     <script src="js/connection.js"></script>
     <script src="js/stomp.js"></script>

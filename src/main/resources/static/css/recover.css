@@ -1,0 +1,4 @@
+#passwordRecovery input[type=password], #settingDiv input[type=text] {
+    margin: 6px 0 0 0;
+    width: calc(100% - 20px);
+}

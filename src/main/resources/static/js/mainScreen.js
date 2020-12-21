@@ -64,8 +64,6 @@ $(document).ready(function () {
             }]]);
         })
     });
-
-    refreshSettings();
 });
 
 /**
@@ -119,6 +117,13 @@ function popup(header, content, buttons) {
         '<p>' + content + '</p>' +
         '<div>' + btn + '</div>' +
         '</div>');
+}
+
+/**
+ * Closes popup
+ */
+function closePopup() {
+    $('.dialogBox').remove();
 }
 
 /**
