@@ -167,14 +167,17 @@ class Player {
      * @param currY
      */
     makePositionAdjustments(currX, currY) {
-        const step = this.computeStep();
-        if (this.path !== []) {
-            this.path.push([currX * BLOCK_SIZE, currY * BLOCK_SIZE])
+        if(currX !== this.currentPos.x || currY !== this.currentPos.y) {
+            const step = this.computeStep();
+            if (this.path.length >= 1) {
+                this.path.push([currX * BLOCK_SIZE, currY * BLOCK_SIZE])
+            }
+            this.currentPos = {x: currX, y:currY};
+            this.movX = (this.currentPos.x - this.prevPos.x) * SPEED;
+            this.movY = (this.currentPos.y - this.prevPos.y) * SPEED;
+            this.posX = this.prevPos.x * BLOCK_SIZE + this.movX * step;
+            this.posY = this.prevPos.y * BLOCK_SIZE + this.movY * step;
         }
-        this.movX = (this.currentPos.x - this.prevPos.x) * SPEED;
-        this.movY = (this.currentPos.y - this.prevPos.y) * SPEED;
-        this.posX = this.prevPos.x * BLOCK_SIZE + movX * step;
-        this.posY = this.prevPos.y * BLOCK_SIZE + movY * step;
     }
 
     /**
@@ -226,15 +229,16 @@ class Player {
                 const pY = this.movY;
                 this.movX = (this.futurePos.x - this.currentPos.x) * SPEED;
                 this.movY = (this.futurePos.y - this.currentPos.y) * SPEED;
-                if ((pX !== this.movX || pY !== this.movY) && this.path !== []) {
+                if ((pX !== this.movX || pY !== this.movY) && this.path.length >= 1) {
                     this.path.push([this.posX, this.posY])
                 }
             }
-            if (this.drawingPath === true && this.path === []) {
+            if (this.drawingPath === true && this.path.length === 0) {
                 this.path.push([this.posX, this.posY])
             } else if (this.drawingPath === false) {
                 this.path = []
             }
+            console.log(this.futurePos);
             this.prevPos = this.currentPos;
             this.currentPos = this.futurePos;
             this.futurePos = null;
