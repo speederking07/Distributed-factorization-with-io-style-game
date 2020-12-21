@@ -7,8 +7,10 @@ package pl.zespolowe.splix.domain.game;
 
 import pl.zespolowe.splix.domain.game.overtakeElements.OverTake;
 import pl.zespolowe.splix.domain.game.player.Player;
+import pl.zespolowe.splix.dto.SimpleMove;
 
 import java.awt.*;
+import java.io.Console;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -108,6 +110,7 @@ class Board {
                 fields.put(new Point(point0.x, point0.y), ch);
                 //gls.changeField(ch,point0);
 
+
                 fields.put(new Point(point0.x, point0.y + 1), ch);
                 gls.changeField(ch, new Point(point0.x, point0.y + 1));
 
@@ -130,7 +133,60 @@ class Board {
     /**
      * automatic
      */
+    public GameListenerState move(Checker ch, Direction dir, GameListenerState gls2) {
+        Point oldPoint = ch.getPoint();
+        int x =oldPoint.x;
+        int y = oldPoint.y;
+        switch (dir) {
+            case EAST -> x++;
+            case WEST -> x--;
+            case NORTH -> y++;
+            case SOUTH -> y--;
+        }
+        Point p = new Point();
+        p.x=x;
+        p.y=y;
+        System.out.println(p);
+        if (paths.containsKey(p)) {
+            //drobna uwaga: zabijam tego ktorego slad zostal najechany
+            killPlayer(paths.get(p));
+        } else if (!(p.x >= x_size && p.y >= y_size)) {
+            //jesli byl u siebie i nie jest to nowy path
+            //jesli byl u siebie i jest to nic
+                if (fields.get(oldPoint)!=null && ch!=null && p!=null){
+                    if(fields.get(oldPoint).equals(ch)) {//byl u siebie
+                        if (fields.get(p).equals(ch)) {//i jest u siebie
+                            ch.setPoint(p);
+                            gls2.playerMove(ch, false);
+                        } else {
+                            System.out.println("bbb");
 
+                            //ch.setPath(p);
+                            ch.setPoint(p);
+                            gls2.playerMove(ch, true);
+                            paths.put(ch.getPoint(), ch);
+                        }
+                    }
+                }
+
+            //jesli nie byl u siebie i jest to overtake
+            //jesli nie byl u siebie i jest to kolejny path
+            else {//nie byl u siebie
+                if (fields.get(p).equals(ch)) {// i jest u siebie
+                    ch.setPoint(p);
+                    overtake(ch);
+                    ch.setPath(new Point());
+                    gls2.playerMove(ch, false);
+                } else {//i nie jest u siebie
+                    ch.setPoint(p);
+                    paths.put(ch.getPoint(), ch);
+                    gls2.playerMove(ch, true);
+                }
+            }
+        }
+        return gls2;
+
+    }
     public Set<Checker> newMove(Set<Checker> checkers, GameListenerState glstmp) {
         gls = glstmp;
 
@@ -143,6 +199,9 @@ class Board {
             } else if (!(p.x >= x_size && p.y >= y_size)) {
                 //jesli byl u siebie i nie jest to nowy path
                 //jesli byl u siebie i jest to nic
+                if(fields.get(oldPoint)==null){
+                    System.out.println("aaaa");
+                }
                 if (fields.get(oldPoint).equals(ch)) {//byl u siebie
                     if (fields.get(p).equals(ch)) {//i jest u siebie
                         ch.setPoint(ch.nextTurn());
