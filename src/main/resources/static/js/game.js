@@ -272,8 +272,8 @@ class Game {
             mY = d[1];
         }
         main.setFuturePos(mX + curr.x, mY + curr.y);
-        this.turn = Math.floor((Date.now() - this.gameStart)/250) + 1;
-        this.connection.sendMove(this.turn, this.nextMove)
+        //this.turn = Math.floor((Date.now() - this.gameStart)/250) + 1;
+        this.connection.sendMove(this.turn, this.nextMove);
     }
 
     /**

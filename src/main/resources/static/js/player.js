@@ -135,7 +135,7 @@ class Player {
             ctx.lineCap = "round";
             ctx.lineJoin = "round";
             ctx.strokeStyle = this.color.get();
-            this.drawPath(ctx, viewX, viewY, viewW, viewH);
+            this.displayPath(ctx, viewX, viewY, viewW, viewH);
         }
         if (this.posX >= viewX - C && this.posX <= viewX + viewW + C && this.posY >= viewY - C && this.posY <= viewY + viewH + C) {
             ctx.beginPath();
@@ -238,7 +238,7 @@ class Player {
             } else if (this.drawingPath === false) {
                 this.path = []
             }
-            console.log(this.futurePos);
+            //console.log(this.futurePos);
             this.prevPos = this.currentPos;
             this.currentPos = this.futurePos;
             this.futurePos = null;
