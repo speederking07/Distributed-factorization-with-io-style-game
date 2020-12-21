@@ -44,6 +44,7 @@ public class Game implements ObservableGame {
         }, 1000, 250);
     }
 
+    //TODO: nie dostaję inforamcji o zmianie statustu pola
     private void publishEvent() {
         listeners.forEach(l -> l.event(gameListenerState));
     }
@@ -53,6 +54,7 @@ public class Game implements ObservableGame {
         board.killPlayer(checker);
     }
 
+    //TODO: brak automatycznego ruchu
     public void move(SimpleMove move, Player player) {
         //TODO: niech się dzieje magia
         Checker tmpChecker=null;

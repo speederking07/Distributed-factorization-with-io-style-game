@@ -145,8 +145,8 @@ class Board {
         switch (dir) {
             case EAST -> x++;
             case WEST -> x--;
-            case NORTH -> y++;
-            case SOUTH -> y--;
+            case NORTH -> y--; //Na odwrót było
+            case SOUTH -> y++;
         }
         Point p = new Point();
         p.x=x;
