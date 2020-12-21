@@ -33,6 +33,19 @@ public class Checker {
         }
         return point0;
     }
+    public void makeMove(Direction dir){
+        int x=point.x;
+        int y=point.y;
+        switch (direction) {
+            case EAST -> x++;
+            case WEST -> x--;
+            case NORTH -> y++;
+            case SOUTH -> y--;
+        }
+        point = new Point();
+        point.x=x;
+        point.y=y;
+    }
 
     public void setScore(int x) {
         score += x;

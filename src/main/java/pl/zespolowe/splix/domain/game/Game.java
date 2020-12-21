@@ -6,7 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import pl.zespolowe.splix.domain.game.player.Player;
 import pl.zespolowe.splix.dto.SimpleMove;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -53,6 +55,15 @@ public class Game implements ObservableGame {
 
     public void move(SimpleMove move, Player player) {
         //TODO: niech się dzieje magia
+        Checker tmpChecker=null;
+        for(Checker ch: players){
+            if(ch.getPlayer().equals(player)){
+                tmpChecker=ch;
+            }
+        }
+
+        gameListenerState=board.move(tmpChecker,move.getMove(),gameListenerState);
+
         log.info("MOVE: " + player);
     }
 
@@ -81,6 +92,13 @@ public class Game implements ObservableGame {
             Checker ch = board.respawnPlayer(x_size, y_size, p);
             if (ch == null) return false;
             players.add(ch);
+            Point point0=ch.getPoint();
+            gameListenerState.changeField(ch, new Point(point0.x, point0.y + 1));
+            gameListenerState.changeField(ch, new Point(point0.x + 1, point0.y + 1));
+            gameListenerState.changeField(ch, new Point(point0.x, point0.y + 2));
+            gameListenerState.changeField(ch, new Point(point0.x + 1, point0.y + 2));
+
+
             gameListenerState.addPlayer(ch);
             return true;
         }
@@ -97,12 +115,13 @@ public class Game implements ObservableGame {
     public void newTurn() {
         log.info("NEXT TURN");
         turn++;
+        publishEvent();
         gameListenerState = new GameListenerState(turn);
         //TODO: to daje NullPointer
         //players = board.newMove(players, gameListenerState);
         //gameListenerState = board.getGameListenerState();
         //dajmy mu liste checkerow i listnera on tam poustawia co trza i zwroci listnera i liste checkerow
-        publishEvent();
+
     }
 
     @Override
