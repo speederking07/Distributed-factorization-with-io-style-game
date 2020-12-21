@@ -168,7 +168,8 @@ input[type="button"]:active {
 
 .dialogBox {
     padding: 18px;
-    width: 300px;
+    width: 90%;
+    max-width: 300px;
     z-index: 10;
     position: fixed;
     top: 50%;
