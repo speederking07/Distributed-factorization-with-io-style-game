@@ -35,15 +35,20 @@ class Board {
     }*/
 
     public void clearPlayersSign(Checker checker) {
+
+        ArrayList<Point> arrayPaths = new ArrayList<>();
         paths.forEach((k, v) -> {
             if (v.equals(checker)) {
-                paths.remove(k);
+                arrayPaths.add(k);
+                //paths.remove(k);
                 //fields.containsKey(k) ? gls.changeField(fields.get(k),k) :  gls.changeField(k);
                 if (fields.containsKey(k)) gls.changeField(fields.get(k), k);
                 else gls.changeField(k);
-
             }
         });
+        for(Point p: arrayPaths){
+            paths.remove(p);
+        }
     }
 
     public void clearField(Point p) {
@@ -153,9 +158,8 @@ class Board {
         } else if (!(p.x >= x_size && p.y >= y_size)) {
             //jesli byl u siebie i nie jest to nowy path
             //jesli byl u siebie i jest to nic
-                if (fields.get(oldPoint)!=null && ch!=null && p!=null){
-                    if(fields.get(oldPoint).equals(ch)) {//byl u siebie
-                        if (fields.get(p).equals(ch)) {//i jest u siebie
+                    if(fields.get(oldPoint)!= null && fields.get(oldPoint).equals(ch)) {//byl u siebie
+                        if (fields.get(p)!= null && fields.get(p).equals(ch)) {//i jest u siebie
                             ch.setPoint(p);
                             gls2.playerMove(ch, false);
                         } else {
@@ -166,13 +170,12 @@ class Board {
                             gls2.playerMove(ch, true);
                             paths.put(ch.getPoint(), ch);
                         }
-                    }
                 }
 
             //jesli nie byl u siebie i jest to overtake
             //jesli nie byl u siebie i jest to kolejny path
             else {//nie byl u siebie
-                if (fields.get(p).equals(ch)) {// i jest u siebie
+                if (fields.get(p)!=null && fields.get(p).equals(ch)) {// i jest u siebie
                     ch.setPoint(p);
                     overtake(ch);
                     ch.setPath(new Point());
@@ -184,6 +187,9 @@ class Board {
                 }
             }
         }
+        paths.forEach((k, v) -> {
+            System.out.println(k);
+        });
         return gls2;
 
     }
