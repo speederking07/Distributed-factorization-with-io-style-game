@@ -7,10 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import pl.zespolowe.splix.services.UserService;
 
 import java.util.Map;
@@ -35,6 +32,21 @@ public class MainController implements ErrorController {
         try {
             service.recoverPassword(username);
             return ResponseEntity.ok("Check your email");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/recover/**")
+    public String getRecoverPage() {
+        return "recovery";
+    }
+
+    @PostMapping("/recover/{tokenID}")
+    public ResponseEntity<String> changeLostPassword(@PathVariable("tokenID") String token, @RequestBody String password) {
+        try {
+            service.changeRecoveredPassword(token, password);
+            return ResponseEntity.ok("Password changed");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

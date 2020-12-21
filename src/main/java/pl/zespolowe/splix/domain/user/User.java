@@ -84,6 +84,10 @@ public class User implements UserDetails {
         recoveryTokens.add(token);
     }
 
+    public void removeToken(RecoveryToken token){
+        recoveryTokens.remove(token);
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         long diff = Calendar.getInstance().getTime().getTime() - lastLogged.getTime();
