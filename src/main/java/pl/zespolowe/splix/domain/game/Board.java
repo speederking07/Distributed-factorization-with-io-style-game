@@ -7,10 +7,8 @@ package pl.zespolowe.splix.domain.game;
 
 import pl.zespolowe.splix.domain.game.overtakeElements.OverTake;
 import pl.zespolowe.splix.domain.game.player.Player;
-import pl.zespolowe.splix.dto.SimpleMove;
 
 import java.awt.*;
-import java.io.Console;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -69,19 +67,22 @@ class Board {
         paths.forEach((k, v) -> {
             if (v.equals(checker)) finalMyPaths.add(k);
         });
-        //zdobacz obwod (return Set<Point>)
+        //zdobywa obwod jako Set<Point>
         myFields = OverTake.getCircuit(finalMyFields);
-        Set<Point> myPath = new HashSet<>();
-        //wsadz obwod w findpath
+        Set<Point> myPath;
+        //teraz szukamy sciezki z tego obwodu(szukamy jej szybko, nie szukam najkrotszej)
         myPath = OverTake.findPath(p1, p2, myFields, new HashSet<>());
         //polacz sciezke z tym co zwroci find path
         myPath.addAll(finalMyPaths);
         myPath.addAll(finalMyFields);
-        //zamaluj pole z tego co polaczyles
+        //teraz mam liste pol ktore nalezy zamalowac
+        //maluje je
         Set<Point> taken = OverTake.paintPolygon(myPath);
+        //na prosbe Pana Marka biore tez liste samych zakretow do wyslania
         for (Point tmp : taken) {
             fields.put(tmp, checker);
             gls.changeField(checker, tmp);
+            System.out.println("zamalowalem: "+tmp);
         }
         clearPlayersSign(checker);
     }
@@ -145,7 +146,7 @@ class Board {
         switch (dir) {
             case EAST -> x++;
             case WEST -> x--;
-            case NORTH -> y--; //Na odwrót było
+            case NORTH -> y--;
             case SOUTH -> y++;
         }
         Point p = new Point();
@@ -159,13 +160,11 @@ class Board {
             //jesli byl u siebie i nie jest to nowy path
             //jesli byl u siebie i jest to nic
                     if(fields.get(oldPoint)!= null && fields.get(oldPoint).equals(ch)) {//byl u siebie
+                        ch.setPath(oldPoint);//ustawiam Patha jakby stąd zaczynal wyjazd z w next turn to bede wiedzial skad wyjechal
                         if (fields.get(p)!= null && fields.get(p).equals(ch)) {//i jest u siebie
                             ch.setPoint(p);
                             gls2.playerMove(ch, false);
                         } else {
-                            System.out.println("bbb");
-
-                            //ch.setPath(p);
                             ch.setPoint(p);
                             gls2.playerMove(ch, true);
                             paths.put(ch.getPoint(), ch);
@@ -178,7 +177,7 @@ class Board {
                 if (fields.get(p)!=null && fields.get(p).equals(ch)) {// i jest u siebie
                     ch.setPoint(p);
                     overtake(ch);
-                    ch.setPath(new Point());
+                    ch.setPath(p);
                     gls2.playerMove(ch, false);
                 } else {//i nie jest u siebie
                     ch.setPoint(p);
