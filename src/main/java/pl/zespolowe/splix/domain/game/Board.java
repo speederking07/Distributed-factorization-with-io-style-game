@@ -79,6 +79,7 @@ class Board {
         //maluje je
         Set<Point> taken = OverTake.paintPolygon(myPath);
         //na prosbe Pana Marka biore tez liste samych zakretow do wyslania
+        ArrayList<Point> curves = OverTake.getCurves(myPath);
         for (Point tmp : taken) {
             fields.put(tmp, checker);
             gls.changeField(checker, tmp);

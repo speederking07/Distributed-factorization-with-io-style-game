@@ -1,6 +1,7 @@
 package pl.zespolowe.splix;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -51,21 +52,61 @@ public class CircuitTest {
         p.x=2;
         p.y=1;*/
 
-        System.out.println(isBorderPoint(p, fields));
+        //System.out.println(isBorderPoint(p, fields));
         Set<Point> result = getCircuit(fields);
 
 
-        for (Point pe : result) {
+        System.out.println(getCurves(fields));
+        /*for (Point pe : result) {
             System.out.println(pe);
-        }
+        }*/
 
-        ColorTest ct = new ColorTest();
+        /*ColorTest ct = new ColorTest();
         Set<Point> result2 = ColorTest.paintPolygon(result);
         for (Point pe : result2) {
             System.out.println(pe);
+        }*/
+
+    }
+
+    public static ArrayList<Point> getCurves(Set<Point> points){
+        ArrayList<Point> rtr = new ArrayList<>();
+        for(Point p: points){
+            if(isCurvePoint(p, points)){rtr.add(p);}
+            System.out.println(p);
         }
+        return rtr;
+    }
 
+    public static boolean isCurvePoint(Point p0, Set<Point> points) {
+        ArrayList<Point> rtr = new ArrayList<>();
+        boolean north=false;
+        boolean south=false;
+        boolean west=false;
+        boolean east=false;
 
+        for (Point p : points) {
+            int pX = (int) p.getX();
+            int pY = (int) p.getY();
+            int p0X = (int) p0.getX();
+            int p0Y = (int) p0.getY();
+            if(p0X==pX){
+                if(p0Y+1==pY){
+                    south=true;
+                }
+                if(p0Y-1==pY){
+                    north=true;
+                }
+            }
+            if(p0Y==pY){
+                if(p0X+1==pX){
+                    east=true;
+                }
+                if(p0X-1==pX){
+                    west=true;
+                }
+            }
+        }
     }
 
     private static Set<Point> getCircuit(Set<Point> points) {

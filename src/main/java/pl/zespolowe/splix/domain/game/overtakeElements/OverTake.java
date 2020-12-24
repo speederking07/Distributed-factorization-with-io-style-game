@@ -46,6 +46,15 @@ public class OverTake {
         return new HashSet<>();
     }
 
+    public static ArrayList<Point> getCurves(Set<Point> points){
+        ArrayList<Point> rtr = new ArrayList<>();
+        for(Point p: points){
+            System.out.println(p);
+        }
+
+        return rtr;
+    }
+
     public static Set<Point> getCircuit(Set<Point> points) {
         Set<Point> rtr = new HashSet<>();
         for (Point point : points) {
@@ -99,12 +108,8 @@ public class OverTake {
                 take = !take;
                 a++;
             }
-
         }
-
         return rtr;
-
-
     }
 
     private static boolean isBorderPoint(Point p, Set<Point> points) {
