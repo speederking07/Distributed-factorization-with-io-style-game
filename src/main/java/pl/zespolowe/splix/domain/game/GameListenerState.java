@@ -21,7 +21,7 @@ public class GameListenerState {
     //lista nowych graczy - players
     private int turn;
     private List<String> killedPlayers;
-    private final Map<String,ArrayList<int[]>> changes;//TODO: Marek ustawilem tak jak chciales
+    private Map<String,ArrayList<int[]>> changes;//TODO: Marek ustawilem tak jak chciales
     //private List<Change> changes;
     private List<Move> moves;
     private List<AddPlayer> addedPlayers;

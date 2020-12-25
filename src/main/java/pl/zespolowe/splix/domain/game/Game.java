@@ -54,25 +54,21 @@ public class Game implements ObservableGame {
 
     //TODO: brak automatycznego ruchu - to jest aktualne?
     public void move(SimpleMove move, Player player) {
-        //TODO: niech się dzieje magia - ok, magia chyba juz dziala?
+        //TODO: niech się dzieje magia - ok, magia chyba juz dziala c'nie?
         Checker tmpChecker=null;
-        for(Checker ch: players){
-            if(ch.getPlayer().equals(player)){
-                tmpChecker=ch;
-            }
-        }
+        for(Checker ch: players)if(ch.getPlayer().equals(player))tmpChecker=ch;
 
         board.move(tmpChecker,move.getMove());
 
-        log.info("MOVE: " + player);
+        log.info("Player's MOVE: " + player.getUsername());
     }
 
     public void resign(Player player) {
         List<Checker> ch = players.stream()
                 .filter(t -> t.getPlayer().equals(player))
                 .collect(Collectors.toList());
-        if (!(ch.get(0) == null))
-            killPlayer(ch.get(0));
+
+        if (ch.size()>1)killPlayer(ch.get(0));
     }
 
     public boolean isActive() {
@@ -83,10 +79,19 @@ public class Game implements ObservableGame {
         return players.stream().anyMatch(c -> c.getPlayer().equals(player));
     }
 
+    /***
+     * Pelna plansza lub nie ma miejsca na respawn
+     * @return
+     */
     public boolean isFull() {
         return players.size() >= max_players;
     }
 
+    /***
+     * Dołącznie gracza
+     * @param p
+     * @return
+     */
     public boolean join(Player p) {
         if (!isFull()) {
             Checker ch = board.respawnPlayer(x_size, y_size, p);
@@ -100,25 +105,25 @@ public class Game implements ObservableGame {
         return false;
     }
 
-
+    /***
+     * Obecny stan gry dla nowego gracza który dołączył
+     * @return
+     */
     public GameCurrentState getGameCurrentState() {
-        //CurrentState cs = new CurrnetState()
-        //cs = board.setInfoForNewPlayer();
-        /***
-         * lista: (lista pól,gracz)
-         * lista: (lista śladów po kolei, gracz)
-         * lista graczy
-         *
-         *
-         */
-        //TODO: Na pełną wersję ta metoda za zwracać ten objekt reprezentujący obecny stan gry dla nowych graczy
-        return null;
+        GameCurrentState gcs = new GameCurrentState();
+        for(Checker ch: players){
+            gcs=board.setInfoForNewPlayer(ch,gcs);
+        }
+        return gcs;
     }
 
-
+    /**
+     * Nstępna tura
+     */
     public void newTurn() {
         log.info("NEXT TURN");
         turn++;
+        board.printGls();//Marek rutaj sb sprawdz co wysyla server
         publishEvent();
         board.setGls(new GameListenerState(turn));
     }

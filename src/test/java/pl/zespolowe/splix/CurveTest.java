@@ -62,6 +62,7 @@ public class CurveTest {
         for(Point pr: OverTake.getCurves(myWalk)){
             System.out.println(pr);
         }
+        System.out.println(OverTake.getCurves(myWalk));
 
 
     }

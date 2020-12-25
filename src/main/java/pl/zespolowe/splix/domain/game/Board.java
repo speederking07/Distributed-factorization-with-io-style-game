@@ -9,9 +9,12 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.zespolowe.splix.domain.game.overtakeElements.OverTake;
 import pl.zespolowe.splix.domain.game.player.Player;
+import pl.zespolowe.splix.dto.AddPlayer;
+import pl.zespolowe.splix.dto.Move;
 
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 class Board {
@@ -197,5 +200,36 @@ class Board {
             System.out.println(k);
         });
 
+    }
+
+    public GameCurrentState setInfoForNewPlayer(Checker ch, GameCurrentState gcs) {
+        ArrayList<Point> points= new ArrayList<>();
+        Set<Point> localPath;
+        fields.forEach((k, v) -> {
+            if(v==ch)points.add(k);
+        });
+        Set<Point>  finalLocalPath = new LinkedHashSet<>();
+        paths.forEach((k, v) -> {
+            if(v==ch) finalLocalPath.add(k);
+        });
+        localPath= OverTake.findPath(ch.getPath(),ch.getPoint(), finalLocalPath, new LinkedHashSet<>());
+        ArrayList<Point> curves = OverTake.getCurves(localPath);
+        gcs.addPlayer(ch.getPlayer(), points, curves, ch.getPoint());
+        return gcs;
+    }
+
+    public void printGls(){
+         int turn = gls.getTurn();
+         List<String> killedPlayers=gls.getKilledPlayers();
+         Map<String,ArrayList<int[]>> changes=gls.getChanges();
+         List<Move> moves=gls.getMoves();
+         List<AddPlayer> addedPlayers=gls.getAddedPlayers();
+        System.out.println("###################################");
+        System.out.println("info co zostalo wyslane w "+turn+" turze");
+        System.out.println("killed players: "+killedPlayers);
+        System.out.println("moves: "+moves);
+        System.out.println("addedPlayers"+addedPlayers);
+        System.out.println("field's changes"+changes);
+        System.out.println("###################################");
     }
 }
