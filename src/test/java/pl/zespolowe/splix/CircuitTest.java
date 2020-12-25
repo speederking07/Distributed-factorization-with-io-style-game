@@ -1,8 +1,11 @@
 package pl.zespolowe.splix;
 
+import pl.zespolowe.splix.domain.game.overtakeElements.OverTake;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class CircuitTest {
@@ -53,10 +56,8 @@ public class CircuitTest {
         p.y=1;*/
 
         //System.out.println(isBorderPoint(p, fields));
-        Set<Point> result = getCircuit(fields);
+        Set<Point> result = OverTake.getCircuit(fields);
 
-
-        System.out.println(getCurves(fields));
         /*for (Point pe : result) {
             System.out.println(pe);
         }*/
@@ -107,10 +108,18 @@ public class CircuitTest {
                 }
             }
         }
+        //if(1<bToI(west)+bToI(east)+bToI(north)+bToI(south) && ){return true;}
+        if((north || south) && (east || west)){return true;}
+        return false;
+
     }
 
+    /*private static int bToI(boolean b) {
+        return b ? 1 : 0;
+    }*/
+
     private static Set<Point> getCircuit(Set<Point> points) {
-        Set<Point> rtr = new HashSet<>();
+        Set<Point> rtr = new LinkedHashSet<>();
         for (Point point : points) {
             if (isBorderPoint(point, points)) {
                 rtr.add(point);

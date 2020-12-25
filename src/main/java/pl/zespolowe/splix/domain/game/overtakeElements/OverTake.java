@@ -3,6 +3,7 @@ package pl.zespolowe.splix.domain.game.overtakeElements;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class OverTake {
@@ -46,23 +47,32 @@ public class OverTake {
         return new HashSet<>();
     }
 
-    public static ArrayList<Point> getCurves(Set<Point> points){
-        ArrayList<Point> rtr = new ArrayList<>();
-        for(Point p: points){
-            System.out.println(p);
-        }
-
-        return rtr;
-    }
-
     public static Set<Point> getCircuit(Set<Point> points) {
-        Set<Point> rtr = new HashSet<>();
+        Set<Point> rtr = new LinkedHashSet<>();
         for (Point point : points) {
             if (isBorderPoint(point, points)) {
                 rtr.add(point);
                 System.out.println("x" + point);
             }
         }
+        return rtr;
+    }
+
+    public static ArrayList<Point> getCurves(Set<Point> points) {
+        ArrayList<Point> arrPoints = new ArrayList<>(points);//aby szybciej sie dostawac do elementow
+        ArrayList<Point> rtr = new ArrayList<>();//to co zwroce
+        int len = points.size();
+        if(len<=2){ return arrPoints;}
+        if(len>2){rtr.add(arrPoints.get(0));}
+        for (int i = 1; i < len - 2; i++) {
+            Point p0 = arrPoints.get(i);
+            Point pf = arrPoints.get(i + 1);//forward point
+            Point pb = arrPoints.get(i - 1);//backward point
+            if (!(pf.getX() == pb.getX()) && !(pf.getY() == pb.getY())) {
+                rtr.add(p0);
+            }
+        }
+        rtr.add(arrPoints.get(len-1));
         return rtr;
     }
 
