@@ -96,6 +96,7 @@ public class Game implements ObservableGame {
         if (!isFull()) {
             Checker ch = board.respawnPlayer(x_size, y_size, p);
             if (ch == null) return false;
+            players.add(ch); //Mozliwe że nie potrzebe ale u mnie nie działało bez tego
             GameListenerState gls = board.getGls();
             gls.addPlayer(ch);
             board.setGls(gls);
