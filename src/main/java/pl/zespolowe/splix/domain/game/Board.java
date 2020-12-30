@@ -83,7 +83,10 @@ class Board {
         myPath.addAll(finalMyPaths);
         //teraz mam liste pol ktore nalezy zamalowac
         //maluje je
-        Set<Point> taken = OverTake.paintPolygon(myPath);
+        for(Point p: myPath ){
+            System.out.println("to wchodzi: "+p);
+        }
+        Set<Point> taken = OverTake.paintPolygon2(myPath);
         //na prosbe Pana Marka biore tez liste samych zakretow do wyslania
         ArrayList<Point> curves = OverTake.getCurves(myPath);
         //gls.changeFields(checker,curves);
