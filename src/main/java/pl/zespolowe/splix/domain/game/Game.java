@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import pl.zespolowe.splix.domain.game.player.Player;
 import pl.zespolowe.splix.dto.SimpleMove;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,7 +22,6 @@ public class Game implements ObservableGame {
     @Getter
     private final List<GameListener> listeners;
     private final Board board;
-    private GameListenerState gameListenerState;
     private int turn;
     private final Set<Checker> players;
 
@@ -34,7 +32,7 @@ public class Game implements ObservableGame {
         this.gameID = gameID;
         this.board = new Board(x_size, y_size);
         this.turn = 0;
-        this.gameListenerState = new GameListenerState(0);
+        board.setGls(new GameListenerState(0));
         log.info("NEW GAME: " + gameID);
         new Timer().schedule(new TimerTask() {
             @Override
@@ -44,9 +42,9 @@ public class Game implements ObservableGame {
         }, 1000, 250);
     }
 
-    //TODO: nie dostaję inforamcji o zmianie statustu pola
+    //TODO: nie dostaję inforamcji o zmianie statustu pola - jest ok?
     private void publishEvent() {
-        listeners.forEach(l -> l.event(gameListenerState));
+        listeners.forEach(l -> l.event(board.getGls()));
     }
 
     private void killPlayer(Checker checker) {
@@ -54,27 +52,23 @@ public class Game implements ObservableGame {
         board.killPlayer(checker);
     }
 
-    //TODO: brak automatycznego ruchu
+    //TODO: brak automatycznego ruchu - to jest aktualne?
     public void move(SimpleMove move, Player player) {
-        //TODO: niech się dzieje magia
+        //TODO: niech się dzieje magia - ok, magia chyba juz dziala c'nie?
         Checker tmpChecker=null;
-        for(Checker ch: players){
-            if(ch.getPlayer().equals(player)){
-                tmpChecker=ch;
-            }
-        }
+        for(Checker ch: players)if(ch.getPlayer().equals(player))tmpChecker=ch;
 
-        gameListenerState=board.move(tmpChecker,move.getMove(),gameListenerState);
+        board.move(tmpChecker,move.getMove());
 
-        log.info("MOVE: " + player);
+        log.info("Player's MOVE: " + player.getUsername());
     }
 
     public void resign(Player player) {
         List<Checker> ch = players.stream()
                 .filter(t -> t.getPlayer().equals(player))
                 .collect(Collectors.toList());
-        if (!(ch.get(0) == null))
-            killPlayer(ch.get(0));
+
+        if (ch.size()>1)killPlayer(ch.get(0));
     }
 
     public boolean isActive() {
@@ -85,45 +79,54 @@ public class Game implements ObservableGame {
         return players.stream().anyMatch(c -> c.getPlayer().equals(player));
     }
 
+    /***
+     * Pelna plansza lub nie ma miejsca na respawn
+     * @return
+     */
     public boolean isFull() {
         return players.size() >= max_players;
     }
 
+    /***
+     * Dołącznie gracza
+     * @param p
+     * @return
+     */
     public boolean join(Player p) {
         if (!isFull()) {
             Checker ch = board.respawnPlayer(x_size, y_size, p);
             if (ch == null) return false;
-            players.add(ch);
-            Point point0=ch.getPoint();
-            gameListenerState.changeField(ch, new Point(point0.x, point0.y + 1));
-            gameListenerState.changeField(ch, new Point(point0.x + 1, point0.y + 1));
-            gameListenerState.changeField(ch, new Point(point0.x, point0.y + 2));
-            gameListenerState.changeField(ch, new Point(point0.x + 1, point0.y + 2));
+            players.add(ch); //Mozliwe że nie potrzebe ale u mnie nie działało bez tego
+            GameListenerState gls = board.getGls();
+            gls.addPlayer(ch);
+            board.setGls(gls);
 
-
-            gameListenerState.addPlayer(ch);
             return true;
         }
         return false;
     }
 
-
+    /***
+     * Obecny stan gry dla nowego gracza który dołączył
+     * @return
+     */
     public GameCurrentState getGameCurrentState() {
-        //TODO: Na pełną wersję ta metoda za zwracać ten objekt reprezentujący obecny stan gry dla nowych graczy
-        return null;
+        GameCurrentState gcs = new GameCurrentState();
+        for(Checker ch: players){
+            gcs=board.setInfoForNewPlayer(ch,gcs);
+        }
+        return gcs;
     }
 
-
+    /**
+     * Nstępna tura
+     */
     public void newTurn() {
         log.info("NEXT TURN");
         turn++;
+        board.printGls();//Marek rutaj sb sprawdz co wysyla server
         publishEvent();
-        gameListenerState = new GameListenerState(turn);
-        //TODO: to daje NullPointer
-        //players = board.newMove(players, gameListenerState);
-        //gameListenerState = board.getGameListenerState();
-        //dajmy mu liste checkerow i listnera on tam poustawia co trza i zwroci listnera i liste checkerow
-
+        board.setGls(new GameListenerState(turn));
     }
 
     @Override

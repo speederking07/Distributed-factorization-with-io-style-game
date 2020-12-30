@@ -10,11 +10,11 @@ import java.awt.*;
 @Getter
 @Setter
 public class Checker {
-    private final Direction direction;
+    private final Direction direction;//aktualny kierunek
     private Player player;
     private int score;
-    private Point point;
-    private Point path;
+    private Point point;//aktualna pozycja
+    private Point path;//poczatek jego sciezki -punkt z ktorego wyruszyla (znajdujacy sie w jego wladaniu)
 
     Checker(@NonNull Player pl, @NonNull Point po) {
         this.player = pl;

@@ -201,25 +201,29 @@ class Game {
      */
     changeBoardList(changes, behind) {
         if (behind <= 1) {
-            for (let c of changes) {
-                let patTo;
-                if (c === "") {
-                    patTo = BASE_PATTERN;
-                } else {
-                    patTo = this.playersMap.get(c.player).pattern;
+            for (const [player, list] of Object.entries(changes)) {
+                for (let [x, y] of list) {
+                    let patTo;
+                    if (player === "") {
+                        patTo = BASE_PATTERN;
+                    } else {
+                        patTo = this.playersMap.get(player).pattern;
+                    }
+                    this.view.changeField(x, y, this.board[x][y], patTo);
+                    this.board[x][y] = patTo;
                 }
-                this.view.changeField(c.x, c.y, this.board[c.x][c.y], patTo);
-                this.board[c.x][c.y] = patTo;
             }
         } else {
-            for (let c of changes) {
-                let patTo;
-                if (c === "") {
-                    patTo = BASE_PATTERN;
-                } else {
-                    patTo = this.playersMap.get(c.player).pattern;
+            for (const [player, list] of Object.entries(changes)) {
+                for (let [x, y] of list) {
+                    let patTo;
+                    if (player === "") {
+                        patTo = BASE_PATTERN;
+                    } else {
+                        patTo = this.playersMap.get(player).pattern;
+                    }
+                    this.board[x][y] = patTo;
                 }
-                this.board[c.x][c.y] = patTo;
             }
         }
     }

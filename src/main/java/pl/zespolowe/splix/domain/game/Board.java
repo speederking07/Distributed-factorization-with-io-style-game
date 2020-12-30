@@ -5,13 +5,16 @@ package pl.zespolowe.splix.domain.game;
  *
  */
 
+import lombok.Getter;
+import lombok.Setter;
 import pl.zespolowe.splix.domain.game.overtakeElements.OverTake;
 import pl.zespolowe.splix.domain.game.player.Player;
-import pl.zespolowe.splix.dto.SimpleMove;
+import pl.zespolowe.splix.dto.AddPlayer;
+import pl.zespolowe.splix.dto.Move;
 
 import java.awt.*;
-import java.io.Console;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 class Board {
@@ -19,14 +22,16 @@ class Board {
     private final Map<Point, Checker> paths;
     protected int x_size;
     protected int y_size;
+    @Getter
+    @Setter
     private GameListenerState gls;
 
     Board(int x, int y) {
         this.x_size = x;
         this.y_size = y;
         this.fields = new HashMap<>();
-        this.paths = new HashMap<>();
-        this.gls = new GameListenerState(0); // TODO: bez tej inicjalizacji idzie NullPointer
+        this.paths = new LinkedHashMap<>();//musi byc linked abym wiedzial gdzie on doklasnie chodzil
+        this.gls = new GameListenerState(0);
     }
 
   /*  public void clear_board() {
@@ -42,8 +47,8 @@ class Board {
                 arrayPaths.add(k);
                 //paths.remove(k);
                 //fields.containsKey(k) ? gls.changeField(fields.get(k),k) :  gls.changeField(k);
-                if (fields.containsKey(k)) gls.changeField(fields.get(k), k);
-                else gls.changeField(k);
+                //if (fields.containsKey(k)) gls.changeField(fields.get(k), k);
+                //else gls.changeField(k);
             }
         });
         for(Point p: arrayPaths){
@@ -60,7 +65,7 @@ class Board {
     public void overtake(Checker checker) {
         Point p2 = checker.getPoint();
         Point p1 = checker.getPath();
-        Set<Point> myFields = new HashSet<>();
+        Set<Point> myFields = new LinkedHashSet<>();
         Set<Point> finalMyFields = myFields;
         Set<Point> finalMyPaths = myFields;
         fields.forEach((k, v) -> {
@@ -69,19 +74,26 @@ class Board {
         paths.forEach((k, v) -> {
             if (v.equals(checker)) finalMyPaths.add(k);
         });
-        //zdobacz obwod (return Set<Point>)
+        //zdobywa obwod jako Set<Point> uporzadkowany
         myFields = OverTake.getCircuit(finalMyFields);
-        Set<Point> myPath = new HashSet<>();
-        //wsadz obwod w findpath
-        myPath = OverTake.findPath(p1, p2, myFields, new HashSet<>());
+        Set<Point> myPath;//myPath to obwod ktory nalezy zamalowac
+        //teraz szukamy sciezki z tego obwodu(szukamy jej szybko, nie szukam najkrotszej)
+        myPath = OverTake.findPath(p1, p2, myFields, new LinkedHashSet<>());
         //polacz sciezke z tym co zwroci find path
         myPath.addAll(finalMyPaths);
-        myPath.addAll(finalMyFields);
-        //zamaluj pole z tego co polaczyles
-        Set<Point> taken = OverTake.paintPolygon(myPath);
+        //teraz mam liste pol ktore nalezy zamalowac
+        //maluje je
+        for(Point p: myPath ){
+            System.out.println("to wchodzi: "+p);
+        }
+        Set<Point> taken = OverTake.paintPolygon2(myPath);
+        //na prosbe Pana Marka biore tez liste samych zakretow do wyslania
+        ArrayList<Point> curves = OverTake.getCurves(myPath);
+        //gls.changeFields(checker,curves);
         for (Point tmp : taken) {
             fields.put(tmp, checker);
-            gls.changeField(checker, tmp);
+            gls.changeField(checker.getPlayer().getUsername(), tmp);
+            System.out.println("zamalowalem: "+tmp);
         }
         clearPlayersSign(checker);
     }
@@ -96,12 +108,14 @@ class Board {
                 iterator.remove();
             }
         }
-//        fields.forEach((k, v) -> {
-//            if (v == checker) {
-//                fields.remove(k);
-//                gls.killPlayer(v);
-//            }
-//        });
+        if(fields.size()>1){
+            fields.forEach((k, v) -> {
+                if (v == checker) {
+                    fields.remove(k);
+                    gls.killPlayer(v);
+                }
+            });
+        }
     }
 
     public Checker respawnPlayer(int size_x, int size_y, Player p) {
@@ -115,18 +129,18 @@ class Board {
                 fields.put(new Point(point0.x, point0.y), ch);
                 //gls.changeField(ch,point0);
 
-
+                String name=ch.getPlayer().getUsername();
                 fields.put(new Point(point0.x, point0.y + 1), ch);
-                gls.changeField(ch, new Point(point0.x, point0.y + 1));
+                gls.changeField(name, new Point(point0.x, point0.y + 1));
 
                 fields.put(new Point(point0.x + 1, point0.y + 1), ch);
-                gls.changeField(ch, new Point(point0.x + 1, point0.y + 1));
+                gls.changeField(name, new Point(point0.x + 1, point0.y + 1));
 
                 fields.put(new Point(point0.x, point0.y + 2), ch);
-                gls.changeField(ch, new Point(point0.x, point0.y + 2));
+                gls.changeField(name, new Point(point0.x, point0.y + 2));
 
                 fields.put(new Point(point0.x + 1, point0.y + 2), ch);
-                gls.changeField(ch, new Point(point0.x + 1, point0.y + 2));
+                gls.changeField(name, new Point(point0.x + 1, point0.y + 2));
 
                 gls.addPlayer(ch);
                 return ch;
@@ -138,14 +152,14 @@ class Board {
     /**
      * automatic
      */
-    public GameListenerState move(Checker ch, Direction dir, GameListenerState gls2) {
+    public void move(Checker ch, Direction dir) {
         Point oldPoint = ch.getPoint();
         int x =oldPoint.x;
         int y = oldPoint.y;
         switch (dir) {
             case EAST -> x++;
             case WEST -> x--;
-            case NORTH -> y--; //Na odwrót było
+            case NORTH -> y--;
             case SOUTH -> y++;
         }
         Point p = new Point();
@@ -159,15 +173,13 @@ class Board {
             //jesli byl u siebie i nie jest to nowy path
             //jesli byl u siebie i jest to nic
                     if(fields.get(oldPoint)!= null && fields.get(oldPoint).equals(ch)) {//byl u siebie
+                        ch.setPath(oldPoint);//ustawiam Patha jakby stąd zaczynal wyjazd z w next turn to bede wiedzial skad wyjechal
                         if (fields.get(p)!= null && fields.get(p).equals(ch)) {//i jest u siebie
                             ch.setPoint(p);
-                            gls2.playerMove(ch, false);
+                            gls.playerMove(ch, false);
                         } else {
-                            System.out.println("bbb");
-
-                            //ch.setPath(p);
                             ch.setPoint(p);
-                            gls2.playerMove(ch, true);
+                            gls.playerMove(ch, true);
                             paths.put(ch.getPoint(), ch);
                         }
                 }
@@ -178,69 +190,49 @@ class Board {
                 if (fields.get(p)!=null && fields.get(p).equals(ch)) {// i jest u siebie
                     ch.setPoint(p);
                     overtake(ch);
-                    ch.setPath(new Point());
-                    gls2.playerMove(ch, false);
+                    ch.setPath(p);
+                    gls.playerMove(ch, false);
                 } else {//i nie jest u siebie
                     ch.setPoint(p);
                     paths.put(ch.getPoint(), ch);
-                    gls2.playerMove(ch, true);
+                    gls.playerMove(ch, true);
                 }
             }
         }
         paths.forEach((k, v) -> {
             System.out.println(k);
         });
-        return gls2;
 
     }
-    public Set<Checker> newMove(Set<Checker> checkers, GameListenerState glstmp) {
-        gls = glstmp;
 
-        for (Checker ch : checkers) {
-            Point oldPoint = ch.getPoint();
-            Point p = ch.nextTurn();
-            if (paths.containsKey(p)) {
-                //drobna uwaga: zabijam tego ktorego slad zostal najechany
-                killPlayer(paths.get(p));
-            } else if (!(p.x >= x_size && p.y >= y_size)) {
-                //jesli byl u siebie i nie jest to nowy path
-                //jesli byl u siebie i jest to nic
-                if(fields.get(oldPoint)==null){
-                    System.out.println("aaaa");
-                }
-                if (fields.get(oldPoint).equals(ch)) {//byl u siebie
-                    if (fields.get(p).equals(ch)) {//i jest u siebie
-                        ch.setPoint(ch.nextTurn());
-                        gls.playerMove(ch, false);
-                    } else {
-                        ch.setPath(p);
-                        ch.setPoint(ch.nextTurn());
-                        gls.playerMove(ch, true);
-                        paths.put(ch.getPoint(), ch);
-                    }
-                }
-                //jesli nie byl u siebie i jest to overtake
-                //jesli nie byl u siebie i jest to kolejny path
-                else {//nie byl u siebie
-                    if (fields.get(p).equals(ch)) {// i jest u siebie
-                        ch.setPoint(ch.nextTurn());
-                        overtake(ch);
-                        ch.setPath(new Point());
-                        gls.playerMove(ch, false);
-                    } else {//i nie jest u siebie
-                        ch.setPoint(ch.nextTurn());
-                        paths.put(ch.getPoint(), ch);
-                        gls.playerMove(ch, true);
-                    }
-                }
-            }
-        }
-        return checkers;
+    public GameCurrentState setInfoForNewPlayer(Checker ch, GameCurrentState gcs) {
+        ArrayList<Point> points= new ArrayList<>();
+        Set<Point> localPath;
+        fields.forEach((k, v) -> {
+            if(v==ch)points.add(k);
+        });
+        Set<Point>  finalLocalPath = new LinkedHashSet<>();
+        paths.forEach((k, v) -> {
+            if(v==ch) finalLocalPath.add(k);
+        });
+        localPath= OverTake.findPath(ch.getPath(),ch.getPoint(), finalLocalPath, new LinkedHashSet<>());
+        ArrayList<Point> curves = OverTake.getCurves(localPath);
+        gcs.addPlayer(ch.getPlayer(), points, curves, ch.getPoint());
+        return gcs;
     }
 
-    public GameListenerState getGameListenerState() {
-        GameListenerState tmp = gls;
-        gls = null;
-        return tmp;
+    public void printGls(){
+         int turn = gls.getTurn();
+         List<String> killedPlayers=gls.getKilledPlayers();
+         Map<String,ArrayList<int[]>> changes=gls.getChanges();
+         List<Move> moves=gls.getMoves();
+         List<AddPlayer> addedPlayers=gls.getAddedPlayers();
+        System.out.println("###################################");
+        System.out.println("info co zostalo wyslane w "+turn+" turze");
+        System.out.println("killed players: "+killedPlayers);
+        System.out.println("moves: "+moves);
+        System.out.println("addedPlayers"+addedPlayers);
+        System.out.println("field's changes"+changes);
+        System.out.println("###################################");
     }
 }

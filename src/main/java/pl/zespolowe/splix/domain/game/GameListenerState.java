@@ -8,7 +8,9 @@ import pl.zespolowe.splix.dto.Move;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -19,14 +21,15 @@ public class GameListenerState {
     //lista nowych graczy - players
     private int turn;
     private List<String> killedPlayers;
-    private List<Change> changes;
+    private Map<String,ArrayList<int[]>> changes;//TODO: Marek ustawilem tak jak chciales
+    //private List<Change> changes;
     private List<Move> moves;
     private List<AddPlayer> addedPlayers;
 
     public GameListenerState(int turn) {
         this.turn = turn;
         this.killedPlayers = new ArrayList<>();
-        this.changes = new ArrayList<>();
+        this.changes = new HashMap<>();
         this.moves = new ArrayList<>();
         this.addedPlayers = new ArrayList<>();
     }
@@ -43,12 +46,29 @@ public class GameListenerState {
         moves.add(new Move(ch, havePath));
     }
 
-    public void changeField(Checker ch, Point p) {
-        changes.add(new Change(ch, p));
+    public void changeField(String name, Point p) {
+        ArrayList<int[]> arr = new ArrayList<>();
+        if(changes.size()>0){
+            changes.forEach((k, v) -> {
+                if (k.equals(name)) {
+                    for(int[] a: v){
+                        arr.add(a);
+                    }
+                }
+            });
+            arr.add(new int[]{(int) p.getX(), (int) p.getY()});
+            changes.remove(name);
+            changes.put(name,arr);
+        }
+        else{
+            arr.add(new int[]{(int) p.getX(), (int) p.getY()});
+            changes.put(name,arr);
+        }
     }
 
     public void changeField(Point p) {
-        changes.add(new Change(p));
+        changeField("",p);
+        //changes.add(new Change(p));
     }
 
 
