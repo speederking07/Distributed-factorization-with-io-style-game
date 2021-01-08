@@ -2,19 +2,23 @@ package pl.zespolowe.splix.domain.game;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import pl.zespolowe.splix.domain.game.player.Bot;
 import pl.zespolowe.splix.domain.game.player.Player;
 import pl.zespolowe.splix.dto.SimpleMove;
 
+import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
 public class Game implements ObservableGame {
-    private final static int x_size = 20;
-    private final static int y_size = 20;
+    private final static int x_size = 100;
+    private final static int y_size = 100;
     private final static int max_players = 20;
+    private final static int botsNumber = 3;
 
     @Getter
     private final int gameID;
@@ -27,12 +31,13 @@ public class Game implements ObservableGame {
 
 
     public Game(int gameID) {
-        this.players = new HashSet<>();
+        //this.players = new HashSet<>();
         this.listeners = new ArrayList<>();
         this.gameID = gameID;
         this.board = new Board(x_size, y_size);
         this.turn = 0;
         board.setGls(new GameListenerState(0));
+        this.players = makeBots(botsNumber);
         log.info("NEW GAME: " + gameID);
         new Timer().schedule(new TimerTask() {
             @Override
@@ -40,6 +45,32 @@ public class Game implements ObservableGame {
                 newTurn();
             }
         }, 1000, 250);
+    }
+
+    @SneakyThrows
+    private Set<Checker> makeBots(int ammount) {
+        String[] botNames = {"Bot Michas",
+                "Bot Marek",
+                "Bot Tomek",
+                "Bot Basia",
+                "Bot Barbara",
+                "Bot Bartek",
+                "Bot Bronek",
+                "Bot Bogus",
+                "Bot Bogdan",
+        };
+        Set<Checker> playersLocal = new HashSet<>();
+        for(int i=0;i<ammount;i++){
+                Bot bot = new Bot(botNames[i]);
+                if(i>=botNames.length) bot = new Bot(botNames[i]+(i-botNames.length+1));
+                Checker ch = board.respawnPlayer(x_size, y_size, bot);
+                if (ch == null) break;
+                playersLocal.add(ch); //Mozliwe że nie potrzebe ale u mnie nie działało bez tego
+                GameListenerState gls = board.getGls();
+                gls.addPlayer(ch);
+                board.setGls(gls);
+        }
+        return playersLocal;
     }
 
     //TODO: nie dostaję inforamcji o zmianie statustu pola - jest ok?
@@ -122,6 +153,7 @@ public class Game implements ObservableGame {
      * Nstępna tura
      */
     public void newTurn() {
+        moveBots();
         log.info("NEXT TURN");
         turn++;
         board.printGls();//Marek rutaj sb sprawdz co wysyla server
@@ -133,4 +165,16 @@ public class Game implements ObservableGame {
     public void addListener(@NonNull GameListener listener) {
         listeners.add(listener);
     }
+
+    /**
+     * Ruch botow
+     */
+    public void moveBots() {
+        players.stream().forEach((ch) -> {
+            if (ch.getPlayer() instanceof Bot) {
+                board.botMove(ch);
+            }
+        });
+    }
+
 }

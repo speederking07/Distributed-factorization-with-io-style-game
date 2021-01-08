@@ -8,6 +8,7 @@ package pl.zespolowe.splix.domain.game;
 import lombok.Getter;
 import lombok.Setter;
 import pl.zespolowe.splix.domain.game.overtakeElements.OverTake;
+import pl.zespolowe.splix.domain.game.player.Bot;
 import pl.zespolowe.splix.domain.game.player.Player;
 import pl.zespolowe.splix.dto.AddPlayer;
 import pl.zespolowe.splix.dto.Move;
@@ -238,5 +239,13 @@ class Board {
         System.out.println("addedPlayers"+addedPlayers);
         System.out.println("field's changes"+changes);
         System.out.println("###################################");
+    }
+
+    /**
+     * Ruch botow
+     */
+    public void botMove(Checker ch) {
+        move(ch,Direction.EAST);
+                //TODO: TU SIE DZIEJE MAGIA ROBIENIA RUCHU PIONEM
     }
 }
