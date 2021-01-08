@@ -165,11 +165,15 @@ class Board {
         Point p = new Point();
         p.x=x;
         p.y=y;
+        if(p.getX()<0 || p.getY()<0 || p.getX() >= x_size || p.getY() >= y_size){
+            killPlayer(ch);
+            return;
+        }
         System.out.println(p);
         if (paths.containsKey(p)) {
             //drobna uwaga: zabijam tego ktorego slad zostal najechany
             killPlayer(paths.get(p));
-        } else if (!(p.x >= x_size && p.y >= y_size)) {
+        } else{
             //jesli byl u siebie i nie jest to nowy path
             //jesli byl u siebie i jest to nic
                     if(fields.get(oldPoint)!= null && fields.get(oldPoint).equals(ch)) {//byl u siebie
