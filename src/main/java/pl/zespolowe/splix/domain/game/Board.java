@@ -17,6 +17,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 class Board {
     private final Map<Point, Checker> fields;
@@ -245,7 +246,101 @@ class Board {
      * Ruch botow
      */
     public void botMove(Checker ch) {
+        Point oldPoint = ch.getPoint();
+        int x =(int)oldPoint.getX();
+        int y = (int)oldPoint.getY();
+        switch (ch.getDirection()) {
+            case EAST -> x++;
+            case WEST -> x--;
+            case NORTH -> y--;
+            case SOUTH -> y++;
+        }
+        Point newPoint = new Point(x,y);
+        if(ch.getPlayer().isRoadSet()){//wiem gdzie isc //todo: zapytac was
+            if (fields.get(oldPoint)!= null && fields.get(oldPoint).equals(ch)) {//jestem u siebie
+                if (!(fields.get(newPoint)!= null && fields.get(newPoint).equals(ch))) {//w next turn nie bedzie u siebie
+                    move(ch,ch.getDirection());
+                    ch.getPlayer().isRoadSet(false);
+                }
+            } else {//nie jestem u siebie ale wiem gdzie isc
+                move(ch,ch.getDirection());
+            }
+        }
+        else{//nie jestem u siebie i nie wiem gdzie isc
+            //trzeba wyznaczyc droge
+            Random random = new Random();
+            Direction localDir;
+            do {//losuje kierunek
+                localDir = Direction.values()[(int) (Math.random() * Direction.values().length)];
+            }
+            while(localDir==null || localDir==ch.getDirection());
+                List<Point> movesList = new ArrayList<>();
+                List<Direction> directionsList = new ArrayList<>();
+                //sprawdz czy wykoanie ruchu (3x ten kier)&&(2x obrot 90o || 2x obrot 2 wersja 90o)&& find path to nasza baza nie przekroczy planszy
+                movesList = getMovesList(ch,localDir);//jesli nie mozliwe zwraca pusta liste a jesli mozliwe to zwraca liste punktow
+                if(movesList.isEmpty()){
+                    movesList=shortestPathToHomeland(ch, getNewPosition(ch.getPoint(),localDir));//wznacza najkrotsza droge do domu z punktu
+                }
+                directionsList=getDirectionsFromPath(movesList);//zamienia liste punktow na liste kierunkow
+                //losuj kierunek
+                    //zadbaj aby nie byl przeciwienstwem tego z ktorego przyszedles-OK
+
+                        //jesli przekroczy (shortest path w next)
+            ch.getPlayer().isRoadSet(true);
+        }
         move(ch,Direction.EAST);
                 //TODO: TU SIE DZIEJE MAGIA ROBIENIA RUCHU PIONEM
+    }
+
+    private  List<Direction> getDirectionsFromPath(List<Point> movesList){
+        List<Direction> directionsList = new ArrayList<>();
+        for(int i=0;i< movesList.size()-1;i++){
+            Point p1 = movesList.get(i);
+            Point p2 = movesList.get(i+1);
+            if(p1.getX()==p2.getX()){
+                if(p1.getY()<p2.getY())directionsList.add(Direction.SOUTH);
+                else directionsList.add(Direction.NORTH);
+            }
+            else{
+                if(p1.getX()<p2.getX())directionsList.add(Direction.EAST);
+                else directionsList.add(Direction.WEST);
+            }
+        }
+        return directionsList;
+    }
+    private Point getNewPosition(Point p, Direction d){
+        int x =(int)p.getX();
+        int y = (int)p.getY();
+        switch (d) {
+            case EAST -> x++;
+            case WEST -> x--;
+            case NORTH -> y--;
+            case SOUTH -> y++;
+        }
+       return(new Point(x,y));
+    }
+
+    private List<Point> shortestPathToHomeland(Checker checker, Point point){
+        List<Point> rtr = new ArrayList<>();
+        //wyznaczam punkt najblizszy mi
+        List<Point> potentialPointsList = fields
+                .entrySet()
+                .stream()
+                .filter(e -> (checker.equals(e.getValue())))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+
+        double minPath = x_size+y_size;
+        Point minPoint;
+        for(Point p: potentialPointsList){
+            double tmp = Math.abs(p.getX()-point.getX()) + Math.abs(p.getY()-point.getY());
+            if(tmp<minPath){minPath = tmp; minPoint=p;}
+        }
+        //wyznaczylem juz punkt najblizszy mi
+
+        //TODO: jebnij strumien co leci po fields, jak na field jest checker to policz roznice punkow, jak roznica<minRoznica to BINGO!
+
+
+        return rtr;
     }
 }

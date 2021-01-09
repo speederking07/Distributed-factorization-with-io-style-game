@@ -5,7 +5,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
-
+/**
+ * Elements for taking fields
+ *
+ * @author MichalKalina
+ */
 public class OverTake {
     /***
      * Znajdowanie sciezki
