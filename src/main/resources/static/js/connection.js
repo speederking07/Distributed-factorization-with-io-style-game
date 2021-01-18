@@ -98,7 +98,35 @@ window.onload = function () {
 function refreshWebsocketConnection() {
     let socket = new SockJS('/gameStompEndpoint');
     stompClient = Stomp.over(socket);
+    stompClient.debug = () => {
+    };
     stompClient.connect({}, function (frame) {
-        //TODO: co robic przy polaczeniu
+        connectSynchronizer();
     });
+}
+
+//  SYNC
+
+let lastReqSendTime = null;
+let times = [150]
+
+function connectSynchronizer() {
+    stompClient.subscribe('/user/queue/synchronize', function (state) {
+        if (times.length >= 5) times.shift();
+        let tempTime = Date.now() - lastReqSendTime;
+        times.push(tempTime / 2);
+    });
+    setInterval(sendUpdateRequest, 1000);
+}
+
+function sendUpdateRequest() {
+    lastReqSendTime = Date.now();
+    stompClient.send('/synchronize', {}, "0".repeat(50));
+    console.clear();
+    console.log(currentAvgDelay() + " ms     \r");
+}
+
+
+function currentAvgDelay() {
+    return times.reduce((a, b) => a + b, 0) / times.length;
 }
