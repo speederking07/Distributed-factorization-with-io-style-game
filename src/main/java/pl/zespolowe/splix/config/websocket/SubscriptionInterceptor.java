@@ -33,6 +33,7 @@ public class SubscriptionInterceptor implements ChannelInterceptor {
 
     private boolean validateSubscription(String sessionID, String destination) {
         if (destination == null) return false;
+        if (destination.endsWith("/queue/synchronize")) return true;
         int gameID = Integer.parseInt(destination.substring(13));
         return gameService.containsPlayer(gameID, playersRegistry.getPlayer(sessionID));
     }
