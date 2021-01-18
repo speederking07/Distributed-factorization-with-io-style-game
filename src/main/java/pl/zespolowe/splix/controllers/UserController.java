@@ -14,6 +14,7 @@ import pl.zespolowe.splix.dto.UserSettingsDTO;
 import pl.zespolowe.splix.services.UserService;
 
 import javax.security.auth.login.AccountException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -39,10 +40,10 @@ public class UserController {
      * @return success/error message
      */
     @PostMapping(value = "/register", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> register(@Valid @RequestBody User user) {
+    public ResponseEntity<String> register(@Valid @RequestBody User user, HttpServletRequest request) {
         try {
+            log.info("Registration attempt: " + user.getUsername() + ", " + user.getEmail() + ", " + request.getRemoteAddr());
             service.registerUser(user);
-            log.info("Registered: " + user);
             return ResponseEntity.ok("Registration successful");
         } catch (AccountException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -83,11 +84,11 @@ public class UserController {
      * @return success/error message
      */
     @PostMapping(value = "/user/password", consumes = TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> changePassword(@RequestBody String password, Authentication authentication) {
+    public ResponseEntity<String> changePassword(@RequestBody String password, Authentication authentication, HttpServletRequest request) {
         try {
             User user = (User) authentication.getPrincipal();
+            log.info("Password change attempt: " + user.getUsername() + ", " + request.getRemoteAddr());
             service.changePassword(user, password);
-            log.debug("Password changed: " + user);
             return ResponseEntity.ok("password%Password changed");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -102,11 +103,11 @@ public class UserController {
      * @return success/error message
      */
     @PostMapping(value = "/user/email", consumes = TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> changeEmail(@RequestBody String email, Authentication authentication) {
+    public ResponseEntity<String> changeEmail(@RequestBody String email, Authentication authentication, HttpServletRequest request) {
         try {
             User user = (User) authentication.getPrincipal();
+            log.info("Email change attempt: " + user.getUsername() + ", " + request.getRemoteAddr());
             service.changeEmail(user, email);
-            log.debug("Email changed: " + user);
             return ResponseEntity.ok("email%Email changed");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -122,10 +123,11 @@ public class UserController {
 
     //TODO
     @GetMapping(value = "/admin/set", consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> registerAdmin(@RequestBody String username) {
+    public ResponseEntity<String> registerAdmin(@RequestBody String username, Authentication auth, HttpServletRequest request) {
         try {
+            User admin = (User) auth.getPrincipal();
+            log.info("Set admin attempt for: " + username + " by: " + admin.getUsername() + ", " + request.getRemoteAddr());
             User user = service.setAdmin(username);
-            log.info("Set admin: " + user);
             return ResponseEntity.ok("Success");
         } catch (AccountException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
