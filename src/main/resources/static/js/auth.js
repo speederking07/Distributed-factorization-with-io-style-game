@@ -16,7 +16,7 @@ function logout() {
     });
 }
 
-function recoverPassword(){
+function recoverPassword() {
     $.get({
         url: '/recover?username=' + $("#recoverEmail").val(),
         success: function (data) {

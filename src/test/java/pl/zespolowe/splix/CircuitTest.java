@@ -70,10 +70,12 @@ public class CircuitTest {
 
     }
 
-    public static ArrayList<Point> getCurves(Set<Point> points){
+    public static ArrayList<Point> getCurves(Set<Point> points) {
         ArrayList<Point> rtr = new ArrayList<>();
-        for(Point p: points){
-            if(isCurvePoint(p, points)){rtr.add(p);}
+        for (Point p : points) {
+            if (isCurvePoint(p, points)) {
+                rtr.add(p);
+            }
             System.out.println(p);
         }
         return rtr;
@@ -81,36 +83,35 @@ public class CircuitTest {
 
     public static boolean isCurvePoint(Point p0, Set<Point> points) {
         ArrayList<Point> rtr = new ArrayList<>();
-        boolean north=false;
-        boolean south=false;
-        boolean west=false;
-        boolean east=false;
+        boolean north = false;
+        boolean south = false;
+        boolean west = false;
+        boolean east = false;
 
         for (Point p : points) {
             int pX = (int) p.getX();
             int pY = (int) p.getY();
             int p0X = (int) p0.getX();
             int p0Y = (int) p0.getY();
-            if(p0X==pX){
-                if(p0Y+1==pY){
-                    south=true;
+            if (p0X == pX) {
+                if (p0Y + 1 == pY) {
+                    south = true;
                 }
-                if(p0Y-1==pY){
-                    north=true;
+                if (p0Y - 1 == pY) {
+                    north = true;
                 }
             }
-            if(p0Y==pY){
-                if(p0X+1==pX){
-                    east=true;
+            if (p0Y == pY) {
+                if (p0X + 1 == pX) {
+                    east = true;
                 }
-                if(p0X-1==pX){
-                    west=true;
+                if (p0X - 1 == pX) {
+                    west = true;
                 }
             }
         }
         //if(1<bToI(west)+bToI(east)+bToI(north)+bToI(south) && ){return true;}
-        if((north || south) && (east || west)){return true;}
-        return false;
+        return (north || south) && (east || west);
 
     }
 

@@ -1,5 +1,7 @@
 package pl.zespolowe.splix;
+
 import pl.zespolowe.splix.domain.game.overtakeElements.OverTake;
+
 import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -7,11 +9,11 @@ import java.util.Set;
 /***
  *
  * tak to wyglada:
-  xxxxx
-  x...x
-  x...x
-  x...x
-  xxxxx
+ xxxxx
+ x...x
+ x...x
+ x...x
+ xxxxx
  */
 
 public class PaintPolygonTest {

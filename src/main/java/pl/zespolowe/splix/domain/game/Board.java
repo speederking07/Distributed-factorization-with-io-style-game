@@ -13,8 +13,8 @@ import pl.zespolowe.splix.dto.AddPlayer;
 import pl.zespolowe.splix.dto.Move;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 class Board {
@@ -51,7 +51,7 @@ class Board {
                 //else gls.changeField(k);
             }
         });
-        for(Point p: arrayPaths){
+        for (Point p : arrayPaths) {
             paths.remove(p);
         }
     }
@@ -83,8 +83,8 @@ class Board {
         myPath.addAll(finalMyPaths);
         //teraz mam liste pol ktore nalezy zamalowac
         //maluje je
-        for(Point p: myPath ){
-            System.out.println("to wchodzi: "+p);
+        for (Point p : myPath) {
+            System.out.println("to wchodzi: " + p);
         }
         Set<Point> taken = OverTake.paintPolygon2(myPath);
         //na prosbe Pana Marka biore tez liste samych zakretow do wyslania
@@ -93,7 +93,7 @@ class Board {
         for (Point tmp : taken) {
             fields.put(tmp, checker);
             gls.changeField(checker.getPlayer().getUsername(), tmp);
-            System.out.println("zamalowalem: "+tmp);
+            System.out.println("zamalowalem: " + tmp);
         }
         clearPlayersSign(checker);
     }
@@ -108,7 +108,7 @@ class Board {
                 iterator.remove();
             }
         }
-        if(fields.size()>1){
+        if (fields.size() > 1) {
             fields.forEach((k, v) -> {
                 if (v == checker) {
                     fields.remove(k);
@@ -129,7 +129,7 @@ class Board {
                 fields.put(new Point(point0.x, point0.y), ch);
                 //gls.changeField(ch,point0);
 
-                String name=ch.getPlayer().getUsername();
+                String name = ch.getPlayer().getUsername();
                 fields.put(new Point(point0.x, point0.y + 1), ch);
                 gls.changeField(name, new Point(point0.x, point0.y + 1));
 
@@ -154,7 +154,7 @@ class Board {
      */
     public void move(Checker ch, Direction dir) {
         Point oldPoint = ch.getPoint();
-        int x =oldPoint.x;
+        int x = oldPoint.x;
         int y = oldPoint.y;
         switch (dir) {
             case EAST -> x++;
@@ -163,8 +163,8 @@ class Board {
             case SOUTH -> y++;
         }
         Point p = new Point();
-        p.x=x;
-        p.y=y;
+        p.x = x;
+        p.y = y;
         System.out.println(p);
         if (paths.containsKey(p)) {
             //drobna uwaga: zabijam tego ktorego slad zostal najechany
@@ -172,22 +172,22 @@ class Board {
         } else if (!(p.x >= x_size && p.y >= y_size)) {
             //jesli byl u siebie i nie jest to nowy path
             //jesli byl u siebie i jest to nic
-                    if(fields.get(oldPoint)!= null && fields.get(oldPoint).equals(ch)) {//byl u siebie
-                        ch.setPath(oldPoint);//ustawiam Patha jakby stąd zaczynal wyjazd z w next turn to bede wiedzial skad wyjechal
-                        if (fields.get(p)!= null && fields.get(p).equals(ch)) {//i jest u siebie
-                            ch.setPoint(p);
-                            gls.playerMove(ch, false);
-                        } else {
-                            ch.setPoint(p);
-                            gls.playerMove(ch, true);
-                            paths.put(ch.getPoint(), ch);
-                        }
+            if (fields.get(oldPoint) != null && fields.get(oldPoint).equals(ch)) {//byl u siebie
+                ch.setPath(oldPoint);//ustawiam Patha jakby stąd zaczynal wyjazd z w next turn to bede wiedzial skad wyjechal
+                if (fields.get(p) != null && fields.get(p).equals(ch)) {//i jest u siebie
+                    ch.setPoint(p);
+                    gls.playerMove(ch, false);
+                } else {
+                    ch.setPoint(p);
+                    gls.playerMove(ch, true);
+                    paths.put(ch.getPoint(), ch);
                 }
+            }
 
             //jesli nie byl u siebie i jest to overtake
             //jesli nie byl u siebie i jest to kolejny path
             else {//nie byl u siebie
-                if (fields.get(p)!=null && fields.get(p).equals(ch)) {// i jest u siebie
+                if (fields.get(p) != null && fields.get(p).equals(ch)) {// i jest u siebie
                     ch.setPoint(p);
                     overtake(ch);
                     ch.setPath(p);
@@ -206,33 +206,33 @@ class Board {
     }
 
     public GameCurrentState setInfoForNewPlayer(Checker ch, GameCurrentState gcs) {
-        ArrayList<Point> points= new ArrayList<>();
+        ArrayList<Point> points = new ArrayList<>();
         Set<Point> localPath;
         fields.forEach((k, v) -> {
-            if(v==ch)points.add(k);
+            if (v == ch) points.add(k);
         });
-        Set<Point>  finalLocalPath = new LinkedHashSet<>();
+        Set<Point> finalLocalPath = new LinkedHashSet<>();
         paths.forEach((k, v) -> {
-            if(v==ch) finalLocalPath.add(k);
+            if (v == ch) finalLocalPath.add(k);
         });
-        localPath= OverTake.findPath(ch.getPath(),ch.getPoint(), finalLocalPath, new LinkedHashSet<>());
+        localPath = OverTake.findPath(ch.getPath(), ch.getPoint(), finalLocalPath, new LinkedHashSet<>());
         ArrayList<Point> curves = OverTake.getCurves(localPath);
         gcs.addPlayer(ch.getPlayer(), points, curves, ch.getPoint());
         return gcs;
     }
 
-    public void printGls(){
-         int turn = gls.getTurn();
-         List<String> killedPlayers=gls.getKilledPlayers();
-         Map<String,ArrayList<int[]>> changes=gls.getChanges();
-         List<Move> moves=gls.getMoves();
-         List<AddPlayer> addedPlayers=gls.getAddedPlayers();
+    public void printGls() {
+        int turn = gls.getTurn();
+        List<String> killedPlayers = gls.getKilledPlayers();
+        Map<String, ArrayList<int[]>> changes = gls.getChanges();
+        List<Move> moves = gls.getMoves();
+        List<AddPlayer> addedPlayers = gls.getAddedPlayers();
         System.out.println("###################################");
-        System.out.println("info co zostalo wyslane w "+turn+" turze");
-        System.out.println("killed players: "+killedPlayers);
-        System.out.println("moves: "+moves);
-        System.out.println("addedPlayers"+addedPlayers);
-        System.out.println("field's changes"+changes);
+        System.out.println("info co zostalo wyslane w " + turn + " turze");
+        System.out.println("killed players: " + killedPlayers);
+        System.out.println("moves: " + moves);
+        System.out.println("addedPlayers" + addedPlayers);
+        System.out.println("field's changes" + changes);
         System.out.println("###################################");
     }
 }

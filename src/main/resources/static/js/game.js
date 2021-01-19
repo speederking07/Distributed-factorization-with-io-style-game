@@ -121,7 +121,7 @@ class Game {
         console.log(this.turn - Number(data.turn));
         if (this.turn === -1) {
             this.turn = data.turn;
-            this.gameStart = Date.now()-250*data.turn;
+            this.gameStart = Date.now() - 250 * data.turn;
             this.addPlayerList(data.addedPlayers);
             this.killPlayerList(data.killedPlayers);
             this.moveListLate(data.moves, 1);

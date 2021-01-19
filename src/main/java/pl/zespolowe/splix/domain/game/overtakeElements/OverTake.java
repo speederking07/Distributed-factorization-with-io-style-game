@@ -83,8 +83,12 @@ public class OverTake {
         ArrayList<Point> arrPoints = new ArrayList<>(points);//aby szybciej sie dostawac do elementow
         ArrayList<Point> rtr = new ArrayList<>();//to co zwroce
         int len = points.size();
-        if(len<=2){ return arrPoints;}
-        if(len>2){rtr.add(arrPoints.get(0));}
+        if (len <= 2) {
+            return arrPoints;
+        }
+        if (len > 2) {
+            rtr.add(arrPoints.get(0));
+        }
         for (int i = 1; i < len - 2; i++) {
             Point p0 = arrPoints.get(i);
             Point pf = arrPoints.get(i + 1);//forward point
@@ -93,7 +97,7 @@ public class OverTake {
                 rtr.add(p0);
             }
         }
-        rtr.add(arrPoints.get(len-1));
+        rtr.add(arrPoints.get(len - 1));
         return rtr;
     }
 
@@ -108,14 +112,14 @@ public class OverTake {
             if (p.y < min) min = p.y;
             if (p.y > max) max = p.y;
         }
-        System.out.println("max i min"+max+" "+min);
+        System.out.println("max i min" + max + " " + min);
         for (int i = min; i <= max; i++) {
             System.out.println(i + "b");
             ArrayList<Integer> al = new ArrayList<>();
             for (Point p : points) {
                 System.out.println(p);
                 if (p.getY() == i) {
-                    al.add((int)p.getX());
+                    al.add((int) p.getX());
                     System.out.println(p.getX());
                 }
             }
@@ -151,21 +155,26 @@ public class OverTake {
      * @param points
      * @return
      */
-    private static Set<Point>getEnclousureFields(Set<Point> points){
+    private static Set<Point> getEnclousureFields(Set<Point> points) {
         double max = 0;
-        double maxX=0;
+        double maxX = 0;
         Set<Point> rtrFields = new LinkedHashSet<>();
-        for (Point p : points) {if (p.getY() > max){max = p.getY();maxX=p.getX();} }
-        Point firstOne = new Point((int)maxX,(int)max+1);
+        for (Point p : points) {
+            if (p.getY() > max) {
+                max = p.getY();
+                maxX = p.getX();
+            }
+        }
+        Point firstOne = new Point((int) maxX, (int) max + 1);
         rtrFields.add(firstOne);
-        rtrFields=getEnclousureField(new Point((int)maxX,(int)firstOne.getY()+1),points,rtrFields);
-        rtrFields=getEnclousureField(new Point((int)maxX,(int)firstOne.getY()-1),points,rtrFields);
-        rtrFields=getEnclousureField(new Point((int)maxX+1,(int)firstOne.getY()+1),points,rtrFields);
-        rtrFields=getEnclousureField(new Point((int)maxX-1,(int)firstOne.getY()+1),points,rtrFields);
-        rtrFields=getEnclousureField(new Point((int)maxX+1,(int)firstOne.getY()-1),points,rtrFields);
-        rtrFields=getEnclousureField(new Point((int)maxX-1,(int)firstOne.getY()-1),points,rtrFields);
-        rtrFields=getEnclousureField(new Point((int)maxX+1,(int)firstOne.getY()),points,rtrFields);
-        rtrFields=getEnclousureField(new Point((int)maxX-1,(int)firstOne.getY()),points,rtrFields);
+        rtrFields = getEnclousureField(new Point((int) maxX, (int) firstOne.getY() + 1), points, rtrFields);
+        rtrFields = getEnclousureField(new Point((int) maxX, (int) firstOne.getY() - 1), points, rtrFields);
+        rtrFields = getEnclousureField(new Point((int) maxX + 1, (int) firstOne.getY() + 1), points, rtrFields);
+        rtrFields = getEnclousureField(new Point((int) maxX - 1, (int) firstOne.getY() + 1), points, rtrFields);
+        rtrFields = getEnclousureField(new Point((int) maxX + 1, (int) firstOne.getY() - 1), points, rtrFields);
+        rtrFields = getEnclousureField(new Point((int) maxX - 1, (int) firstOne.getY() - 1), points, rtrFields);
+        rtrFields = getEnclousureField(new Point((int) maxX + 1, (int) firstOne.getY()), points, rtrFields);
+        rtrFields = getEnclousureField(new Point((int) maxX - 1, (int) firstOne.getY()), points, rtrFields);
         return rtrFields;
     }
 
@@ -178,26 +187,28 @@ public class OverTake {
      * @param rtrFields
      * @return
      */
-    private static Set<Point> getEnclousureField(Point point, Set<Point> points,Set<Point>rtrFields) {
+    private static Set<Point> getEnclousureField(Point point, Set<Point> points, Set<Point> rtrFields) {
         boolean istGut = false;
         double x = point.getX();
         double y = point.getY();
-        if(rtrFields.contains(point))return rtrFields;
-        for (Point p : points){
-            if (p.getX() == x && p.getY()==y){return rtrFields;}
-            if(p.getX()==x && (p.getY()<=y+1 && p.getY()>=y-1))istGut=true;
-            if(p.getY()==y && (p.getX()<=x+1 && p.getX()>=x-1))istGut=true;
+        if (rtrFields.contains(point)) return rtrFields;
+        for (Point p : points) {
+            if (p.getX() == x && p.getY() == y) {
+                return rtrFields;
+            }
+            if (p.getX() == x && (p.getY() <= y + 1 && p.getY() >= y - 1)) istGut = true;
+            if (p.getY() == y && (p.getX() <= x + 1 && p.getX() >= x - 1)) istGut = true;
         }
-        if(istGut)rtrFields.add(point);
+        if (istGut) rtrFields.add(point);
         else return rtrFields;
-        rtrFields=getEnclousureField(new Point((int)x,(int)y+1),points,rtrFields);
-        rtrFields=getEnclousureField(new Point((int)x,(int)y-1),points,rtrFields);
-        rtrFields=getEnclousureField(new Point((int)x+1,(int)y+1),points,rtrFields);
-        rtrFields=getEnclousureField(new Point((int)x-1,(int)y+1),points,rtrFields);
-        rtrFields=getEnclousureField(new Point((int)x+1,(int)y-1),points,rtrFields);
-        rtrFields=getEnclousureField(new Point((int)x-1,(int)y-1),points,rtrFields);
-        rtrFields=getEnclousureField(new Point((int)x+1,(int)y),points,rtrFields);
-        rtrFields=getEnclousureField(new Point((int)x-1,(int)y),points,rtrFields);
+        rtrFields = getEnclousureField(new Point((int) x, (int) y + 1), points, rtrFields);
+        rtrFields = getEnclousureField(new Point((int) x, (int) y - 1), points, rtrFields);
+        rtrFields = getEnclousureField(new Point((int) x + 1, (int) y + 1), points, rtrFields);
+        rtrFields = getEnclousureField(new Point((int) x - 1, (int) y + 1), points, rtrFields);
+        rtrFields = getEnclousureField(new Point((int) x + 1, (int) y - 1), points, rtrFields);
+        rtrFields = getEnclousureField(new Point((int) x - 1, (int) y - 1), points, rtrFields);
+        rtrFields = getEnclousureField(new Point((int) x + 1, (int) y), points, rtrFields);
+        rtrFields = getEnclousureField(new Point((int) x - 1, (int) y), points, rtrFields);
         return rtrFields;
     }
 
@@ -210,17 +221,21 @@ public class OverTake {
      * @param rtrFields
      * @return
      */
-    private static Set<Point> fillEnclousureFields(Point point, Set<Point> enclosureFields,Set<Point>rtrFields) {
-        if(rtrFields.contains(point)){return rtrFields;}
-        if(enclosureFields.contains(point)){return rtrFields;}
+    private static Set<Point> fillEnclousureFields(Point point, Set<Point> enclosureFields, Set<Point> rtrFields) {
+        if (rtrFields.contains(point)) {
+            return rtrFields;
+        }
+        if (enclosureFields.contains(point)) {
+            return rtrFields;
+        }
         rtrFields.add(point);
         System.out.println(point);
-        int x = (int)point.getX();
-        int y = (int)point.getY();
-        rtrFields=fillEnclousureFields(new Point(x,y+1),enclosureFields,rtrFields);
-        rtrFields=fillEnclousureFields(new Point(x,y-1),enclosureFields,rtrFields);
-        rtrFields=fillEnclousureFields(new Point(x+1,y),enclosureFields,rtrFields);
-        rtrFields=fillEnclousureFields(new Point(x-1,y),enclosureFields,rtrFields);
+        int x = (int) point.getX();
+        int y = (int) point.getY();
+        rtrFields = fillEnclousureFields(new Point(x, y + 1), enclosureFields, rtrFields);
+        rtrFields = fillEnclousureFields(new Point(x, y - 1), enclosureFields, rtrFields);
+        rtrFields = fillEnclousureFields(new Point(x + 1, y), enclosureFields, rtrFields);
+        rtrFields = fillEnclousureFields(new Point(x - 1, y), enclosureFields, rtrFields);
         return rtrFields;
     }
 
@@ -230,22 +245,22 @@ public class OverTake {
      * @param points
      * @return
      */
-        public static Set<Point> paintPolygon2(Set<Point> points) {
-        if(points.isEmpty()) return new LinkedHashSet<>();
-        Set<Point> enclosureFields= getEnclousureFields(points);
+    public static Set<Point> paintPolygon2(Set<Point> points) {
+        if (points.isEmpty()) return new LinkedHashSet<>();
+        Set<Point> enclosureFields = getEnclousureFields(points);
         Set<Point> rtrFields = new LinkedHashSet<>();//nie dalem "=points" bo wtedy zmienilismyby tez points z nadklasy
         Set<Point> iterateFields = new LinkedHashSet<>();
-        for(Point p: points) {
+        for (Point p : points) {
             iterateFields.add(p);
             rtrFields.add(p);
         }
-        for(Point p: iterateFields){
-            int x = (int)p.getX();
-            int y = (int)p.getY();
-            rtrFields=fillEnclousureFields(new Point(x,y+1),enclosureFields,rtrFields);
-            rtrFields=fillEnclousureFields(new Point(x,y-1),enclosureFields,rtrFields);
-            rtrFields=fillEnclousureFields(new Point(x+1,y),enclosureFields,rtrFields);
-            rtrFields=fillEnclousureFields(new Point(x-1,y),enclosureFields,rtrFields);
+        for (Point p : iterateFields) {
+            int x = (int) p.getX();
+            int y = (int) p.getY();
+            rtrFields = fillEnclousureFields(new Point(x, y + 1), enclosureFields, rtrFields);
+            rtrFields = fillEnclousureFields(new Point(x, y - 1), enclosureFields, rtrFields);
+            rtrFields = fillEnclousureFields(new Point(x + 1, y), enclosureFields, rtrFields);
+            rtrFields = fillEnclousureFields(new Point(x - 1, y), enclosureFields, rtrFields);
         }
         return rtrFields;
     }

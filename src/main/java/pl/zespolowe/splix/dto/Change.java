@@ -6,7 +6,6 @@ import pl.zespolowe.splix.domain.game.Checker;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
 
 /****
  *
@@ -24,8 +23,8 @@ public class Change {
 
     public Change(Checker ch, Point p) {
         int[] tmp = new int[2];
-        tmp[0]= (int) p.getX();
-        tmp[1]= (int) p.getY();
+        tmp[0] = (int) p.getX();
+        tmp[1] = (int) p.getY();
 
         //pos[pos.length()-1][pos.length-1]=p.getX(),p.getY();
         //pos.add(tmp);

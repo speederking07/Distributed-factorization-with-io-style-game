@@ -167,12 +167,12 @@ class Player {
      * @param currY
      */
     makePositionAdjustments(currX, currY) {
-        if(currX !== this.currentPos.x || currY !== this.currentPos.y) {
+        if (currX !== this.currentPos.x || currY !== this.currentPos.y) {
             const step = this.computeStep();
             if (this.path.length >= 1) {
                 this.path.push([currX * BLOCK_SIZE, currY * BLOCK_SIZE])
             }
-            this.currentPos = {x: currX, y:currY};
+            this.currentPos = {x: currX, y: currY};
             this.movX = (this.currentPos.x - this.prevPos.x) * SPEED;
             this.movY = (this.currentPos.y - this.prevPos.y) * SPEED;
             this.posX = this.prevPos.x * BLOCK_SIZE + this.movX * step;

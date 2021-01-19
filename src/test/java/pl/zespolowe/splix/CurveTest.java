@@ -3,8 +3,6 @@ package pl.zespolowe.splix;
 import pl.zespolowe.splix.domain.game.overtakeElements.OverTake;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -59,14 +57,13 @@ public class CurveTest {
         p.y = 3;
         myWalk.add(p);
 
-        for(Point pr: OverTake.getCurves(myWalk)){
+        for (Point pr : OverTake.getCurves(myWalk)) {
             System.out.println(pr);
         }
         System.out.println(OverTake.getCurves(myWalk));
 
 
     }
-
 
 
 }

@@ -116,7 +116,7 @@ class BoardView {
      */
     drawDying(viewX, viewY) {
         for (let i = 0; i < this.dying.length; i++) {
-            if(this.dying[i][0] !== undefined) {
+            if (this.dying[i][0] !== undefined) {
                 this.dying[i][0].drawDying(this.ctx, viewX, viewY, this.width, this.height, this.dying[i][1]);
                 this.dying[i][1] += 1;
                 if (this.dying[i][1] > DYING_FRAMES) {
