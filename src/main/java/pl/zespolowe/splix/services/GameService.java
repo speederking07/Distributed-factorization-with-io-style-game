@@ -1,9 +1,11 @@
 package pl.zespolowe.splix.services;
 
 import lombok.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import pl.zespolowe.splix.domain.game.Game;
+import pl.zespolowe.splix.domain.game.GameCurrentState;
 import pl.zespolowe.splix.domain.game.GameListener;
 import pl.zespolowe.splix.domain.game.player.Player;
 import pl.zespolowe.splix.exceptions.GameException;
@@ -79,4 +81,11 @@ public class GameService {
         return game != null && game.containsPlayer(player);
     }
 
+
+    @Nullable
+    public GameCurrentState getState(int gameID) {
+        Game game = games.get(gameID);
+        if (game != null) return game.getGameCurrentState();
+        return null;
+    }
 }

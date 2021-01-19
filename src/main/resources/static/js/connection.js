@@ -44,9 +44,24 @@ class Connection {
      * @param update - function to be called whenever information is received from server
      */
     subscribe(update) {
-        stompClient.subscribe('/topic/stomp/' + this.gameID, function (state) {
-            update(JSON.parse(state.body));
+        let id = this.gameID;
+        $.get({
+            url: '/game/state/' + this.gameID,
+            success: function (data) {
+                stompClient.subscribe('/topic/stomp/' + id, function (state) {
+                    update(JSON.parse(state.body));
+                }, {id: "gameSocket"});
+                return data; // JSON.parse(data)
+            },
+            error: function (data) {
+                // reject(data.responseText);
+                //TODO:
+            }
         });
+    }
+
+    unsubscribe() {
+        if (stompClient != null) stompClient.unsubscribe("gameSocket");
     }
 
     /**
@@ -96,6 +111,7 @@ window.onload = function () {
 };
 
 function refreshWebsocketConnection() {
+    if (stompClient != null) stompClient.disconnect();
     let socket = new SockJS('/gameStompEndpoint');
     stompClient = Stomp.over(socket);
     stompClient.debug = () => {

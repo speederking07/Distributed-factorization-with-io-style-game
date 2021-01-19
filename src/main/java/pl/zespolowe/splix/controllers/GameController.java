@@ -12,9 +12,11 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import org.springframework.web.socket.messaging.SessionUnsubscribeEvent;
+import pl.zespolowe.splix.domain.game.GameCurrentState;
 import pl.zespolowe.splix.domain.game.GameListener;
 import pl.zespolowe.splix.domain.game.player.Player;
 import pl.zespolowe.splix.domain.user.User;
@@ -24,6 +26,7 @@ import pl.zespolowe.splix.services.ActivePlayersService;
 import pl.zespolowe.splix.services.GameService;
 
 import javax.servlet.http.HttpSession;
+import java.util.Objects;
 
 /**
  * Controller handling game endpoints
@@ -71,6 +74,16 @@ public class GameController {
             return ResponseEntity.ok(Integer.toString(gameID));
         } catch (GameException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/game/state/{gameID}")
+    public ResponseEntity<GameCurrentState> getState(@PathVariable("gameID") int gameID) {
+        try {
+            return ResponseEntity.ok(Objects.requireNonNull(gameService.getState(gameID)));
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
         }
     }
 
