@@ -1,6 +1,7 @@
 package pl.zespolowe.splix.services;
 
 import lombok.NonNull;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import pl.zespolowe.splix.domain.game.Game;
 import pl.zespolowe.splix.domain.game.GameListener;
@@ -26,6 +27,11 @@ public class GameService {
         Game game = new Game(id);
         games.put(id, game);
         return game;
+    }
+
+    @Scheduled(fixedRate = 250)
+    public void nextTurn() {
+        games.values().parallelStream().forEach(Game::newTurn);
     }
 
     /**
