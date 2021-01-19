@@ -118,7 +118,7 @@ class Game {
      * @param data - data from server
      */
     update(data) {
-        console.log(this.turn - Number(data.turn));
+        console.log(data);
         if (this.turn === -1) {
             this.turn = data.turn;
             this.gameStart = Date.now()-250*data.turn;
@@ -306,7 +306,8 @@ class Game {
      * Stops whole game
      */
     kill() {
-        this.animator.stop();
+        this.animator.kill();
+        this.connection.unsubscribe();
         clearInterval(this.gameLoop);
         $(document).off('keydown');
         $(document).off('swipe');
