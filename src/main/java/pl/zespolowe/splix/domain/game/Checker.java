@@ -10,7 +10,7 @@ import java.awt.*;
 @Getter
 @Setter
 public class Checker {
-    private final Direction direction;//aktualny kierunek
+    private Direction direction;//aktualny kierunek
     private Player player;
     private int score;
     private Point point;//aktualna pozycja
@@ -50,5 +50,4 @@ public class Checker {
     public void setScore(int x) {
         score += x;
     }
-
 }
