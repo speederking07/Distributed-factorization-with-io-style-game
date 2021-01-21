@@ -19,6 +19,7 @@ public class Game implements ObservableGame {
     private final static int y_size = 100;
     private final static int max_players = 20;
     private final static int botsNumber = 3;
+    long startTime=-1;
 
     @Getter
     private final int gameID;
@@ -128,9 +129,10 @@ public class Game implements ObservableGame {
             Checker ch = board.respawnPlayer(x_size, y_size, p);
             if (ch == null) return false;
             players.add(ch); //Mozliwe że nie potrzebe ale u mnie nie działało bez tego
-            GameListenerState gls = board.getGls();
-            gls.addPlayer(ch);
-            board.setGls(gls);
+            board.addGlsPlayer(ch);
+            //GameListenerState gls = board.getGls();
+            //gls.addPlayer(ch);
+            //board.setGls(gls);
 
             return true;
         }
@@ -146,6 +148,15 @@ public class Game implements ObservableGame {
         for(Checker ch: players){
             gcs=board.setInfoForNewPlayer(ch,gcs);
         }
+        System.out.println("to dostaje nowy gracz:\n");
+        List a=gcs.getAddedPlayers();
+        if(a.size()==0)System.out.println("Nic nie dostal - pewnie to pierwszy gracz jest\n");
+        for(int i=0;i<a.size();i++) {
+            System.out.println(gcs.getAddedPlayers().get(i).getName());
+            System.out.println(gcs.getAddedPlayers().get(i).getFields());
+            System.out.println(gcs.getAddedPlayers().get(i).getPath());
+        }
+        System.out.println("----------------\n");
         return gcs;
     }
 
@@ -154,6 +165,7 @@ public class Game implements ObservableGame {
      */
     public void newTurn() {
         moveBots();
+        startTime = (startTime==-1) ? System.currentTimeMillis():-1;
         log.info("NEXT TURN");
         turn++;
         board.printGls();//Marek rutaj sb sprawdz co wysyla server
