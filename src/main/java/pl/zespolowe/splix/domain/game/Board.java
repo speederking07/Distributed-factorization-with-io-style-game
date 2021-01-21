@@ -231,6 +231,11 @@ class Board {
         return gcs;
     }
 
+    public void addGlsPlayer(Checker ch1){
+        gls.addPlayer(ch1);
+
+    }
+
     public void printGls(){
          int turn = gls.getTurn();
          List<String> killedPlayers=gls.getKilledPlayers();

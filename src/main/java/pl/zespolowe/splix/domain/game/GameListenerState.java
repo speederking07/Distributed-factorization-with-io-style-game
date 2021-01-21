@@ -39,6 +39,7 @@ public class GameListenerState {
     }
 
     public void killPlayer(Checker ch) {
+        if(!killedPlayers.contains(ch.getPlayer().getUsername()))
         killedPlayers.add(ch.getPlayer().getUsername());
     }
 

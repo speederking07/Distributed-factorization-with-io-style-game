@@ -130,9 +130,10 @@ public class Game implements ObservableGame {
             Checker ch = board.respawnPlayer(x_size, y_size, p);
             if (ch == null) return false;
             players.add(ch); //Mozliwe że nie potrzebe ale u mnie nie działało bez tego
-            GameListenerState gls = board.getGls();
-            gls.addPlayer(ch);
-            board.setGls(gls);
+            board.addGlsPlayer(ch);
+            //GameListenerState gls = board.getGls();
+            //gls.addPlayer(ch);
+            //board.setGls(gls);
 
             return true;
         }
@@ -148,6 +149,15 @@ public class Game implements ObservableGame {
         for (Checker ch : players) {
             gcs = board.setInfoForNewPlayer(ch, gcs);
         }
+        System.out.println("to dostaje nowy gracz:\n");
+        List a=gcs.getAddedPlayers();
+        if(a.size()==0)System.out.println("Nic nie dostal - pewnie to pierwszy gracz jest\n");
+        for(int i=0;i<a.size();i++) {
+            System.out.println(gcs.getAddedPlayers().get(i).getName());
+            System.out.println(gcs.getAddedPlayers().get(i).getFields());
+            System.out.println(gcs.getAddedPlayers().get(i).getPath());
+        }
+        System.out.println("----------------\n");
         return gcs;
     }
 
