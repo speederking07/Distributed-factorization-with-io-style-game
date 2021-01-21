@@ -44,9 +44,25 @@ class Connection {
      * @param update - function to be called whenever information is received from server
      */
     subscribe(update) {
-        stompClient.subscribe('/topic/stomp/' + this.gameID, function (state) {
-            update(JSON.parse(state.body));
-        });
+        let id = this.gameID;
+        return new Promise((function(resolve, reject) {
+            $.get({
+                url: '/game/state/' + this.gameID,
+                success: function (data) {
+                    stompClient.subscribe('/topic/stomp/' + id, function (state) {
+                        update(JSON.parse(state.body));
+                    }, {id: "gameSocket"});
+                    resolve(data)
+                },
+                error: function (data) {
+                    reject(data.responseText);
+                }
+            });
+        }).bind(this));
+    }
+
+    unsubscribe() {
+        if (stompClient != null) stompClient.unsubscribe("gameSocket");
     }
 
     /**
@@ -96,9 +112,36 @@ window.onload = function () {
 };
 
 function refreshWebsocketConnection() {
+    if (stompClient != null) stompClient.disconnect();
     let socket = new SockJS('/gameStompEndpoint');
     stompClient = Stomp.over(socket);
+    stompClient.debug = () => {
+    };
     stompClient.connect({}, function (frame) {
-        //TODO: co robic przy polaczeniu
+        connectSynchronizer();
     });
+}
+
+//  SYNC
+
+let lastReqSendTime = null;
+let times = [150]
+
+function connectSynchronizer() {
+    stompClient.subscribe('/user/queue/synchronize', function (state) {
+        if (times.length >= 5) times.shift();
+        let tempTime = Date.now() - lastReqSendTime;
+        times.push(tempTime / 2);
+    });
+    setInterval(sendUpdateRequest, 1000);
+}
+
+function sendUpdateRequest() {
+    lastReqSendTime = Date.now();
+    stompClient.send('/synchronize', {}, "0".repeat(50));
+}
+
+
+function currentAvgDelay() {
+    return times.reduce((a, b) => a + b, 0) / times.length;
 }

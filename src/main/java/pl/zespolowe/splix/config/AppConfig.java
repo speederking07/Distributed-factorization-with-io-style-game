@@ -1,5 +1,6 @@
 package pl.zespolowe.splix.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +28,7 @@ import java.util.Calendar;
 @Configuration
 @EnableWebMvc
 @EnableAsync
+@Slf4j
 public class AppConfig implements WebMvcConfigurer {
 
     @Autowired
@@ -54,6 +56,7 @@ public class AppConfig implements WebMvcConfigurer {
         return (req, res, authentication) -> {
             if (authentication.getPrincipal() instanceof User) {
                 User user = (User) authentication.getPrincipal();
+                log.info("User logged: " + user.getUsername() +", " +req.getRemoteAddr());
                 user.setLastLogged(new Date(Calendar.getInstance().getTime().getTime()));
                 userService.saveUser(user);
             }

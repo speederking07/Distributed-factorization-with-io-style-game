@@ -223,9 +223,11 @@ class Board {
         paths.forEach((k, v) -> {
             if(v==ch) finalLocalPath.add(k);
         });
-        localPath= OverTake.findPath(ch.getPath(),ch.getPoint(), finalLocalPath, new LinkedHashSet<>());
-        ArrayList<Point> curves = OverTake.getCurves(localPath);
-        gcs.addPlayer(ch.getPlayer(), points, curves, ch.getPoint());
+        if(ch.getPath()!=null) {
+            localPath = OverTake.findPath(ch.getPath(), ch.getPoint(), finalLocalPath, new LinkedHashSet<>());
+            ArrayList<Point> curves = OverTake.getCurves(localPath);
+            gcs.addPlayer(ch.getPlayer(), points, curves, ch.getPoint());
+        }
         return gcs;
     }
 

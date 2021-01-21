@@ -1,5 +1,6 @@
 package pl.zespolowe.splix.services;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import pl.zespolowe.splix.domain.game.player.Player;
@@ -13,6 +14,7 @@ import java.util.Map;
  * @author Tomasz
  */
 @Service
+@Slf4j
 public class ActivePlayersService {
     private final Map<String, Player> players;
 

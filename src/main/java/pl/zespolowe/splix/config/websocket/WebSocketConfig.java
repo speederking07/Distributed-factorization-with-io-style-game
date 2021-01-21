@@ -20,7 +20,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         assert config != null;
-        config.enableSimpleBroker("/topic");
+        config.enableSimpleBroker("/topic", "/queue");
     }
 
     @Override

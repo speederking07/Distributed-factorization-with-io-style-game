@@ -44,18 +44,24 @@ public class OverTake {
         tmpPoint.x = p1.x;
         tmpPoint.y = p1.y - 1;
         area.add(tmpPoint);
-        for (Point p : area) {
-            System.out.println(p + "p");
-            for (Point pointField : fields) {
-                //System.out.println("pointField "+pointField);
-                if (pointField.equals(p)) {
-                    Set<Point> pathTmp = findPath(p, p2, fields, path);
-                    if (pathTmp.size() > 0) {
-                        return pathTmp;
+        if(area!=null){
+            for (Point p : area) {
+                System.out.println(p + "p");
+                for (Point pointField : fields) {
+                    //System.out.println("pointField "+pointField);
+                    if (pointField.equals(p)) {
+                        if(p!=null){
+                            Set<Point> pathTmp = findPath(p, p2, fields, path);
+                            if (pathTmp.size() > 0) {
+                                return pathTmp;
+                            }
+
+                        }
                     }
                 }
             }
         }
+
         System.out.println("bb");
         return new HashSet<>();
     }

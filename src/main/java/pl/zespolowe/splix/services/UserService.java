@@ -1,6 +1,7 @@
 package pl.zespolowe.splix.services;
 
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -28,6 +29,7 @@ import static java.util.Collections.reverse;
  * @author Tomasz
  */
 @Service
+@Slf4j
 public class UserService implements UserDetailsService {
 
     @Autowired
@@ -72,6 +74,7 @@ public class UserService implements UserDetailsService {
 
         tokenRepository.save(token);
         mailService.sendPasswordRecovery(user.getEmail(), token);
+        log.info("Password recovery token generated: " + username + ", " + token.getToken() + ", " + user.getEmail());
     }
 
     public void changeRecoveredPassword(String token, String password) throws TokenException {
@@ -81,6 +84,7 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(password));
         user.removeToken(t);
         saveUser(user);
+        log.info("Password recovery - password changed: " + user.getUsername());
         tokenRepository.delete(t);
     }
 
@@ -119,6 +123,7 @@ public class UserService implements UserDetailsService {
             user.setPassword(temp);
             throw new CredentialException(violations.stream().findFirst().get().getMessage());
         }
+        log.info("Password changed: " + user.getUsername());
     }
 
     /**
@@ -137,6 +142,7 @@ public class UserService implements UserDetailsService {
             user.setEmail(temp);
             throw new CredentialException(violations.stream().findFirst().get().getMessage());
         }
+        log.info("Email changed: " + user.getUsername());
     }
 
     /**
@@ -151,6 +157,7 @@ public class UserService implements UserDetailsService {
         User user = (User) loadUserByUsername(username);
         user.addRole(Role.ADMIN);
         saveUser(user);
+        log.info("User set admin: " + user.getUsername());
         return user;
     }
 
@@ -163,6 +170,7 @@ public class UserService implements UserDetailsService {
         user.setLastLogged(new Date(Calendar.getInstance().getTime().getTime()));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         saveUser(user);
+        log.info("User registered: " + user.getUsername() + ", " + user.getEmail());
     }
 
     /**
