@@ -90,9 +90,8 @@ public class Game implements ObservableGame {
         //TODO: niech się dzieje magia - ok, magia chyba juz dziala c'nie?
         Checker tmpChecker = null;
         for (Checker ch : players) if (ch.getPlayer().equals(player)) tmpChecker = ch;
-
-        board.move(tmpChecker, move.getMove());
-
+        Checker chs=board.move(tmpChecker, move.getMove());
+        if(chs!=null)killPlayer(chs);
         log.info("Player's MOVE: " + player.getUsername());
     }
 
