@@ -17,6 +17,7 @@ public class Game implements ObservableGame {
     private final static int x_size = 20;
     private final static int y_size = 20;
     private final static int max_players = 20;
+    long startTime=-1;
 
     @Getter
     private final int gameID;
@@ -124,6 +125,7 @@ public class Game implements ObservableGame {
      * Nstępna tura
      */
     public void newTurn() {
+        startTime = (startTime==-1) ? System.currentTimeMillis():-1;
         log.info("NEXT TURN");
         turn++;
         board.printGls();//Marek rutaj sb sprawdz co wysyla server
