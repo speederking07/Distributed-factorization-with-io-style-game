@@ -11,6 +11,7 @@ import pl.zespolowe.splix.dto.SimpleMove;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -27,8 +28,8 @@ public class Game implements ObservableGame {
     @Getter
     private final List<GameListener> listeners;
     private final Board board;
-    private int turn;
     private final Set<Checker> players;
+    private int turn;
 
 
     public Game(int gameID) {
@@ -40,12 +41,12 @@ public class Game implements ObservableGame {
         board.setGls(new GameListenerState(0));
         this.players = makeBots(botsNumber);
         log.info("NEW GAME: " + gameID);
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                newTurn();
-            }
-        }, 1000, 250);
+//        new Timer().schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                newTurn();
+//            }
+//        }, 1000, 250);
     }
 
     @SneakyThrows
@@ -87,11 +88,10 @@ public class Game implements ObservableGame {
     //TODO: brak automatycznego ruchu - to jest aktualne?
     public void move(SimpleMove move, Player player) {
         //TODO: niech się dzieje magia - ok, magia chyba juz dziala c'nie?
-        Checker tmpChecker=null;
-        for(Checker ch: players)if(ch.getPlayer().equals(player))tmpChecker=ch;
-
-        board.move(tmpChecker,move.getMove());
-
+        Checker tmpChecker = null;
+        for (Checker ch : players) if (ch.getPlayer().equals(player)) tmpChecker = ch;
+        Checker chs=board.move(tmpChecker, move.getMove());
+        if(chs!=null)killPlayer(chs);
         log.info("Player's MOVE: " + player.getUsername());
     }
 
@@ -100,7 +100,7 @@ public class Game implements ObservableGame {
                 .filter(t -> t.getPlayer().equals(player))
                 .collect(Collectors.toList());
 
-        if (ch.size()>1)killPlayer(ch.get(0));
+        if (ch.size() > 1) killPlayer(ch.get(0));
     }
 
     public boolean isActive() {
@@ -145,8 +145,8 @@ public class Game implements ObservableGame {
      */
     public GameCurrentState getGameCurrentState() {
         GameCurrentState gcs = new GameCurrentState();
-        for(Checker ch: players){
-            gcs=board.setInfoForNewPlayer(ch,gcs);
+        for (Checker ch : players) {
+            gcs = board.setInfoForNewPlayer(ch, gcs);
         }
         System.out.println("to dostaje nowy gracz:\n");
         List a=gcs.getAddedPlayers();

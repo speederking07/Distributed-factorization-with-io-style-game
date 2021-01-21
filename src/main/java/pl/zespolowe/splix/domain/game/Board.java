@@ -156,7 +156,8 @@ class Board {
     /**
      * automatic
      */
-    public void move(Checker ch, Direction dir) {
+    public Checker move(Checker ch, Direction dir) {
+        Checker rtr = null;
         Point oldPoint = ch.getPoint();
         int x =oldPoint.x;
         int y = oldPoint.y;
@@ -171,12 +172,13 @@ class Board {
         p.y=y;
         if(p.getX()<0 || p.getY()<0 || p.getX() >= x_size || p.getY() >= y_size){
             killPlayer(ch);
-            return;
+            return ch;
         }
         System.out.println(p);
         if (paths.containsKey(p)) {
             //drobna uwaga: zabijam tego ktorego slad zostal najechany
             killPlayer(paths.get(p));
+            rtr=paths.get(p);
         } else{
             //jesli byl u siebie i nie jest to nowy path
             //jesli byl u siebie i jest to nic
@@ -210,7 +212,7 @@ class Board {
         paths.forEach((k, v) -> {
             System.out.println(k);
         });
-
+        return rtr;
     }
 
     public GameCurrentState setInfoForNewPlayer(Checker ch, GameCurrentState gcs) {
