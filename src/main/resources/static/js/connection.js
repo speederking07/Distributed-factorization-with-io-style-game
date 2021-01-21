@@ -45,19 +45,20 @@ class Connection {
      */
     subscribe(update) {
         let id = this.gameID;
-        $.get({
-            url: '/game/state/' + this.gameID,
-            success: function (data) {
-                stompClient.subscribe('/topic/stomp/' + id, function (state) {
-                    update(JSON.parse(state.body));
-                }, {id: "gameSocket"});
-                return data; // JSON.parse(data)
-            },
-            error: function (data) {
-                // reject(data.responseText);
-                //TODO:
-            }
-        });
+        return new Promise((function(resolve, reject) {
+            $.get({
+                url: '/game/state/' + this.gameID,
+                success: function (data) {
+                    stompClient.subscribe('/topic/stomp/' + id, function (state) {
+                        update(JSON.parse(state.body));
+                    }, {id: "gameSocket"});
+                    resolve(data)
+                },
+                error: function (data) {
+                    reject(data.responseText);
+                }
+            });
+        }).bind(this));
     }
 
     unsubscribe() {
@@ -138,8 +139,6 @@ function connectSynchronizer() {
 function sendUpdateRequest() {
     lastReqSendTime = Date.now();
     stompClient.send('/synchronize', {}, "0".repeat(50));
-    console.clear();
-    console.log(currentAvgDelay() + " ms     \r");
 }
 
 
