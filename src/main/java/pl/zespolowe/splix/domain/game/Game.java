@@ -153,8 +153,8 @@ public class Game implements ObservableGame {
         if(a.size()==0)System.out.println("Nic nie dostal - pewnie to pierwszy gracz jest\n");
         for(int i=0;i<a.size();i++) {
             System.out.println(gcs.getAddedPlayers().get(i).getName());
-            System.out.println(gcs.getAddedPlayers().get(i).getFields());
-            System.out.println(gcs.getAddedPlayers().get(i).getPath());
+            System.out.println("pola: "+gcs.getAddedPlayers().get(i).getFields());
+            System.out.println("sciezki: "+ gcs.getAddedPlayers().get(i).getPath());
         }
         System.out.println("----------------\n");
         return gcs;
