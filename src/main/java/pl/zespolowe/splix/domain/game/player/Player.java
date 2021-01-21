@@ -19,6 +19,7 @@ import java.util.Objects;
 public class Player {
 
     private final String username;
+    private boolean isRoadSet;//to powinno byc tylko w botcie ale nie jest bo ie umialem TODO: musze was zapytac
     @Setter
     private Game game;
     private String colorsInCsv;
@@ -71,4 +72,12 @@ public class Player {
                 "username='" + username + '\'' +
                 '}';
     }
+    public boolean isRoadSet() {
+        return this.isRoadSet;
+    }
+
+    public void isRoadSet(boolean road) {
+        this.isRoadSet=road;
+    }
+
 }
