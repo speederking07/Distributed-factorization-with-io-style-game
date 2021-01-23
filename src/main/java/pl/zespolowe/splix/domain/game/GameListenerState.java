@@ -3,7 +3,6 @@ package pl.zespolowe.splix.domain.game;
 import lombok.Getter;
 import lombok.Setter;
 import pl.zespolowe.splix.dto.AddPlayer;
-import pl.zespolowe.splix.dto.Change;
 import pl.zespolowe.splix.dto.Move;
 
 import java.awt.*;
@@ -21,7 +20,7 @@ public class GameListenerState {
     //lista nowych graczy - players
     private int turn;
     private List<String> killedPlayers;
-    private Map<String,ArrayList<int[]>> changes;//TODO: Marek ustawilem tak jak chciales
+    private Map<String, ArrayList<int[]>> changes;//TODO: Marek ustawilem tak jak chciales
     //private List<Change> changes;
     private List<Move> moves;
     private List<AddPlayer> addedPlayers;
@@ -35,16 +34,19 @@ public class GameListenerState {
     }
 
     public void addPlayer(Checker ch) {
-        int exists=0;
-        for(AddPlayer a: addedPlayers) {
-            if (a.getName()==ch.getPlayer().getUsername())exists=1;
+        int exists = 0;
+        for (AddPlayer a : addedPlayers) {
+            if (a.getName().equals(ch.getPlayer().getUsername())) {
+                exists = 1;
+                break;
+            }
         }
-        if(exists==0)addedPlayers.add(new AddPlayer(ch));
+        if (exists == 0) addedPlayers.add(new AddPlayer(ch));
     }
 
     public void killPlayer(Checker ch) {
-        if(!killedPlayers.contains(ch.getPlayer().getUsername()))
-        killedPlayers.add(ch.getPlayer().getUsername());
+        if (!killedPlayers.contains(ch.getPlayer().getUsername()))
+            killedPlayers.add(ch.getPlayer().getUsername());
     }
 
     public void playerMove(Checker ch, boolean havePath) {
@@ -53,26 +55,22 @@ public class GameListenerState {
 
     public void changeField(String name, Point p) {
         ArrayList<int[]> arr = new ArrayList<>();
-        if(changes.size()>0){
+        if (changes.size() > 0) {
             changes.forEach((k, v) -> {
                 if (k.equals(name)) {
-                    for(int[] a: v){
-                        arr.add(a);
-                    }
+                    arr.addAll(v);
                 }
             });
             arr.add(new int[]{(int) p.getX(), (int) p.getY()});
             changes.remove(name);
-            changes.put(name,arr);
-        }
-        else{
+        } else {
             arr.add(new int[]{(int) p.getX(), (int) p.getY()});
-            changes.put(name,arr);
         }
+        changes.put(name, arr);
     }
 
     public void changeField(Point p) {
-        changeField("",p);
+        changeField("", p);
         //changes.add(new Change(p));
     }
 
