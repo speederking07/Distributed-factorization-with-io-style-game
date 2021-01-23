@@ -19,7 +19,7 @@ public class Game implements ObservableGame {
     private final static int x_size = 100;
     private final static int y_size = 100;
     private final static int max_players = 20;
-    private final static int botsNumber = 3;
+    private final static int botsNumber = 1;
     long startTime=-1;
 
     @Getter

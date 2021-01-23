@@ -247,7 +247,10 @@ class Board {
         System.out.println("###################################");
         System.out.println("info co zostalo wyslane w "+turn+" turze");
         System.out.println("killed players: "+killedPlayers);
-        System.out.println("moves: "+moves);
+        System.out.println("moves: ");
+        for(Move m: moves) {
+            System.out.println("x:" + m.getX()+" y:"+m.getY()+"name: "+m.getPlayer());
+        }
         System.out.println("addedPlayers"+addedPlayers);
         System.out.println("field's changes"+changes);
         System.out.println("###################################");
@@ -337,7 +340,7 @@ class Board {
                 //zadbaj aby nie byl przeciwienstwem tego z ktorego przyszedles-OK
                 //jesli przekroczy (shortest path w next)
                 ch.getPlayer().isRoadSet(true);
-
+                botMove(ch);
         }
         //move(ch,Direction.EAST);
                 //TODO: TU SIE DZIEJE MAGIA ROBIENIA RUCHU PIONEM
