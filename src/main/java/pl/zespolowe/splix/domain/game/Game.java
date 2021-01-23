@@ -182,7 +182,10 @@ public class Game implements ObservableGame {
             Checker ch = iter.next();
             if (ch.getPlayer() instanceof Bot) {
                 Checker chs = board.botMove(ch);
-                if (chs != null) killPlayer(chs); //TO MODYFIKUJE PLAYERS
+                if (chs != null) {
+                    iter.remove();
+                    board.killPlayer(chs);
+                }
             }
         }
 //        players.forEach((ch) -> {
