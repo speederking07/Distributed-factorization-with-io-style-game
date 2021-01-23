@@ -137,7 +137,7 @@ class Game {
      */
     update(data) {
         console.log(data);
-        console.log(this.turn - Number(data.turn));
+        console.log(this.turn+", "+Number(data.turn));
         if (this.turn !== -1) console.log(this.playersMap.get(this.playerName).posX/BLOCK_SIZE+", "+this.playersMap.get(this.playerName).posY/BLOCK_SIZE)
         if (this.turn === -1) {
             this.turn = data.turn;
@@ -192,6 +192,15 @@ class Game {
             this.playersMap.delete(p);
             const index = Game.findPlayerIndexByName(this.players, p);
             let toDel = this.players[index];
+            const patternToDel = toDel.pattern;
+            for(let x = 0; x < BOARD_SIZE; x ++){
+                for(let y = 0; y < BOARD_SIZE; y ++){
+                    if (this.board === patternToDel){
+                        this.view.changeField(x, y, this.board[x][y], BASE_PATTERN);
+                        this.board[x][y] = BASE_PATTERN;
+                    }
+                }
+            }
             this.players.slice(index, 1);
             this.view.killPlayer(toDel);
         }

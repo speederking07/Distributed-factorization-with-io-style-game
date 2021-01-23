@@ -16,6 +16,7 @@ class Connection {
     constructor(gameID, username) {
         this.gameID = gameID;
         this.username = username;
+        console.log(username)
     }
 
     /**
