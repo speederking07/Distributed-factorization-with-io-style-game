@@ -184,7 +184,7 @@ public class Game implements ObservableGame {
                 Checker chs = board.botMove(ch);
                 if (chs != null) {
                     iter.remove();
-                    board.killPlayer(chs);
+                    killPlayer(chs);
                 }
             }
         }
