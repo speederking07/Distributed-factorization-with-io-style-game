@@ -87,9 +87,9 @@ class Board {
         myPath.addAll(finalMyPaths);
         //teraz mam liste pol ktore nalezy zamalowac
         //maluje je
-        for(Point p: myPath ){
+        /*for(Point p: myPath ){
             System.out.println("to wchodzi: "+p);
-        }
+        }*/
         Set<Point> taken = OverTake.paintPolygon2(myPath);
         //na prosbe Pana Marka biore tez liste samych zakretow do wyslania
         ArrayList<Point> curves = OverTake.getCurves(myPath);
@@ -97,7 +97,7 @@ class Board {
         for (Point tmp : taken) {
             fields.put(tmp, checker);
             gls.changeField(checker.getPlayer().getUsername(), tmp);
-            System.out.println("zamalowalem: "+tmp);
+            //System.out.println("zamalowalem: "+tmp);
         }
         clearPlayersSign(checker);
     }
@@ -174,7 +174,7 @@ class Board {
             killPlayer(ch);
             return ch;
         }
-        System.out.println(p);
+        //System.out.println(p);
         if (paths.containsKey(p)) {
             //drobna uwaga: zabijam tego ktorego slad zostal najechany
             killPlayer(paths.get(p));
@@ -209,9 +209,9 @@ class Board {
                 }
             }
         }
-        paths.forEach((k, v) -> {
+        /*paths.forEach((k, v) -> {
             System.out.println(k);
-        });
+        });*/
         return rtr;
     }
 

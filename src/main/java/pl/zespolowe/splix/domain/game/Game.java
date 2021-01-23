@@ -164,13 +164,13 @@ public class Game implements ObservableGame {
      * Nstępna tura
      */
     public void newTurn() {
-        moveBots();
         startTime = (startTime==-1) ? System.currentTimeMillis():-1;
         log.info("NEXT TURN");
         turn++;
         board.printGls();//Marek rutaj sb sprawdz co wysyla server
         publishEvent();
         board.setGls(new GameListenerState(turn));
+        moveBots();
     }
 
     @Override
