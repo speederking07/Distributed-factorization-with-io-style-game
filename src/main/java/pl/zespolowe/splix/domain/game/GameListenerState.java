@@ -35,7 +35,11 @@ public class GameListenerState {
     }
 
     public void addPlayer(Checker ch) {
-        addedPlayers.add(new AddPlayer(ch));
+        int exists=0;
+        for(AddPlayer a: addedPlayers) {
+            if (a.getName()==ch.getPlayer().getUsername())exists=1;
+        }
+        if(exists==0)addedPlayers.add(new AddPlayer(ch));
     }
 
     public void killPlayer(Checker ch) {
