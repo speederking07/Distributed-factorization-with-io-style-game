@@ -27,7 +27,7 @@ impl fmt::Display for PerfectSquares {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         for (first, second, parity) in &self.squares {
             let num_parity :Vec<&str> = parity.iter().map(bool_to_num).collect();
-            write!(f, "{};{};{:?}$\n", first, second, num_parity.join(" "));
+            write!(f, "{};{};{}$\n", first, second, num_parity.join(" "));
         }
         Ok(())
     }
