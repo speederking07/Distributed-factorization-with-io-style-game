@@ -2,7 +2,7 @@ const { greet, compute_perfect_squares, compute_linear_equations } = wasm_bindge
 
 async function run() {
     await wasm_bindgen("./js/wasm/factorization_bg.wasm");
-    greet("hey");
+    //greet("hey");
     //smooth from to to_factor
     console.log(compute_perfect_squares(17, "735", "900", "539873"));
     data = "735;352;1 0 0 0 1 0 0$"+
