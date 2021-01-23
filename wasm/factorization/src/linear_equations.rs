@@ -175,24 +175,26 @@ pub fn compute_linear_equations(smooth: u32, base: &str, data: &str) -> String
     };
     let squares = data.split('$');
     for sq in squares{
-        let splitted = sq.trim().split(";").collect::<Vec<&str>>();
-        if splitted.len() != 3{
-            return "Wrong input".to_string();
+        if sq != "" {
+            let splitted = sq.trim().split(";").collect::<Vec<&str>>();
+            if splitted.len() != 3 {
+                return "Wrong input".to_string();
+            }
+            let big = match BigUint::parse_bytes(splitted[0].trim().as_bytes(), INPUT_BASE) {
+                Some(num) => num,
+                None => return "ERROR WRONG BIG STRING".to_string(),
+            };
+            let small = match BigUint::parse_bytes(splitted[1].trim().as_bytes(), INPUT_BASE) {
+                Some(num) => num,
+                None => return "ERROR WRONG SMALL STRING".to_string(),
+            };
+            let parity: Vec<u8> = match read_values(splitted[2].trim()) {
+                Ok(data) => data,
+                Err(_) => return "ERROR WRONG PARITY STRING".to_string(),
+            };
+            let bool_parity: Vec<bool> = parity.into_iter().map(u8_to_bool).collect();
+            parsed.push((big, small, bool_parity));
         }
-        let big = match BigUint::parse_bytes(splitted[0].trim().as_bytes(), INPUT_BASE){
-            Some(num) => num,
-            None => return "ERROR WRONG BIG STRING".to_string(),
-        };
-        let small = match BigUint::parse_bytes(splitted[1].trim().as_bytes(), INPUT_BASE){
-            Some(num) => num,
-            None => return "ERROR WRONG SMALL STRING".to_string(),
-        };
-        let parity : Vec<u8> = match read_values(splitted[2].trim()){
-            Ok(data) => data,
-            Err(_) => return "ERROR WRONG PARITY STRING".to_string(),
-        };
-        let bool_parity : Vec<bool >= parity.into_iter().map(u8_to_bool).collect();
-        parsed.push((big, small, bool_parity));
     }
     let linear = LinearEquations::new(smooth, base_num, parsed);
     match linear.find_solution(){
@@ -210,7 +212,7 @@ mod test{
         let data = "735;352;1 0 0 0 1 0 0$
             750;22627;0 0 0 0 1 0 1$
             783;73216;1 0 0 0 1 1 0$
-            801;101728;1 0 0 0 1 0 0";
+            801;101728;1 0 0 0 1 0 0$";
         println!("{}", compute_linear_equations(17, "539873", data));
     }
 }

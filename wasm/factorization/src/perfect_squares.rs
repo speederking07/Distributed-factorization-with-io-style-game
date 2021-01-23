@@ -16,18 +16,18 @@ pub struct PerfectSquares{
     pub squares: Vec<(BigUint, BigUint, Vec<bool>)>
 }
 
-fn bool_to_num(a: &bool) -> u8{
+fn bool_to_num(a: &bool) -> &str{
     match a {
-        true => 1,
-        _ => 0
+        true => "1",
+        _ => "0"
     }
 }
 
 impl fmt::Display for PerfectSquares {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         for (first, second, parity) in &self.squares {
-            let num_parity :Vec<u8> = parity.iter().map(bool_to_num).collect();
-            write!(f, "({};{};{:?})\n", first, second, num_parity);
+            let num_parity :Vec<&str> = parity.iter().map(bool_to_num).collect();
+            write!(f, "{};{};{:?}$\n", first, second, num_parity.join(" "));
         }
         Ok(())
     }
