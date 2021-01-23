@@ -16,10 +16,10 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class Game implements ObservableGame {
-    private final static int x_size = 100;
-    private final static int y_size = 100;
+    private final static int x_size = 50;
+    private final static int y_size = 50;
     private final static int max_players = 20;
-    private final static int botsNumber = 3;
+    private final static int botsNumber = 4;
     long startTime=-1;
 
     @Getter
@@ -183,8 +183,10 @@ public class Game implements ObservableGame {
      */
     public void moveBots() {
         players.stream().forEach((ch) -> {
+            Checker chs=null;
             if (ch.getPlayer() instanceof Bot) {
-                board.botMove(ch);
+                chs=board.botMove(ch);
+                if(chs!=null)killPlayer(chs);
             }
         });
     }

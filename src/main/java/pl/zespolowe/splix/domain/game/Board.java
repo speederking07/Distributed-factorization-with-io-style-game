@@ -247,7 +247,10 @@ class Board {
         System.out.println("###################################");
         System.out.println("info co zostalo wyslane w "+turn+" turze");
         System.out.println("killed players: "+killedPlayers);
-        System.out.println("moves: "+moves);
+        System.out.println("moves: ");
+        for(Move m: moves) {
+            System.out.println("x:" + m.getX()+" y:"+m.getY()+"name: "+m.getPlayer());
+        }
         System.out.println("addedPlayers"+addedPlayers);
         System.out.println("field's changes"+changes);
         System.out.println("###################################");
@@ -256,7 +259,8 @@ class Board {
     /**
      * Ruch botow
      */
-    public void botMove(Checker ch) {
+    public Checker botMove(Checker ch) {
+        Checker rtr = null;
         Point oldPoint = ch.getPoint();
         System.out.println("BOT-POZYCJA: "+oldPoint);
         int x =(int)oldPoint.getX();
@@ -270,12 +274,12 @@ class Board {
         Point newPoint = new Point(x,y);
         if(ch.getPlayer().isRoadSet()){//wiem gdzie isc //todo: zapytac was
             if (fields.get(oldPoint)!= null && fields.get(oldPoint).equals(ch)) {//jestem u siebie
-                move(ch,ch.getDirection());
+                rtr=move(ch,ch.getDirection());
                 if (!(fields.get(newPoint)!= null && fields.get(newPoint).equals(ch))) {//w next turn nie bedzie u siebie
                     ch.getPlayer().isRoadSet(false);
                 }
             } else {//nie jestem u siebie ale wiem gdzie isc
-                move(ch,ch.getDirection());
+                rtr=move(ch,ch.getDirection());
                 List<Direction> dirs = new ArrayList<>();
                 List<Direction> finalDirs = dirs;
                 if(BotMoves!=null) {
@@ -337,10 +341,10 @@ class Board {
                 //zadbaj aby nie byl przeciwienstwem tego z ktorego przyszedles-OK
                 //jesli przekroczy (shortest path w next)
                 ch.getPlayer().isRoadSet(true);
-
+                botMove(ch);
         }
-        //move(ch,Direction.EAST);
-                //TODO: TU SIE DZIEJE MAGIA ROBIENIA RUCHU PIONEM
+                //TODO: TU SIE DZIEJE MAGIA ROBIENIA RUCHU PIONEM BOTA
+        return rtr;
     }
     List<Point> movesList = new ArrayList<>();
     List<Direction> directionsList = new ArrayList<>();
