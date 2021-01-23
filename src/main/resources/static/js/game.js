@@ -137,8 +137,7 @@ class Game {
      */
     update(data) {
         console.log(data);
-        console.log(this.turn+", "+Number(data.turn));
-        if (this.turn !== -1) console.log(this.playersMap.get(this.playerName).posX/BLOCK_SIZE+", "+this.playersMap.get(this.playerName).posY/BLOCK_SIZE)
+        console.log("Behind: "+this.turn-Number(data.turn));
         if (this.turn === -1) {
             this.turn = data.turn;
             this.gameStart = (Date.now()-(1000/TURNS_PER_SECONDS)*data.turn) - currentAvgDelay();
@@ -214,11 +213,13 @@ class Game {
     moveListInTime(moves) {
         for (let m of moves) {
             let p = this.playersMap.get(m.player);
-            p.setFuturePos(m.x, m.y);
-            if (m.havePath) {
-                p.drawPath();
-            } else {
-                p.closePath();
+            if(p !== undefined) {
+                p.setFuturePos(m.x, m.y);
+                if (m.havePath) {
+                    p.drawPath();
+                } else {
+                    p.closePath();
+                }
             }
         }
     }
@@ -270,21 +271,25 @@ class Game {
         if (turnsBehind === 1) {
             for (let m of moves) {
                 let p = this.playersMap.get(m.player);
-                p.makePositionAdjustments(m.x, m.y);
-                if (m.havePath) {
-                    p.drawPath();
-                } else {
-                    p.closePath();
+                if(p !== undefined) {
+                    p.makePositionAdjustments(m.x, m.y);
+                    if (m.havePath) {
+                        p.drawPath();
+                    } else {
+                        p.closePath();
+                    }
                 }
             }
         } else if (turnsBehind === 2) {
             for (let m of moves) {
                 let p = this.playersMap.get(m.player);
-                p.setPrevPos(m.x, m.y);
-                if (m.havePath) {
-                    p.drawPath();
-                } else {
-                    p.closePath();
+                if(p !== undefined) {
+                    p.setPrevPos(m.x, m.y);
+                    if (m.havePath) {
+                        p.drawPath();
+                    } else {
+                        p.closePath();
+                    }
                 }
             }
         }
