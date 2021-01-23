@@ -8,10 +8,7 @@ import pl.zespolowe.splix.domain.game.player.Bot;
 import pl.zespolowe.splix.domain.game.player.Player;
 import pl.zespolowe.splix.dto.SimpleMove;
 
-import java.awt.*;
 import java.util.*;
-import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -20,15 +17,13 @@ public class Game implements ObservableGame {
     private final static int y_size = 50;
     private final static int max_players = 20;
     private final static int botsNumber = 4;
-    long startTime=-1;
-
     @Getter
     private final int gameID;
-
     @Getter
     private final List<GameListener> listeners;
     private final Board board;
     private final Set<Checker> players;
+    long startTime = -1;
     private int turn;
 
 
@@ -62,15 +57,15 @@ public class Game implements ObservableGame {
                 "Bot Bogdan",
         };
         Set<Checker> playersLocal = new HashSet<>();
-        for(int i=0;i<ammount;i++){
-                Bot bot = new Bot(botNames[i]);
-                if(i>=botNames.length) bot = new Bot(botNames[i]+(i-botNames.length+1));
-                Checker ch = board.respawnPlayer(x_size, y_size, bot);
-                if (ch == null) break;
-                playersLocal.add(ch); //Mozliwe że nie potrzebe ale u mnie nie działało bez tego
-                GameListenerState gls = board.getGls();
-                gls.addPlayer(ch);
-                board.setGls(gls);
+        for (int i = 0; i < ammount; i++) {
+            Bot bot = new Bot(botNames[i]);
+            if (i >= botNames.length) bot = new Bot(botNames[i] + (i - botNames.length + 1));
+            Checker ch = board.respawnPlayer(x_size, y_size, bot);
+            if (ch == null) break;
+            playersLocal.add(ch); //Mozliwe że nie potrzebe ale u mnie nie działało bez tego
+            GameListenerState gls = board.getGls();
+            gls.addPlayer(ch);
+            board.setGls(gls);
         }
         return playersLocal;
     }
@@ -90,8 +85,8 @@ public class Game implements ObservableGame {
         //TODO: niech się dzieje magia - ok, magia chyba juz dziala c'nie?
         Checker tmpChecker = null;
         for (Checker ch : players) if (ch.getPlayer().equals(player)) tmpChecker = ch;
-        Checker chs=board.move(tmpChecker, move.getMove());
-        if(chs!=null)killPlayer(chs);
+        Checker chs = board.move(tmpChecker, move.getMove());
+        if (chs != null) killPlayer(chs);
         log.info("Player's MOVE: " + player.getUsername());
     }
 
@@ -149,12 +144,12 @@ public class Game implements ObservableGame {
             gcs = board.setInfoForNewPlayer(ch, gcs);
         }
         System.out.println("to dostaje nowy gracz:\n");
-        List a=gcs.getAddedPlayers();
-        if(a.size()==0)System.out.println("Nic nie dostal - pewnie to pierwszy gracz jest\n");
-        for(int i=0;i<a.size();i++) {
+        List<CurrentPlayer> a = gcs.getAddedPlayers();
+        if (a.size() == 0) System.out.println("Nic nie dostal - pewnie to pierwszy gracz jest\n");
+        for (int i = 0; i < a.size(); i++) {
             System.out.println(gcs.getAddedPlayers().get(i).getName());
-            System.out.println("pola: "+gcs.getAddedPlayers().get(i).getFields());
-            System.out.println("sciezki: "+ gcs.getAddedPlayers().get(i).getPath());
+            System.out.println("pola: " + gcs.getAddedPlayers().get(i).getFields());
+            System.out.println("sciezki: " + gcs.getAddedPlayers().get(i).getPath());
         }
         System.out.println("----------------\n");
         return gcs;
@@ -164,7 +159,7 @@ public class Game implements ObservableGame {
      * Nstępna tura
      */
     public void newTurn() {
-        startTime = (startTime==-1) ? System.currentTimeMillis():-1;
+        startTime = (startTime == -1) ? System.currentTimeMillis() : -1;
         log.info("NEXT TURN");
         turn++;
         board.printGls();//Marek rutaj sb sprawdz co wysyla server
@@ -182,13 +177,21 @@ public class Game implements ObservableGame {
      * Ruch botow
      */
     public void moveBots() {
-        players.stream().forEach((ch) -> {
-            Checker chs=null;
+        Iterator<Checker> iter = players.iterator();
+        while (iter.hasNext()) {
+            Checker ch = iter.next();
             if (ch.getPlayer() instanceof Bot) {
-                chs=board.botMove(ch);
-                if(chs!=null)killPlayer(chs);
+                Checker chs = board.botMove(ch);
+                if (chs != null) killPlayer(chs); //TO MODYFIKUJE PLAYERS
             }
-        });
+        }
+//        players.forEach((ch) -> {
+//            Checker chs = null;
+//            if (ch.getPlayer() instanceof Bot) {
+//                chs = board.botMove(ch);
+//                if (chs != null) killPlayer(chs);
+//            }
+//        });
     }
 
 }
