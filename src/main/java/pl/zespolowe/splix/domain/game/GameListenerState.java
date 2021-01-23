@@ -34,11 +34,19 @@ public class GameListenerState {
     }
 
     public void addPlayer(Checker ch) {
-        addedPlayers.add(new AddPlayer(ch));
+        int exists = 0;
+        for (AddPlayer a : addedPlayers) {
+            if (a.getName().equals(ch.getPlayer().getUsername())) {
+                exists = 1;
+                break;
+            }
+        }
+        if (exists == 0) addedPlayers.add(new AddPlayer(ch));
     }
 
     public void killPlayer(Checker ch) {
-        killedPlayers.add(ch.getPlayer().getUsername());
+        if (!killedPlayers.contains(ch.getPlayer().getUsername()))
+            killedPlayers.add(ch.getPlayer().getUsername());
     }
 
     public void playerMove(Checker ch, boolean havePath) {
@@ -50,18 +58,15 @@ public class GameListenerState {
         if (changes.size() > 0) {
             changes.forEach((k, v) -> {
                 if (k.equals(name)) {
-                    for (int[] a : v) {
-                        arr.add(a);
-                    }
+                    arr.addAll(v);
                 }
             });
             arr.add(new int[]{(int) p.getX(), (int) p.getY()});
             changes.remove(name);
-            changes.put(name, arr);
         } else {
             arr.add(new int[]{(int) p.getX(), (int) p.getY()});
-            changes.put(name, arr);
         }
+        changes.put(name, arr);
     }
 
     public void changeField(Point p) {

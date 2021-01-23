@@ -1,6 +1,7 @@
 package pl.zespolowe.splix.services;
 
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.Map;
  * @author Tomasz
  */
 @Service
+@Slf4j
 public class GameService {
     private final Map<Integer, Game> games;
 
@@ -48,7 +50,7 @@ public class GameService {
     public synchronized int addToGame(Player player) throws GameException {
         Game game = games.values().stream().filter(g -> !g.isFull())
                 .findFirst()
-                .orElse(createGame());
+                .orElseGet(this::createGame);
         if (!game.join(player)) throw new GameException("Unable to join any game, please try again");
         player.setGame(game);
         return game.getGameID();

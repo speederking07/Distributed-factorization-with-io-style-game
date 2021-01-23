@@ -6,6 +6,11 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+/**
+ * Elements for taking fields
+ *
+ * @author MichalKalina
+ */
 public class OverTake {
     /***
      * Znajdowanie sciezki
@@ -17,41 +22,34 @@ public class OverTake {
      * @return
      */
     public static Set<Point> findPath(Point p1, Point p2, Set<Point> fields, Set<Point> path) {
-        if (p1.equals(p2)) {
-            return path;
-        }
+        if (p1.equals(p2)) return path;
+
         path.add(p1);
         fields.remove(p1);
-        System.out.println(p1 + "aa" + p2);
+//        System.out.println(p1 + "aa" + p2);
         Set<Point> area = new HashSet<>();
-        Point tmpPoint = new Point();
-        tmpPoint.x = p1.x + 1;
-        tmpPoint.y = p1.y;
-        area.add(tmpPoint);
-        tmpPoint = new Point();
-        tmpPoint.x = p1.x - 1;
-        tmpPoint.y = p1.y;
-        area.add(tmpPoint);
-        tmpPoint = new Point();
-        tmpPoint.x = p1.x;
-        tmpPoint.y = p1.y + 1;
-        area.add(tmpPoint);
-        tmpPoint = new Point();
-        tmpPoint.x = p1.x;
-        tmpPoint.y = p1.y - 1;
-        area.add(tmpPoint);
+        area.add(new Point(p1.x + 1, p1.y));
+        area.add(new Point(p1.x - 1, p1.y));
+        area.add(new Point(p1.x, p1.y + 1));
+        area.add(new Point(p1.x, p1.y - 1));
+        area.retainAll(fields); // część wspólna
         for (Point p : area) {
-            System.out.println(p + "p");
-            for (Point pointField : fields) {
-                //System.out.println("pointField "+pointField);
-                if (pointField.equals(p)) {
-                    Set<Point> pathTmp = findPath(p, p2, fields, path);
-                    if (pathTmp.size() > 0) {
-                        return pathTmp;
-                    }
-                }
-            }
+            Set<Point> pathTmp = findPath(p, p2, fields, path);
+            if (!pathTmp.isEmpty())
+                return pathTmp;
         }
+
+//        for (Point p : area) {
+////            System.out.println(p + "p");
+//            for (Point pointField : fields) {
+//                if (pointField.equals(p)) {
+//                    Set<Point> pathTmp = findPath(p, p2, fields, path);
+//                    if (!pathTmp.isEmpty())
+//                        return pathTmp;
+//                }
+//            }
+//        }
+
         System.out.println("bb");
         return new HashSet<>();
     }

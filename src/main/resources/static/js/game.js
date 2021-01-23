@@ -29,7 +29,12 @@ class Game {
         this.nextMove = 'EAST';
         this.playerName = playerName;
         this.connection = connection;
-        this.connection.subscribe(this.update.bind(this));
+        this.connection.subscribe(this.update.bind(this))
+            .then(init => this.initialize(init))
+            .catch(error => {
+                popup("Error", error, [["OK", () => {}]]);
+                this.whenFinished();
+            });
         this.gameLoop = null;
         $(document).keydown((function (e) {
             if (e.which === 37 || e.which === 65 || e.which === 97) {
@@ -58,6 +63,19 @@ class Game {
         this.playerY = 100;
         this.animator = new Animator((() => this.view.draw(this.playerX, this.playerY)).bind(this), FRAMES_PER_SECONDS);
         this.animator.start();
+    }
+
+    initialize(data){
+        console.log(data)
+        for (let p of data.addedPlayers){
+            let player = Player.fromServer(p);
+            player.path = p.path;
+            this.players.push(player);
+            this.playersMap.set(p.name, player);
+            for (let [x, y] of p.fields) {
+                this.board[x][y] = player.pattern;
+            }
+        }
     }
 
     /**
@@ -118,10 +136,13 @@ class Game {
      * @param data - data from server
      */
     update(data) {
+        console.log(data);
         console.log(this.turn - Number(data.turn));
+        if (this.turn !== -1) console.log(this.playersMap.get(this.playerName).posX/BLOCK_SIZE+", "+this.playersMap.get(this.playerName).posY/BLOCK_SIZE)
         if (this.turn === -1) {
             this.turn = data.turn;
-            this.gameStart = Date.now() - 250 * data.turn;
+            this.gameStart = (Date.now()-(1000/TURNS_PER_SECONDS)*data.turn) - currentAvgDelay();
+            this.step = data.turn * NUMBER_OF_STEPS;
             this.addPlayerList(data.addedPlayers);
             this.killPlayerList(data.killedPlayers);
             this.moveListLate(data.moves, 1);
@@ -209,8 +230,10 @@ class Game {
                     } else {
                         patTo = this.playersMap.get(player).pattern;
                     }
-                    this.view.changeField(x, y, this.board[x][y], patTo);
-                    this.board[x][y] = patTo;
+                    if (patTo !== this.board[x][y]) {
+                        this.view.changeField(x, y, this.board[x][y], patTo);
+                        this.board[x][y] = patTo;
+                    }
                 }
             }
         } else {
@@ -277,6 +300,7 @@ class Game {
         }
         main.setFuturePos(mX + curr.x, mY + curr.y);
         //this.turn = Math.floor((Date.now() - this.gameStart)/250) + 1;
+        console.log(this.nextMove);
         this.connection.sendMove(this.turn, this.nextMove);
     }
 
@@ -284,21 +308,24 @@ class Game {
      * Main game loop
      */
     play() {
-        if (this.alive) {
-            if (this.step === 0) {
-                this.turn += 1;
-            } else if (this.step === MOVE_WINDOW) {
-                this.sendMove();
+        let expectedStep = Math.floor((Date.now() - this.gameStart) / (1000 / TURNS_PER_SECONDS / NUMBER_OF_STEPS));
+        while (this.step <= expectedStep) {
+            if (this.alive) {
+                if (this.step % NUMBER_OF_STEPS === 0) {
+                    this.turn += 1;
+                } else if (this.step % NUMBER_OF_STEPS === MOVE_WINDOW) {
+                    this.sendMove();
+                }
             }
-        }
-        for (let p of this.players) {
-            p.move();
-        }
-        this.step = (this.step + 1) % NUMBER_OF_STEPS;
-        if (this.alive) {
-            const main = this.playersMap.get(this.playerName);
-            this.playerX = main.posX - this.canvas.width / 2 + PLAYER_RADIUS;
-            this.playerY = main.posY - this.canvas.height / 2 + PLAYER_RADIUS;
+            for (let p of this.players) {
+                p.move();
+            }
+            this.step = (this.step + 1);
+            if (this.alive) {
+                const main = this.playersMap.get(this.playerName);
+                this.playerX = main.posX - this.canvas.width / 2 + PLAYER_RADIUS;
+                this.playerY = main.posY - this.canvas.height / 2 + PLAYER_RADIUS;
+            }
         }
     }
 
@@ -306,7 +333,8 @@ class Game {
      * Stops whole game
      */
     kill() {
-        this.animator.stop();
+        this.animator.kill();
+        this.connection.unsubscribe();
         clearInterval(this.gameLoop);
         $(document).off('keydown');
         $(document).off('swipe');
