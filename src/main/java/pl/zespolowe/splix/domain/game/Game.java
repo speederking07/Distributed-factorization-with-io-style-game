@@ -21,7 +21,9 @@ public class Game implements ObservableGame {
     private final int gameID;
     @Getter
     private final List<GameListener> listeners;
+    @Getter
     private final Board board;
+    @Getter
     private final Set<Checker> players;
     long startTime = -1;
     long allGameSTart=0;

@@ -20,7 +20,9 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 class Board {
+    @Getter
     private final Map<Point, Checker> fields;
+    @Getter
     private final Map<Point, Checker> paths;
     private Map<Checker,List<Direction>> BotMoves = new HashMap<>();
 
@@ -43,7 +45,7 @@ class Board {
         paths = new HashMap<>();
     }*/
 
-    public void clearPlayersSign(Checker checker) {
+    private void clearPlayersSign(Checker checker) {
 
         ArrayList<Point> arrayPaths = new ArrayList<>();
         paths.forEach((k, v) -> {
@@ -60,13 +62,7 @@ class Board {
         }
     }
 
-    public void clearField(Point p) {
-        paths.forEach((k, v) -> {
-            if (k.equals(p)) fields.remove(k);
-        });
-    }
-
-    public void overtake(Checker checker) {
+    private void overtake(Checker checker) {
         Point p2 = checker.getPoint();
         Point p1 = checker.getPath();
         Set<Point> myFields = new LinkedHashSet<>();

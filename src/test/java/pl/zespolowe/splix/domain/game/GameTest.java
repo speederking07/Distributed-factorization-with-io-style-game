@@ -3,49 +3,64 @@ package pl.zespolowe.splix.domain.game;
 import org.junit.Assert;
 import pl.zespolowe.splix.domain.game.player.Bot;
 import pl.zespolowe.splix.domain.game.player.Player;
+import pl.zespolowe.splix.dto.SimpleMove;
 
 import javax.security.auth.login.CredentialException;
 import java.awt.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/***
- *
- * @author KalinaMichal
- * Tests for Board class
- *
- */
-public class BoardTest {
+public class GameTest {
 
     @org.junit.Test
-    public void shouldStartGame() throws CredentialException {
+    public void shouldJoin() throws CredentialException {
 
         //given
-        Board sut = new Board(20,20);
+        Game sut = new Game(1);
 
         //when
-        Checker ch = sut.respawnPlayer(20, 20, new Player("testowyGracz") );
+        Boolean joined = sut.join(new Player("testowyGracz") );
 
         //then
-        Assert.assertTrue(sut.getFields().containsValue(ch));
-        Assert.assertTrue(sut.getGls().getAddedPlayers().get(0).getName().equals("testowyGracz"));
+        Assert.assertTrue(sut.getPlayers().size()==5);
+        Assert.assertTrue(joined);
     }
 
     @org.junit.Test
     public void shouldMovePlayer() throws CredentialException {
 
         //given
-        Board sut = new Board(20,20);
-        Checker ch = sut.respawnPlayer(20, 20, new Player("testowyGracz") );
-        int x=(int)ch.getPoint().getX();
-        int y=(int)ch.getPoint().getY();
+        Game sut = new Game(1);
+        Player player = new Player("testowyGracz");
+        Boolean joined = sut.join(player);
+        SimpleMove move = new SimpleMove();
+        move.setMove(Direction.EAST);
+        move.setTurn(1);
 
         //when
-        sut.move(ch,Direction.EAST);
+        sut.move(move,player);
+
 
         //then
-        Assert.assertTrue((int)ch.getPoint().getX()-1==x && (int)ch.getPoint().getY()==y);
+        //sprawdzam czy pole poboczne(slad) nalezy do mnie
+        AtomicInteger iter= new AtomicInteger();
+        sut.getBoard().getFields().forEach((k, v) -> {
+            if (v.getPlayer().getUsername().equals(player.getUsername())) {
+                iter.getAndIncrement();
+            }
+        });
+        AtomicInteger exp = new AtomicInteger(5);
+        Assert.assertFalse(iter.equals(exp));
+        Assert.assertTrue(joined);
     }
 
+    /****
+     *
+     *
+     * To nizej do wywalenia
+     * @throws CredentialException
+     */
     @org.junit.Test
     public void shouldKillPlayer() throws CredentialException {
 
@@ -123,7 +138,5 @@ public class BoardTest {
             }
         });
         Assert.assertTrue(iter.get() >=5);
-        //sprawdzam czy pole ze srodka nalezy do mnie
-//        Assert.assertTrue(sut.getFields().get(new Point(x+2,y+1)).getPlayer().getUsername().equals("testowyGracz"));
     }
 }
