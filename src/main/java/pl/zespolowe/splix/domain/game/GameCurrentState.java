@@ -13,6 +13,7 @@ import java.util.List;
 @Setter
 public class GameCurrentState {
     private List<CurrentPlayer> addedPlayers; //lista wszystkich obecnych graczy
+    private long time;
 
     public GameCurrentState() {
         this.addedPlayers = new ArrayList<>();
@@ -21,6 +22,9 @@ public class GameCurrentState {
     public void addPlayer(Player player, ArrayList<Point> points, ArrayList<Point> path, Point pos) {
         CurrentPlayer cp = new CurrentPlayer(player, points, path, (int) pos.getY(), (int) pos.getY());
         addedPlayers.add(cp);
+    }
+    public void addTime(long t1){
+        this.time=t1;
     }
 
 }
