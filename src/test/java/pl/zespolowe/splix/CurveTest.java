@@ -3,13 +3,15 @@ package pl.zespolowe.splix;
 import pl.zespolowe.splix.domain.game.overtakeElements.OverTake;
 
 import java.awt.*;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class CurveTest {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnsupportedEncodingException {
         Set<Point> myWalk = new LinkedHashSet<>();
         /**
          * ###################
@@ -59,10 +61,13 @@ public class CurveTest {
         p.y = 3;
         myWalk.add(p);
 
-        for(Point pr: OverTake.getCurves(myWalk)){
-            System.out.println(pr);
-        }
+        StringWriter writer = new StringWriter();
+        PrintWriter out1 = new PrintWriter(writer);
+        out1.println(OverTake.getCurves(myWalk));
+
+        System.out.println(writer.toString());
         System.out.println(OverTake.getCurves(myWalk));
+
 
 
     }

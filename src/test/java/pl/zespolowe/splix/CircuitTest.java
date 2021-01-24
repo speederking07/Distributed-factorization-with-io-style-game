@@ -58,9 +58,9 @@ public class CircuitTest {
         //System.out.println(isBorderPoint(p, fields));
         Set<Point> result = OverTake.getCircuit(fields);
 
-        /*for (Point pe : result) {
+        for (Point pe : result) {
             System.out.println(pe);
-        }*/
+        }
 
         /*ColorTest ct = new ColorTest();
         Set<Point> result2 = ColorTest.paintPolygon(result);

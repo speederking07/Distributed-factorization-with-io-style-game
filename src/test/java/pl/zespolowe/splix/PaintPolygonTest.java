@@ -1,6 +1,8 @@
 package pl.zespolowe.splix;
 import pl.zespolowe.splix.domain.game.overtakeElements.OverTake;
 import java.awt.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -77,6 +79,11 @@ public class PaintPolygonTest {
         p.y = 3;
         fields.add(p);
         Set<Point> result = OverTake.paintPolygon2(fields);
+
+        StringWriter writer = new StringWriter();
+        PrintWriter out1 = new PrintWriter(writer);
+        out1.println(result);
+
         System.out.println(fields.size());
         System.out.println(result.size());
     }

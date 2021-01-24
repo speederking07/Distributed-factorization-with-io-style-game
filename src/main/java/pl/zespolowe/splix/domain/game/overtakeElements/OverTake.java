@@ -50,7 +50,7 @@ public class OverTake {
 //            }
 //        }
 
-        System.out.println("bb");
+        //System.out.println("bb");
         return new HashSet<>();
     }
 
@@ -65,7 +65,7 @@ public class OverTake {
         for (Point point : points) {
             if (isBorderPoint(point, points)) {
                 rtr.add(point);
-                System.out.println("x" + point);
+                //System.out.println("x" + point);
             }
         }
         return rtr;
@@ -110,22 +110,22 @@ public class OverTake {
             if (p.y < min) min = p.y;
             if (p.y > max) max = p.y;
         }
-        System.out.println("max i min" + max + " " + min);
+        //System.out.println("max i min" + max + " " + min);
         for (int i = min; i <= max; i++) {
-            System.out.println(i + "b");
+            //System.out.println(i + "b");
             ArrayList<Integer> al = new ArrayList<>();
             for (Point p : points) {
-                System.out.println(p);
+                //System.out.println(p);
                 if (p.getY() == i) {
                     al.add((int) p.getX());
-                    System.out.println(p.getX());
+                   // System.out.println(p.getX());
                 }
             }
             int a = 0;
             int k = al.get(0);
             boolean take = true;
             while (a < al.size() - 1) {
-                System.out.println("aaaaaa");
+                //System.out.println("aaaaaa");
                 int curr = al.get(a);
                 int next = al.get(a + 1);
                 while (k < next) {
@@ -227,7 +227,7 @@ public class OverTake {
             return rtrFields;
         }
         rtrFields.add(point);
-        System.out.println(point);
+        //System.out.println(point);
         int x = (int) point.getX();
         int y = (int) point.getY();
         rtrFields = fillEnclousureFields(new Point(x, y + 1), enclosureFields, rtrFields);
