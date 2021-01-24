@@ -27,6 +27,8 @@ import java.util.*;
 @Entity
 @NoArgsConstructor
 public class Task {
+    private static int STEP = 100000;
+
     @Id
     private String number;
 
@@ -49,6 +51,8 @@ public class Task {
     @Fetch(FetchMode.SELECT)
     private Set<SubSet> subsets;
 
+    private String factor1, factor2;
+
 
     public Task(@NonNull String number) throws NumberFormatException {
         if (!number.matches("^[0-9]+$"))
@@ -61,8 +65,9 @@ public class Task {
         this.B = Long.toString((long) Math.ceil(Math.exp(0.55 * Math.sqrt(log * logLog))));
         this.numbers = new HashSet<>();
         this.subsets = new HashSet<>();
-        this.rangeStart = "1";
+        this.rangeStart = getValue().sqrt().toString();
         this.piB = this.B;
+        this.factor1 = this.factor2 = "-1";
     }
 
     private static long newton(long n, long k) {
@@ -100,7 +105,7 @@ public class Task {
         result.setRangeMin(this.rangeStart);
 
         if (numbers.size() < Long.parseLong(B)) {
-            rangeStart = Long.toString(Long.parseLong(rangeStart) + 1000);
+            rangeStart = Long.toString(Long.parseLong(rangeStart) + STEP);
             result.setRangeMax(rangeStart);
             result.setType(TaskType.PAIRS);
         } else {
@@ -119,7 +124,7 @@ public class Task {
                 subsets.add(subSet);
                 result.setFactorizedNumbers(subSet.getNumbers());
             } else {
-                rangeStart = Long.toString(Long.parseLong(rangeStart) + 1000);
+                rangeStart = Long.toString(Long.parseLong(rangeStart) + STEP);
                 result.setRangeMax(rangeStart);
                 result.setType(TaskType.PAIRS);
             }
