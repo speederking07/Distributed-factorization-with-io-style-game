@@ -24,7 +24,7 @@ public class GameCurrentState {
     }
 
     public void addPlayer(Player player, ArrayList<Point> points, ArrayList<Point> path, Point pos){
-        CurrentPlayer cp = new CurrentPlayer(player, points, path, (int)pos.getY(), (int)pos.getY());
+        CurrentPlayer cp = new CurrentPlayer(player, points, path, (int)pos.getX(), (int)pos.getY());
         addedPlayers.add(cp);
     }
 
