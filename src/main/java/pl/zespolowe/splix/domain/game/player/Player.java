@@ -73,12 +73,13 @@ public class Player {
                 "username='" + username + '\'' +
                 '}';
     }
+
     public boolean isRoadSet() {
         return this.isRoadSet;
     }
 
     public void isRoadSet(boolean road) {
-        this.isRoadSet=road;
+        this.isRoadSet = road;
     }
 
 }

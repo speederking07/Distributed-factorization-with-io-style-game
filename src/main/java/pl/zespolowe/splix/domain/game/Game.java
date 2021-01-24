@@ -27,7 +27,7 @@ public class Game implements ObservableGame {
     @Getter
     private final Set<Checker> players;
     long startTime = -1;
-    long allGameSTart=0;
+    long allGameSTart = 0;
     @Getter
     private int turn;
 
@@ -38,7 +38,7 @@ public class Game implements ObservableGame {
         this.gameID = gameID;
         this.board = new Board(x_size, y_size);
         this.turn = 0;
-        this.allGameSTart=System.currentTimeMillis();
+        this.allGameSTart = System.currentTimeMillis();
         board.setGls(new GameListenerState(0));
         this.players = makeBots(botsNumber);
         log.info("NEW GAME: " + gameID);

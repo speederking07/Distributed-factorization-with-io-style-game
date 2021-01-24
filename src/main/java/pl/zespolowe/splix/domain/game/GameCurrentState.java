@@ -23,8 +23,9 @@ public class GameCurrentState {
         CurrentPlayer cp = new CurrentPlayer(player, points, path, (int) pos.getY(), (int) pos.getY());
         addedPlayers.add(cp);
     }
-    public void addTime(long t1){
-        this.time=t1;
+
+    public void addTime(long t1) {
+        this.time = t1;
     }
 
 }

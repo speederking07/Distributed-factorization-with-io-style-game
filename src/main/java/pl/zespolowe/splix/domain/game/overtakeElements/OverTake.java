@@ -118,7 +118,7 @@ public class OverTake {
                 //System.out.println(p);
                 if (p.getY() == i) {
                     al.add((int) p.getX());
-                   // System.out.println(p.getX());
+                    // System.out.println(p.getX());
                 }
             }
             int a = 0;

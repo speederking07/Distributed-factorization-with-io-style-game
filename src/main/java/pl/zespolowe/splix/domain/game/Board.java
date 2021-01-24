@@ -23,10 +23,17 @@ class Board {
     private final Map<Point, Checker> fields;
     @Getter
     private final Map<Point, Checker> paths;
-    private final Map<Checker,List<Direction>> BotMoves = new HashMap<>();
+    private final Map<Checker, List<Direction>> BotMoves = new HashMap<>();
 
     protected int x_size;
     protected int y_size;
+    List<Point> movesList = new ArrayList<>();
+    List<Direction> directionsList = new ArrayList<>();
+
+  /*  public void clear_board() {
+        fields = new HashMap<>();
+        paths = new HashMap<>();
+    }*/
     @Getter
     @Setter
     private GameListenerState gls;
@@ -38,11 +45,6 @@ class Board {
         this.paths = new LinkedHashMap<>();//musi byc linked abym wiedzial gdzie on doklasnie chodzil
         this.gls = new GameListenerState(0);
     }
-
-  /*  public void clear_board() {
-        fields = new HashMap<>();
-        paths = new HashMap<>();
-    }*/
 
     private void clearPlayersSign(Checker checker) {
 
@@ -56,7 +58,7 @@ class Board {
                 //else gls.changeField(k);
             }
         });
-        for(Point p: arrayPaths){
+        for (Point p : arrayPaths) {
             paths.remove(p);
         }
     }
@@ -107,7 +109,7 @@ class Board {
                 iterator.remove();
             }
         }
-        if(fields.size()>1){
+        if (fields.size() > 1) {
             fields.forEach((k, v) -> {
                 if (v == checker) {
                     fields.remove(k);
@@ -128,7 +130,7 @@ class Board {
                 fields.put(new Point(point0.x, point0.y), ch);
                 //gls.changeField(ch,point0);
 
-                String name=ch.getPlayer().getUsername();
+                String name = ch.getPlayer().getUsername();
                 fields.put(new Point(point0.x, point0.y + 1), ch);
                 gls.changeField(name, new Point(point0.x, point0.y + 1));
 
@@ -154,7 +156,7 @@ class Board {
     public Checker move(Checker ch, Direction dir) {
         Checker rtr = null;
         Point oldPoint = ch.getPoint();
-        int x =oldPoint.x;
+        int x = oldPoint.x;
         int y = oldPoint.y;
         switch (dir) {
             case EAST -> x++;
@@ -163,9 +165,9 @@ class Board {
             case SOUTH -> y++;
         }
         Point p = new Point();
-        p.x=x;
-        p.y=y;
-        if(p.getX()<0 || p.getY()<0 || p.getX() >= x_size || p.getY() >= y_size){
+        p.x = x;
+        p.y = y;
+        if (p.getX() < 0 || p.getY() < 0 || p.getX() >= x_size || p.getY() >= y_size) {
             killPlayer(ch);
             return ch;
         }
@@ -173,26 +175,26 @@ class Board {
         if (paths.containsKey(p)) {
             //drobna uwaga: zabijam tego ktorego slad zostal najechany
             killPlayer(paths.get(p));
-            rtr=paths.get(p);
-        } else{
+            rtr = paths.get(p);
+        } else {
             //jesli byl u siebie i nie jest to nowy path
             //jesli byl u siebie i jest to nic
-                    if(fields.get(oldPoint)!= null && fields.get(oldPoint).equals(ch)) {//byl u siebie
-                        ch.setPath(oldPoint);//ustawiam Patha jakby stąd zaczynal wyjazd z w next turn to bede wiedzial skad wyjechal
-                        if (fields.get(p)!= null && fields.get(p).equals(ch)) {//i jest u siebie
-                            ch.setPoint(p);
-                            gls.playerMove(ch, false);
-                        } else {
-                            ch.setPoint(p);
-                            gls.playerMove(ch, true);
-                            paths.put(ch.getPoint(), ch);
-                        }
+            if (fields.get(oldPoint) != null && fields.get(oldPoint).equals(ch)) {//byl u siebie
+                ch.setPath(oldPoint);//ustawiam Patha jakby stąd zaczynal wyjazd z w next turn to bede wiedzial skad wyjechal
+                if (fields.get(p) != null && fields.get(p).equals(ch)) {//i jest u siebie
+                    ch.setPoint(p);
+                    gls.playerMove(ch, false);
+                } else {
+                    ch.setPoint(p);
+                    gls.playerMove(ch, true);
+                    paths.put(ch.getPoint(), ch);
                 }
+            }
 
             //jesli nie byl u siebie i jest to overtake
             //jesli nie byl u siebie i jest to kolejny path
             else {//nie byl u siebie
-                if (fields.get(p)!=null && fields.get(p).equals(ch)) {// i jest u siebie
+                if (fields.get(p) != null && fields.get(p).equals(ch)) {// i jest u siebie
                     ch.setPoint(p);
                     overtake(ch);
                     ch.setPath(p);
@@ -211,16 +213,16 @@ class Board {
     }
 
     public GameCurrentState setInfoForNewPlayer(Checker ch, GameCurrentState gcs) {
-        ArrayList<Point> points= new ArrayList<>();
+        ArrayList<Point> points = new ArrayList<>();
         Set<Point> localPath;
         fields.forEach((k, v) -> {
-            if(v==ch)points.add(k);
+            if (v == ch) points.add(k);
         });
-        Set<Point>  finalLocalPath = new LinkedHashSet<>();
+        Set<Point> finalLocalPath = new LinkedHashSet<>();
         paths.forEach((k, v) -> {
-            if(v==ch) finalLocalPath.add(k);
+            if (v == ch) finalLocalPath.add(k);
         });
-        if(ch.getPath()!=null) {
+        if (ch.getPath() != null) {
             localPath = OverTake.findPath(ch.getPath(), ch.getPoint(), finalLocalPath, new LinkedHashSet<>());
             ArrayList<Point> curves = OverTake.getCurves(localPath);
             gcs.addPlayer(ch.getPlayer(), points, curves, ch.getPoint());
@@ -228,17 +230,17 @@ class Board {
         return gcs;
     }
 
-    public void addGlsPlayer(Checker ch1){
+    public void addGlsPlayer(Checker ch1) {
         gls.addPlayer(ch1);
 
     }
 
-    public void printGls(){
-         int turn = gls.getTurn();
-         List<String> killedPlayers=gls.getKilledPlayers();
-         Map<String,ArrayList<int[]>> changes=gls.getChanges();
-         List<Move> moves=gls.getMoves();
-         List<AddPlayer> addedPlayers=gls.getAddedPlayers();
+    public void printGls() {
+        int turn = gls.getTurn();
+        List<String> killedPlayers = gls.getKilledPlayers();
+        Map<String, ArrayList<int[]>> changes = gls.getChanges();
+        List<Move> moves = gls.getMoves();
+        List<AddPlayer> addedPlayers = gls.getAddedPlayers();
 //        System.out.println("###################################");
 //        System.out.println("info co zostalo wyslane w "+turn+" turze");
 //        System.out.println("killed players: "+killedPlayers);
@@ -258,146 +260,144 @@ class Board {
         Checker rtr = null;
         Point oldPoint = ch.getPoint();
 //        System.out.println("BOT-POZYCJA: "+oldPoint);
-        int x =(int)oldPoint.getX();
-        int y = (int)oldPoint.getY();
+        int x = (int) oldPoint.getX();
+        int y = (int) oldPoint.getY();
         switch (ch.getDirection()) {
             case EAST -> x++;
             case WEST -> x--;
             case NORTH -> y--;
             case SOUTH -> y++;
         }
-        Point newPoint = new Point(x,y);
-        if(ch.getPlayer().isRoadSet()){//wiem gdzie isc //todo: zapytac was
-            if (fields.get(oldPoint)!= null && fields.get(oldPoint).equals(ch)) {//jestem u siebie
-                rtr=move(ch,ch.getDirection());
-                if (!(fields.get(newPoint)!= null && fields.get(newPoint).equals(ch))) {//w next turn nie bedzie u siebie
+        Point newPoint = new Point(x, y);
+        if (ch.getPlayer().isRoadSet()) {//wiem gdzie isc //todo: zapytac was
+            if (fields.get(oldPoint) != null && fields.get(oldPoint).equals(ch)) {//jestem u siebie
+                rtr = move(ch, ch.getDirection());
+                if (!(fields.get(newPoint) != null && fields.get(newPoint).equals(ch))) {//w next turn nie bedzie u siebie
                     ch.getPlayer().isRoadSet(false);
                 }
             } else {//nie jestem u siebie ale wiem gdzie isc
-                rtr=move(ch,ch.getDirection());
+                rtr = move(ch, ch.getDirection());
                 List<Direction> dirs = new ArrayList<>();
                 List<Direction> finalDirs = dirs;
-                if(BotMoves!=null) {
+                if (BotMoves != null) {
                     BotMoves.forEach((k, v) -> {
                         if (k == ch) finalDirs.addAll(v);
                     });
-                    if(!finalDirs.isEmpty()) {
+                    if (!finalDirs.isEmpty()) {
                         ch.setDirection(finalDirs.get(0));
                         finalDirs.remove(0);
-                        BotMoves.put(ch,finalDirs);
+                        BotMoves.put(ch, finalDirs);
                     }
                 }
                 //dodaje do piona kolejny ruch z listy
                 //usuwam element z listy
-                if (fields.get(newPoint)!= null && fields.get(newPoint).equals(ch)) {// w nastepnej turze jestem u siebie
+                if (fields.get(newPoint) != null && fields.get(newPoint).equals(ch)) {// w nastepnej turze jestem u siebie
                     Direction localDir;
-                    Direction forbidden=ch.getDirection();
+                    Direction forbidden = ch.getDirection();
                     switch (ch.getDirection()) {
-                        case EAST -> forbidden=Direction.WEST;
-                        case WEST -> forbidden=Direction.EAST;
-                        case NORTH -> forbidden=Direction.SOUTH;
-                        case SOUTH -> forbidden=Direction.NORTH;
+                        case EAST -> forbidden = Direction.WEST;
+                        case WEST -> forbidden = Direction.EAST;
+                        case NORTH -> forbidden = Direction.SOUTH;
+                        case SOUTH -> forbidden = Direction.NORTH;
                     }
                     do {//losuje kierunek
                         localDir = Direction.values()[(int) (Math.random() * Direction.values().length)];
                     }
-                    while (localDir == null || localDir == forbidden );
+                    while (localDir == null || localDir == forbidden);
                     ch.setDirection(localDir);//losuje kierunek i oprozniam liste
                     //BotMoves.put(ch, Collections.emptyList());
                 }
             }
-        }
-        else{//nie wiem gdzie isc
+        } else {//nie wiem gdzie isc
             //nie jestem u siebie i nie wiem gdzie isc
-                //trzeba wyznaczyc droge
-                Random random = new Random();
-                Direction localDir;
-            Direction forbidden=ch.getDirection();
+            //trzeba wyznaczyc droge
+            Random random = new Random();
+            Direction localDir;
+            Direction forbidden = ch.getDirection();
             switch (ch.getDirection()) {
-                case EAST -> forbidden=Direction.WEST;
-                case WEST -> forbidden=Direction.EAST;
-                case NORTH -> forbidden=Direction.SOUTH;
-                case SOUTH -> forbidden=Direction.NORTH;
+                case EAST -> forbidden = Direction.WEST;
+                case WEST -> forbidden = Direction.EAST;
+                case NORTH -> forbidden = Direction.SOUTH;
+                case SOUTH -> forbidden = Direction.NORTH;
             }
-                do {//losuje kierunek
-                    localDir = Direction.values()[(int) (Math.random() * Direction.values().length)];
-                }
-                while (localDir == null || localDir == forbidden);
-                List<Point> movesList = new ArrayList<>();
-                List<Direction> directionsList = new ArrayList<>();
-                //sprawdz czy wykoanie ruchu (3x ten kier)&&(2x obrot 90o || 2x obrot 2 wersja 90o)&& find path to nasza baza nie przekroczy planszy
-                movesList = getMovesList(ch, localDir);//jesli nie mozliwe zwraca pusta liste a jesli mozliwe to zwraca liste punktow
-                if (movesList.isEmpty()) {
-                    movesList = shortestPathToHomeland(ch, getNewPosition(ch.getPoint(), localDir));//wznacza najkrotsza droge do domu z punktu
-                }
-                directionsList = getDirectionsFromPath(movesList);//zamienia liste punktow na liste kierunkow
-                BotMoves.put(ch, directionsList);
-                //losuj kierunek
-                //zadbaj aby nie byl przeciwienstwem tego z ktorego przyszedles-OK
-                //jesli przekroczy (shortest path w next)
-                ch.getPlayer().isRoadSet(true);
-                botMove(ch);
+            do {//losuje kierunek
+                localDir = Direction.values()[(int) (Math.random() * Direction.values().length)];
+            }
+            while (localDir == null || localDir == forbidden);
+            List<Point> movesList = new ArrayList<>();
+            List<Direction> directionsList = new ArrayList<>();
+            //sprawdz czy wykoanie ruchu (3x ten kier)&&(2x obrot 90o || 2x obrot 2 wersja 90o)&& find path to nasza baza nie przekroczy planszy
+            movesList = getMovesList(ch, localDir);//jesli nie mozliwe zwraca pusta liste a jesli mozliwe to zwraca liste punktow
+            if (movesList.isEmpty()) {
+                movesList = shortestPathToHomeland(ch, getNewPosition(ch.getPoint(), localDir));//wznacza najkrotsza droge do domu z punktu
+            }
+            directionsList = getDirectionsFromPath(movesList);//zamienia liste punktow na liste kierunkow
+            BotMoves.put(ch, directionsList);
+            //losuj kierunek
+            //zadbaj aby nie byl przeciwienstwem tego z ktorego przyszedles-OK
+            //jesli przekroczy (shortest path w next)
+            ch.getPlayer().isRoadSet(true);
+            botMove(ch);
         }
-                //TODO: TU SIE DZIEJE MAGIA ROBIENIA RUCHU PIONEM BOTA
+        //TODO: TU SIE DZIEJE MAGIA ROBIENIA RUCHU PIONEM BOTA
         return rtr;
     }
-    List<Point> movesList = new ArrayList<>();
-    List<Direction> directionsList = new ArrayList<>();
+
     //sprawdz czy wykoanie ruchu (3x ten kier)&&(2x obrot 90o || 2x obrot 2 wersja 90o)&& find path to nasza baza nie przekroczy planszy
-    List<Point> getMovesList(Checker ch,Direction localDir){
+    List<Point> getMovesList(Checker ch, Direction localDir) {
         List<Point> rtr = new ArrayList<>();
         Point oldPoint = ch.getPoint();
-        int x0= (int)oldPoint.getX();
-        int y0 =(int)oldPoint.getY();
-        int x=0;
-        int y=0 ;
+        int x0 = (int) oldPoint.getX();
+        int y0 = (int) oldPoint.getY();
+        int x = 0;
+        int y = 0;
         switch (ch.getDirection()) {
             case EAST -> x++;
             case WEST -> x--;
             case NORTH -> y--;
             case SOUTH -> y++;
         }
-        rtr.add(new Point(x0+x,y0+y));
-        rtr.add(new Point(x0+2*x,y0+2*y));
-        rtr.add(new Point(x0+3*x,y0+3*y));
-        rtr.add(new Point(x0+3*x+y,y0+3*y+x));
-        rtr.add(new Point(x0+3*x+2*y,y0+3*y+2*x));
-        rtr.add(new Point(x0+2*x+2*y,y0+2*y+2*x));
-        rtr.add(new Point(x0+x+2*y,y0+y+2*x));
-        rtr.addAll(shortestPathToHomeland(ch,new Point(x0+x+2*y,y0+y+2*x)));
+        rtr.add(new Point(x0 + x, y0 + y));
+        rtr.add(new Point(x0 + 2 * x, y0 + 2 * y));
+        rtr.add(new Point(x0 + 3 * x, y0 + 3 * y));
+        rtr.add(new Point(x0 + 3 * x + y, y0 + 3 * y + x));
+        rtr.add(new Point(x0 + 3 * x + 2 * y, y0 + 3 * y + 2 * x));
+        rtr.add(new Point(x0 + 2 * x + 2 * y, y0 + 2 * y + 2 * x));
+        rtr.add(new Point(x0 + x + 2 * y, y0 + y + 2 * x));
+        rtr.addAll(shortestPathToHomeland(ch, new Point(x0 + x + 2 * y, y0 + y + 2 * x)));
 //        System.out.println("MOJA LISTA HAHA "+rtr);
         return rtr;
     }
 
-    private  List<Direction> getDirectionsFromPath(List<Point> movesList){
+    private List<Direction> getDirectionsFromPath(List<Point> movesList) {
         List<Direction> directionsList = new ArrayList<>();
-        for(int i=0;i< movesList.size()-1;i++){
+        for (int i = 0; i < movesList.size() - 1; i++) {
             Point p1 = movesList.get(i);
-            Point p2 = movesList.get(i+1);
-            if(p1.getX()==p2.getX()){
-                if(p1.getY()<p2.getY())directionsList.add(Direction.SOUTH);
+            Point p2 = movesList.get(i + 1);
+            if (p1.getX() == p2.getX()) {
+                if (p1.getY() < p2.getY()) directionsList.add(Direction.SOUTH);
                 else directionsList.add(Direction.NORTH);
-            }
-            else{
-                if(p1.getX()<p2.getX())directionsList.add(Direction.EAST);
+            } else {
+                if (p1.getX() < p2.getX()) directionsList.add(Direction.EAST);
                 else directionsList.add(Direction.WEST);
             }
         }
         return directionsList;
     }
-    private Point getNewPosition(Point p, Direction d){
-        int x =(int)p.getX();
-        int y = (int)p.getY();
+
+    private Point getNewPosition(Point p, Direction d) {
+        int x = (int) p.getX();
+        int y = (int) p.getY();
         switch (d) {
             case EAST -> x++;
             case WEST -> x--;
             case NORTH -> y--;
             case SOUTH -> y++;
         }
-       return(new Point(x,y));
+        return (new Point(x, y));
     }
 
-    private List<Point> shortestPathToHomeland(Checker checker, Point point){
+    private List<Point> shortestPathToHomeland(Checker checker, Point point) {
         List<Point> rtr = new ArrayList<>();
         //wyznaczam punkt najblizszy mi
         List<Point> potentialPointsList = fields
@@ -407,29 +407,32 @@ class Board {
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
 
-        double minPath = x_size+y_size;
-        Point minPoint = new Point(-1,-1);
-        for(Point p: potentialPointsList){
-            double tmp = Math.abs(p.getX()-point.getX()) + Math.abs(p.getY()-point.getY());
-            if(tmp<minPath){minPath = tmp; minPoint=p;}
+        double minPath = x_size + y_size;
+        Point minPoint = new Point(-1, -1);
+        for (Point p : potentialPointsList) {
+            double tmp = Math.abs(p.getX() - point.getX()) + Math.abs(p.getY() - point.getY());
+            if (tmp < minPath) {
+                minPath = tmp;
+                minPoint = p;
+            }
         }
-        if(minPoint.getX()<0 || minPoint.getY()<0){
+        if (minPoint.getX() < 0 || minPoint.getY() < 0) {
             return rtr;
         }
-        while(minPoint.getX()<point.getX()){
-            point= new Point((int)point.getX()-1,(int)point.getY());
+        while (minPoint.getX() < point.getX()) {
+            point = new Point((int) point.getX() - 1, (int) point.getY());
             rtr.add(point);
         }
-        while(minPoint.getX()>point.getX()){
-            point= new Point((int)point.getX()+1,(int)point.getY());
+        while (minPoint.getX() > point.getX()) {
+            point = new Point((int) point.getX() + 1, (int) point.getY());
             rtr.add(point);
         }
-        while(minPoint.getY()>point.getY()){
-            point= new Point((int)point.getX(),(int)point.getY()+1);
+        while (minPoint.getY() > point.getY()) {
+            point = new Point((int) point.getX(), (int) point.getY() + 1);
             rtr.add(point);
         }
-        while(minPoint.getY()>point.getY()){
-            point= new Point((int)point.getX(),(int)point.getY()-1);
+        while (minPoint.getY() > point.getY()) {
+            point = new Point((int) point.getX(), (int) point.getY() - 1);
             rtr.add(point);
         }
         //wyznaczylem juz punkt najblizszy mi

@@ -1,7 +1,5 @@
 package pl.zespolowe.splix.domain.game.player;
 
-import lombok.Getter;
-import lombok.Setter;
 import pl.zespolowe.splix.domain.game.GameListener;
 import pl.zespolowe.splix.domain.game.GameListenerState;
 
@@ -17,5 +15,6 @@ public class Bot extends Player implements GameListener {
     }
 
     @Override
-    public void event(GameListenerState move) {}
+    public void event(GameListenerState move) {
+    }
 }
