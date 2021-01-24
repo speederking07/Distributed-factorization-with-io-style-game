@@ -112,6 +112,11 @@ pub fn compute_perfect_squares(smooth: u32, from: &str, to: &str, base: &str) ->
     ps.to_string()
 }
 
+#[wasm_bindgen]
+pub fn list_of_primes(limit: u32) -> Vec<u32>{
+    PerfectSquares::get_primes_to(limit)
+}
+
 #[cfg(test)]
 mod test{
     use crate::perfect_squares::compute_perfect_squares;

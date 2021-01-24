@@ -1,9 +1,10 @@
 r = 0;
 
-let demo;
+let demo, worker;
 
 $(document).ready(function () {
     SwipeListener(document);
+    worker = new Worker('./js/wasm/factorization.js');
     $(window).trigger('resize');
     demo = new Demo(document.getElementById('board'));
     demo.start();
