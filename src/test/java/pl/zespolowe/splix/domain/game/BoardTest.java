@@ -3,7 +3,6 @@ package pl.zespolowe.splix.domain.game;
 import org.junit.Assert;
 import pl.zespolowe.splix.domain.game.player.Bot;
 import pl.zespolowe.splix.domain.game.player.Player;
-
 import javax.security.auth.login.CredentialException;
 import java.awt.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -15,7 +14,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  */
 public class BoardTest {
-
+    /***
+     * Checker respawnPlayer(int,int, Player)
+     * @throws CredentialException
+     */
     @org.junit.Test
     public void shouldStartGame() throws CredentialException {
 
@@ -46,6 +48,10 @@ public class BoardTest {
         Assert.assertTrue((int)ch.getPoint().getX()-1==x && (int)ch.getPoint().getY()==y);
     }
 
+    /***
+     * killPlayer(Checker)
+     * @throws CredentialException
+     */
     @org.junit.Test
     public void shouldKillPlayer() throws CredentialException {
 
@@ -66,6 +72,10 @@ public class BoardTest {
         Assert.assertTrue(sut.getPaths().containsValue(ch2));
     }
 
+    /***
+     * move(Checker, Direction)
+     * @throws CredentialException
+     */
     @org.junit.Test
     public void shouldOvertake() throws CredentialException {
 /***
@@ -95,6 +105,10 @@ public class BoardTest {
         Assert.assertTrue(sut.getFields().get(new Point(x+2,y+1)).getPlayer().getUsername().equals("testowyGracz"));
     }
 
+    /****
+     * botMove(Checker)
+     * @throws CredentialException
+     */
     @org.junit.Test
     public void shouldPlayBot() throws CredentialException {
         //given

@@ -16,6 +16,7 @@ public class Game implements ObservableGame {
     private final static int x_size = 50;
     private final static int y_size = 50;
     private final static int max_players = 20;
+    @Getter
     private final static int botsNumber = 4;
     @Getter
     private final int gameID;
@@ -27,6 +28,7 @@ public class Game implements ObservableGame {
     private final Set<Checker> players;
     long startTime = -1;
     long allGameSTart=0;
+    @Getter
     private int turn;
 
 

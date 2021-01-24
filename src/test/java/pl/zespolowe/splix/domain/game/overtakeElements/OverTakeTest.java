@@ -248,6 +248,9 @@ public class OverTakeTest {
         Assert.assertEquals(result.size(),20);
     }
 
+    /***
+     * Test for making curcuits
+     */
     @org.junit.Test
     public void circuitTest() {
 
@@ -305,6 +308,9 @@ public class OverTakeTest {
         Assert.assertEquals(writer.toString(),"[java.awt.Point[x=0,y=0], java.awt.Point[x=2,y=0], java.awt.Point[x=0,y=2], java.awt.Point[x=2,y=2], java.awt.Point[x=1,y=0], java.awt.Point[x=0,y=1], java.awt.Point[x=2,y=1], java.awt.Point[x=1,y=2]][java.awt.Point[x=0,y=0], java.awt.Point[x=2,y=0], java.awt.Point[x=0,y=2], java.awt.Point[x=2,y=2], java.awt.Point[x=1,y=0], java.awt.Point[x=0,y=1], java.awt.Point[x=2,y=1], java.awt.Point[x=1,y=2], java.awt.Point[x=1,y=1]]");
     }
 
+    /****
+     * test for finding path
+     */
     @org.junit.Test
     public void findPathTest() {
         Set<Point> fields = new HashSet<>();
