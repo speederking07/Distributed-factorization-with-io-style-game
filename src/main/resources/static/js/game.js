@@ -286,7 +286,7 @@ class Game {
             for (let m of moves) {
                 let p = this.playersMap.get(m.player);
                 if (p !== undefined) {
-                    p.setPrevPos(m.x, m.y);
+                    p.setPrevPos(m.x, m.y, this.step);
                     if (m.havePath) {
                         p.drawPath();
                     } else {

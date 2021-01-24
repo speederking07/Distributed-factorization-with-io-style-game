@@ -165,18 +165,25 @@ class Player {
      * Change current position target in case of wrong predictions
      * @param currX
      * @param currY
+     * @param step
      */
-    makePositionAdjustments(currX, currY) {
-        if (currX !== this.currentPos.x || currY !== this.currentPos.y) {
-            const step = this.computeStep();
-            if (this.path.length >= 1) {
-                this.path.push([currX * BLOCK_SIZE, currY * BLOCK_SIZE])
+    makePositionAdjustments(currX, currY, step) {
+        if(currX !== this.currentPos.x || currY !== this.currentPos.y) {
+            if(Math.abs(currX - this.currentPos.x) >= 2 || Math.abs(currY - this.currentPos.y) >= 2){
+                console.log('ERROR major shift')
             }
-            this.currentPos = {x: currX, y: currY};
+            if(this.path.length >= 1) {
+                if (this.currentPos.x === this.prevPos.x) {
+                    this.path.push([this.currentPos.x * BLOCK_SIZE, currY * BLOCK_SIZE])
+                } else if (this.currentPos.y === this.prevPos.y) {
+                    this.path.push([currX * BLOCK_SIZE, this.currentPos.y * BLOCK_SIZE])
+                }
+            }
+            this.currentPos = {x: currX, y:currY};
             this.movX = (this.currentPos.x - this.prevPos.x) * SPEED;
             this.movY = (this.currentPos.y - this.prevPos.y) * SPEED;
-            this.posX = this.prevPos.x * BLOCK_SIZE + this.movX * step;
-            this.posY = this.prevPos.y * BLOCK_SIZE + this.movY * step;
+            this.posX = this.prevPos.x * BLOCK_SIZE + this.movX * mod(step, NUMBER_OF_STEPS);
+            this.posY = this.prevPos.y * BLOCK_SIZE + this.movY * mod(step, NUMBER_OF_STEPS);
         }
     }
 
@@ -185,8 +192,26 @@ class Player {
      * @param x
      * @param y
      */
-    setPrevPos(x, y) {
-        this.prevPos = {x: x, y: y}
+    setPrevPos(prevX, prevY, step) {
+        if(prevX !== this.prevPos.x || prevY !== this.prevPos.y){
+            if (this.currentPos.x === this.prevPos.x){
+                if (prevX < this.prevPos.x){
+                    this.prevPos = {x: prevX, y: prevY};
+                    this.makePositionAdjustments(prevX-1, prevY, step);
+                } else {
+                    this.prevPos = {x: prevX, y: prevY};
+                    this.makePositionAdjustments(prevX+1, prevY, step);
+                }
+            } else {
+                if (prevY < this.prevPos.y){
+                    this.prevPos = {x: prevX, y: prevY};
+                    this.makePositionAdjustments(prevX, prevY-1, step);
+                } else {
+                    this.prevPos = {x: prevX, y: prevY};
+                    this.makePositionAdjustments(prevX, prevY+1, step);
+                }
+            }
+        }
     }
 
     /**
