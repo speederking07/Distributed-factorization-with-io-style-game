@@ -291,7 +291,7 @@ async function handelTask() {
 function processLinearEquations(data) {
     let processed = "";
     for (const number of data.factorizedNumbers) {
-        processed += number.num + ";" + number.num2 + ";";
+        processed += number.num + ";" + number.a + ";";
         for (const [prime, p] of Object.entries(number.factors)) {
             processed += p + " ";
         }
@@ -332,7 +332,7 @@ function processPerfectSquare(data) {
             for (let i = 0; i < par.length; i++) {
                 map.set(primes[i], par[i]);
             }
-            res.push({num: big, num2: small, factors: map})
+            res.push({num: big.trim(), a: small.trim(), factors: Object.fromEntries(map)})
         }
     }
     fetch('/task', {
@@ -347,6 +347,11 @@ function processPerfectSquare(data) {
             factorizedNumbers: res
         }),
     }).then(data => {
+        console.log(JSON.stringify({
+            type: "PAIRS",
+            n: data.n,
+            factorizedNumbers: res
+        }))
         console.log(res)
     });
 }
