@@ -93,7 +93,7 @@ public class Game implements ObservableGame {
         for (Checker ch : players) if (ch.getPlayer().equals(player)) tmpChecker = ch;
         Checker chs = board.move(tmpChecker, move.getMove());
         if (chs != null) killPlayer(chs);
-        log.info("Player's MOVE: " + player.getUsername());
+//        log.info("Player's MOVE: " + player.getUsername());
     }
 
     public void resign(Player player) {
@@ -149,19 +149,19 @@ public class Game implements ObservableGame {
         for (Checker ch : players) {
             gcs = board.setInfoForNewPlayer(ch, gcs);
         }
-        System.out.println("to dostaje nowy gracz:\n");
-        List<CurrentPlayer> a = gcs.getAddedPlayers();
-        if (a.size() == 0) System.out.println("Nic nie dostal - pewnie to pierwszy gracz jest\n");
-        for (int i = 0; i < a.size(); i++) {
-            System.out.println(gcs.getAddedPlayers().get(i).getName());
-            for(int[] pole :gcs.getAddedPlayers().get(i).getFields() ){
-                System.out.println("pola: x: " + pole[0]+" y: "+pole[1]);
-            }
-
-            System.out.println("sciezki: " + gcs.getAddedPlayers().get(i).getPath());
-        }
-        System.out.println("----------------\n");
-        gcs.addTime(allGameSTart);
+//        System.out.println("to dostaje nowy gracz:\n");
+//        List<CurrentPlayer> a = gcs.getAddedPlayers();
+//        if (a.size() == 0) System.out.println("Nic nie dostal - pewnie to pierwszy gracz jest\n");
+//        for (int i = 0; i < a.size(); i++) {
+////            System.out.println(gcs.getAddedPlayers().get(i).getName());
+//            for(int[] pole :gcs.getAddedPlayers().get(i).getFields() ){
+////                System.out.println("pola: x: " + pole[0]+" y: "+pole[1]);
+//            }
+//
+////            System.out.println("sciezki: " + gcs.getAddedPlayers().get(i).getPath());
+//        }
+//        System.out.println("----------------\n");
+//        gcs.addTime(allGameSTart);
         return gcs;
     }
 
@@ -170,7 +170,7 @@ public class Game implements ObservableGame {
      */
     public void newTurn() {
         startTime = (startTime == -1) ? System.currentTimeMillis() : -1;
-        log.info("NEXT TURN");
+//        log.info("NEXT TURN");
         turn++;
         board.printGls();//Marek rutaj sb sprawdz co wysyla server
         publishEvent();

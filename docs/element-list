@@ -1,9 +1,12 @@
 pl.zespolowe.splix
+pl.zespolowe.splix.calculations
 pl.zespolowe.splix.config
 pl.zespolowe.splix.config.security
 pl.zespolowe.splix.config.validation
 pl.zespolowe.splix.config.websocket
+pl.zespolowe.splix.controller
 pl.zespolowe.splix.controllers
+pl.zespolowe.splix.domain.factorization
 pl.zespolowe.splix.domain.game
 pl.zespolowe.splix.domain.game.overtakeElements
 pl.zespolowe.splix.domain.game.player
@@ -11,4 +14,5 @@ pl.zespolowe.splix.domain.user
 pl.zespolowe.splix.dto
 pl.zespolowe.splix.exceptions
 pl.zespolowe.splix.repositories
+pl.zespolowe.splix.service
 pl.zespolowe.splix.services

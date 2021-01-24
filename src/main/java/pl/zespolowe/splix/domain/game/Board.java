@@ -8,14 +8,13 @@ package pl.zespolowe.splix.domain.game;
 import lombok.Getter;
 import lombok.Setter;
 import pl.zespolowe.splix.domain.game.overtakeElements.OverTake;
-import pl.zespolowe.splix.domain.game.player.Bot;
 import pl.zespolowe.splix.domain.game.player.Player;
 import pl.zespolowe.splix.dto.AddPlayer;
 import pl.zespolowe.splix.dto.Move;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
@@ -24,7 +23,7 @@ class Board {
     private final Map<Point, Checker> fields;
     @Getter
     private final Map<Point, Checker> paths;
-    private Map<Checker,List<Direction>> BotMoves = new HashMap<>();
+    private final Map<Checker,List<Direction>> BotMoves = new HashMap<>();
 
     protected int x_size;
     protected int y_size;
@@ -240,16 +239,16 @@ class Board {
          Map<String,ArrayList<int[]>> changes=gls.getChanges();
          List<Move> moves=gls.getMoves();
          List<AddPlayer> addedPlayers=gls.getAddedPlayers();
-        System.out.println("###################################");
-        System.out.println("info co zostalo wyslane w "+turn+" turze");
-        System.out.println("killed players: "+killedPlayers);
-        System.out.println("moves: ");
-        for(Move m: moves) {
-            System.out.println("x:" + m.getX()+" y:"+m.getY()+"name: "+m.getPlayer());
-        }
-        System.out.println("addedPlayers"+addedPlayers);
-        System.out.println("field's changes"+changes);
-        System.out.println("###################################");
+//        System.out.println("###################################");
+//        System.out.println("info co zostalo wyslane w "+turn+" turze");
+//        System.out.println("killed players: "+killedPlayers);
+//        System.out.println("moves: ");
+//        for(Move m: moves) {
+//            System.out.println("x:" + m.getX()+" y:"+m.getY()+"name: "+m.getPlayer());
+//        }
+//        System.out.println("addedPlayers"+addedPlayers);
+//        System.out.println("field's changes"+changes);
+//        System.out.println("###################################");
     }
 
     /**
@@ -258,7 +257,7 @@ class Board {
     public Checker botMove(Checker ch) {
         Checker rtr = null;
         Point oldPoint = ch.getPoint();
-        System.out.println("BOT-POZYCJA: "+oldPoint);
+//        System.out.println("BOT-POZYCJA: "+oldPoint);
         int x =(int)oldPoint.getX();
         int y = (int)oldPoint.getY();
         switch (ch.getDirection()) {
@@ -366,7 +365,7 @@ class Board {
         rtr.add(new Point(x0+2*x+2*y,y0+2*y+2*x));
         rtr.add(new Point(x0+x+2*y,y0+y+2*x));
         rtr.addAll(shortestPathToHomeland(ch,new Point(x0+x+2*y,y0+y+2*x)));
-        System.out.println("MOJA LISTA HAHA "+rtr);
+//        System.out.println("MOJA LISTA HAHA "+rtr);
         return rtr;
     }
 

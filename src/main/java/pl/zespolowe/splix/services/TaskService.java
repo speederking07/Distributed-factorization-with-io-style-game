@@ -55,7 +55,6 @@ public class TaskService {
         Task t = opt.get();
         SubTask result = t.getSubTask();
         taskRepository.save(t);
-        System.out.println(t.getNumbers().stream().map(FactorizedNumber::getNum).collect(Collectors.joining()));
         return result;
     }
 
