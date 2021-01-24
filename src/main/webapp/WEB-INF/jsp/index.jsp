@@ -11,8 +11,6 @@
     <link href="css/config.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@jaames/iro"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="js/wasm/factorization.js"></script>
-    <script src="js/factorization.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/consts.js"></script>
     <script src="js/animator.js"></script>

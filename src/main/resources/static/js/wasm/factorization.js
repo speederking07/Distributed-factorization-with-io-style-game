@@ -135,6 +135,38 @@ let wasm_bindgen;
         }
     };
 
+    let cachegetUint32Memory0 = null;
+
+    function getUint32Memory0() {
+        if (cachegetUint32Memory0 === null || cachegetUint32Memory0.buffer !== wasm.memory.buffer) {
+            cachegetUint32Memory0 = new Uint32Array(wasm.memory.buffer);
+        }
+        return cachegetUint32Memory0;
+    }
+
+    function getArrayU32FromWasm0(ptr, len) {
+        return getUint32Memory0().subarray(ptr / 4, ptr / 4 + len);
+    }
+
+    /**
+     * @param {number} limit
+     * @returns {Uint32Array}
+     */
+    __exports.list_of_primes = function (limit) {
+        try {
+            const retptr = wasm.__wbindgen_export_0.value - 16;
+            wasm.__wbindgen_export_0.value = retptr;
+            wasm.list_of_primes(retptr, limit);
+            var r0 = getInt32Memory0()[retptr / 4 + 0];
+            var r1 = getInt32Memory0()[retptr / 4 + 1];
+            var v0 = getArrayU32FromWasm0(r0, r1).slice();
+            wasm.__wbindgen_free(r0, r1 * 4);
+            return v0;
+        } finally {
+            wasm.__wbindgen_export_0.value += 16;
+        }
+    };
+
     /**
      * @param {string} a
      */
@@ -208,3 +240,113 @@ let wasm_bindgen;
     wasm_bindgen = Object.assign(init, __exports);
 
 })();
+
+const {greet, list_of_primes, compute_perfect_squares, compute_linear_equations} = wasm_bindgen;
+
+async function run() {
+    await wasm_bindgen("factorization_bg.wasm");
+    //greet("hey");
+    //smooth from to to_factor
+    console.log(compute_perfect_squares(17, "735", "900", "539873"));
+    data = "735;352;1 0 0 0 1 0 0$" +
+        "750;22627;0 0 0 0 1 0 1$" +
+        "783;73216;1 0 0 0 1 1 0$" +
+        "801;101728;1 0 0 0 1 0 0";
+    console.log(compute_linear_equations(17, "539873", data));
+    console.log(list_of_primes(17));
+    setTimeout(work, 500);
+}
+
+run();
+
+async function work() {
+    await handelTask();
+    setTimeout(work, 500);
+}
+
+async function handelTask() {
+    return new Promise(function (resolve, reject) {
+        fetch('/task', {
+            method: "GET",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        }).then(async res => {
+            let data = await res.json();
+            console.log(data);
+            if (data.type === "SOLVE_LINEAR") {
+                processPerfectSquare(data);
+                resolve("SOLVE_LINEAR");
+            } else if (data.type === "PAIRS") {
+                processPerfectSquare(data);
+                resolve("PAIRS");
+            } else {
+                reject("WRONG TYPE")
+            }
+        });
+    });
+}
+
+function processLinearEquations(data) {
+    let processed = "";
+    for (const number of data.factorizedNumbers) {
+        processed += number.num + ";" + number.num2 + ";";
+        for (const [prime, p] of Object.entries(number.factors)) {
+            processed += p + " ";
+        }
+        processed += "$"
+    }
+    let res = compute_linear_equations(Number(data.b), data.n, processed);
+    console.log(res);
+    let primes = res.split(';');
+    if (primes.length === 2) {
+        fetch('/task', {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                type: "SOLVE_LINEAR",
+                n: data.n,
+                p: primes[0],
+                q: primes[1],
+            }),
+        }).then(data => {
+                console.log(res)
+            }
+        )
+    }
+}
+
+function processPerfectSquare(data) {
+    let numbers = compute_perfect_squares(Number(data.b), data.rangeMin, data.rangeMax, data.n).split('$');
+    let res = [];
+    const primes = list_of_primes(data.b);
+    for (let n of numbers) {
+        if (n.trim() !== "") {
+            let [big, small, parity] = n.split(';');
+            let map = new Map();
+            let par = parity.split(" ");
+            for (let i = 0; i < par.length; i++) {
+                map.set(primes[i], par[i]);
+            }
+            res.push({num: big, num2: small, factors: map})
+        }
+    }
+    fetch('/task', {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            type: "PAIRS",
+            n: data.n,
+            factorizedNumbers: res
+        }),
+    }).then(data => {
+        console.log(res)
+    });
+}

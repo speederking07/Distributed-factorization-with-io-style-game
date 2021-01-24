@@ -9,8 +9,5 @@ import java.util.Optional;
 @Repository
 public interface TaskRepository extends JpaRepository<Task, String> {
 
-//    @Query(value = "SELECT * FROM task WHERE factor1 = '-1' AND factor2 = '-1' LIMIT 1", nativeQuery = true)
     Optional<Task> findDistinctTopBySolvedFalse();
-
-
 }

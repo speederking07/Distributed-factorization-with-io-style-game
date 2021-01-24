@@ -70,9 +70,11 @@ public class UserController {
      */
     @PostMapping(value = "/user/settings", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateSettings(@Valid @RequestBody UserSettingsDTO dto, Authentication auth) {
-        User user = (User) auth.getPrincipal();
-        user.getSettings().updateFromDto(dto);
-        service.saveUser(user);
+        if (auth.getPrincipal() instanceof User) {
+            User user = (User) auth.getPrincipal();
+            user.getSettings().updateFromDto(dto);
+            service.saveUser(user);
+        }
         return ResponseEntity.ok("");
     }
 
@@ -85,6 +87,7 @@ public class UserController {
      */
     @PostMapping(value = "/user/password", consumes = TEXT_PLAIN_VALUE)
     public ResponseEntity<String> changePassword(@RequestBody String password, Authentication authentication, HttpServletRequest request) {
+        if (!(authentication.getPrincipal() instanceof User)) return ResponseEntity.ok("");
         try {
             User user = (User) authentication.getPrincipal();
             log.info("Password change attempt: " + user.getUsername() + ", " + request.getRemoteAddr());
@@ -104,6 +107,7 @@ public class UserController {
      */
     @PostMapping(value = "/user/email", consumes = TEXT_PLAIN_VALUE)
     public ResponseEntity<String> changeEmail(@RequestBody String email, Authentication authentication, HttpServletRequest request) {
+        if (!(authentication.getPrincipal() instanceof User)) return ResponseEntity.ok("");
         try {
             User user = (User) authentication.getPrincipal();
             log.info("Email change attempt: " + user.getUsername() + ", " + request.getRemoteAddr());
