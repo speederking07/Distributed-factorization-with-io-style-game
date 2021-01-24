@@ -56,7 +56,7 @@ public class AppConfig implements WebMvcConfigurer {
         return (req, res, authentication) -> {
             if (authentication.getPrincipal() instanceof User) {
                 User user = (User) authentication.getPrincipal();
-                log.info("User logged: " + user.getUsername() +", " +req.getRemoteAddr());
+                log.info("User logged: " + user.getUsername() + ", " + req.getRemoteAddr());
                 user.setLastLogged(new Date(Calendar.getInstance().getTime().getTime()));
                 userService.saveUser(user);
             }

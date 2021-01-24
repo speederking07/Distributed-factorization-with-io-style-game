@@ -66,7 +66,7 @@ public class UserSettings {
             g = hue2rgb(p, q, h);
             b = hue2rgb(p, q, h - 1.0f / 3);
         }
-        return String.format("\"#%02x%02x%02x\"",Math.round(r * 255), Math.round(g * 255) ,Math.round(b * 255));
+        return String.format("\"#%02x%02x%02x\"", Math.round(r * 255), Math.round(g * 255), Math.round(b * 255));
     }
 
     private static float hue2rgb(float p, float q, float h) {

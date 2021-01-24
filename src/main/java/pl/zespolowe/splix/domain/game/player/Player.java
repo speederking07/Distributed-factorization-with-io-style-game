@@ -47,6 +47,7 @@ public class Player {
 
     /**
      * Perform move in current game
+     *
      * @param move
      */
     public void move(SimpleMove move) {

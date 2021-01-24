@@ -13,18 +13,13 @@ import java.util.List;
 @Setter
 public class GameCurrentState {
     private List<CurrentPlayer> addedPlayers; //lista wszystkich obecnych graczy
-    private long time;
 
-    public GameCurrentState(){
-        this.addedPlayers=new ArrayList<>();
+    public GameCurrentState() {
+        this.addedPlayers = new ArrayList<>();
     }
 
-    public void addTime(long time1){
-        this.time=time1;
-    }
-
-    public void addPlayer(Player player, ArrayList<Point> points, ArrayList<Point> path, Point pos){
-        CurrentPlayer cp = new CurrentPlayer(player, points, path, (int)pos.getX(), (int)pos.getY());
+    public void addPlayer(Player player, ArrayList<Point> points, ArrayList<Point> path, Point pos) {
+        CurrentPlayer cp = new CurrentPlayer(player, points, path, (int) pos.getY(), (int) pos.getY());
         addedPlayers.add(cp);
     }
 
@@ -39,14 +34,14 @@ class CurrentPlayer {
     private ArrayList<int[]> fields; //lista pól tego grasza
     private int x, y;//pozycja
 
-    public CurrentPlayer(Player player, ArrayList<Point> points, ArrayList<Point> path, int x, int y){
-        this.x=x;
-        this.y=y;
-        this.color= player.getColorsInCsv();
-        this.name= player.getUsername();
+    public CurrentPlayer(Player player, ArrayList<Point> points, ArrayList<Point> path, int x, int y) {
+        this.x = x;
+        this.y = y;
+        this.color = player.getColorsInCsv();
+        this.name = player.getUsername();
         this.fields = new ArrayList<>();
         this.path = new ArrayList<>();
-        for(Point p: points)this.fields.add(new int[]{(int)p.getX(),(int)p.getY()});
-        for(Point p: path)this.path.add(new int[]{(int)p.getX(),(int)p.getY()});
+        for (Point p : points) this.fields.add(new int[]{(int) p.getX(), (int) p.getY()});
+        for (Point p : path) this.path.add(new int[]{(int) p.getX(), (int) p.getY()});
     }
 }

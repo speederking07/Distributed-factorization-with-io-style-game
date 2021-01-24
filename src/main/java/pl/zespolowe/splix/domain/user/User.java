@@ -84,7 +84,7 @@ public class User implements UserDetails {
         recoveryTokens.add(token);
     }
 
-    public void removeToken(RecoveryToken token){
+    public void removeToken(RecoveryToken token) {
         recoveryTokens.remove(token);
     }
 

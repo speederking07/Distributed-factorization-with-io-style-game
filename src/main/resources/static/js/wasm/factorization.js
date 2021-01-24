@@ -1,11 +1,12 @@
 let wasm_bindgen;
-(function() {
+(function () {
     const __exports = {};
     let wasm;
 
     let WASM_VECTOR_LEN = 0;
 
     let cachegetUint8Memory0 = null;
+
     function getUint8Memory0() {
         if (cachegetUint8Memory0 === null || cachegetUint8Memory0.buffer !== wasm.memory.buffer) {
             cachegetUint8Memory0 = new Uint8Array(wasm.memory.buffer);
@@ -17,16 +18,16 @@ let wasm_bindgen;
 
     const encodeString = (typeof cachedTextEncoder.encodeInto === 'function'
         ? function (arg, view) {
-        return cachedTextEncoder.encodeInto(arg, view);
-    }
+            return cachedTextEncoder.encodeInto(arg, view);
+        }
         : function (arg, view) {
-        const buf = cachedTextEncoder.encode(arg);
-        view.set(buf);
-        return {
-            read: arg.length,
-            written: buf.length
-        };
-    });
+            const buf = cachedTextEncoder.encode(arg);
+            view.set(buf);
+            return {
+                read: arg.length,
+                written: buf.length
+            };
+        });
 
     function passStringToWasm0(arg, malloc, realloc) {
 
@@ -67,6 +68,7 @@ let wasm_bindgen;
     }
 
     let cachegetInt32Memory0 = null;
+
     function getInt32Memory0() {
         if (cachegetInt32Memory0 === null || cachegetInt32Memory0.buffer !== wasm.memory.buffer) {
             cachegetInt32Memory0 = new Int32Array(wasm.memory.buffer);
@@ -74,20 +76,21 @@ let wasm_bindgen;
         return cachegetInt32Memory0;
     }
 
-    let cachedTextDecoder = new TextDecoder('utf-8', { ignoreBOM: true, fatal: true });
+    let cachedTextDecoder = new TextDecoder('utf-8', {ignoreBOM: true, fatal: true});
 
     cachedTextDecoder.decode();
 
     function getStringFromWasm0(ptr, len) {
         return cachedTextDecoder.decode(getUint8Memory0().subarray(ptr, ptr + len));
     }
+
     /**
-    * @param {number} smooth
-    * @param {string} base
-    * @param {string} data
-    * @returns {string}
-    */
-    __exports.compute_linear_equations = function(smooth, base, data) {
+     * @param {number} smooth
+     * @param {string} base
+     * @param {string} data
+     * @returns {string}
+     */
+    __exports.compute_linear_equations = function (smooth, base, data) {
         try {
             const retptr = wasm.__wbindgen_export_0.value - 16;
             wasm.__wbindgen_export_0.value = retptr;
@@ -106,13 +109,13 @@ let wasm_bindgen;
     };
 
     /**
-    * @param {number} smooth
-    * @param {string} from
-    * @param {string} to
-    * @param {string} base
-    * @returns {string}
-    */
-    __exports.compute_perfect_squares = function(smooth, from, to, base) {
+     * @param {number} smooth
+     * @param {string} from
+     * @param {string} to
+     * @param {string} base
+     * @returns {string}
+     */
+    __exports.compute_perfect_squares = function (smooth, from, to, base) {
         try {
             const retptr = wasm.__wbindgen_export_0.value - 16;
             wasm.__wbindgen_export_0.value = retptr;
@@ -133,9 +136,9 @@ let wasm_bindgen;
     };
 
     /**
-    * @param {string} a
-    */
-    __exports.greet = function(a) {
+     * @param {string} a
+     */
+    __exports.greet = function (a) {
         var ptr0 = passStringToWasm0(a, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
         var len0 = WASM_VECTOR_LEN;
         wasm.greet(ptr0, len0);
@@ -166,7 +169,7 @@ let wasm_bindgen;
             const instance = await WebAssembly.instantiate(module, imports);
 
             if (instance instanceof WebAssembly.Instance) {
-                return { instance, module };
+                return {instance, module};
 
             } else {
                 return instance;
@@ -186,7 +189,7 @@ let wasm_bindgen;
         }
         const imports = {};
         imports.wbg = {};
-        imports.wbg.__wbg_alert_6b7ceba244f51614 = function(arg0, arg1) {
+        imports.wbg.__wbg_alert_6b7ceba244f51614 = function (arg0, arg1) {
             alert(getStringFromWasm0(arg0, arg1));
         };
 
@@ -194,7 +197,7 @@ let wasm_bindgen;
             input = fetch(input);
         }
 
-        const { instance, module } = await load(await input, imports);
+        const {instance, module} = await load(await input, imports);
 
         wasm = instance.exports;
         init.__wbindgen_wasm_module = module;
