@@ -17,7 +17,7 @@ import java.util.*;
  * 2. Rozbija przedział [sqrt(n), inf] na podprzedziały <br>
  * 3. Klienci szukają w podprzedziałach liczb 'b' takich, że b = (a^2 mod n) ma czynniki <= B<br>
  * Klient może zwrócić listę 'b' wraz z ich czynnikami.<br>
- * 4. Z zebranej listy 'b' z całego przedziału wybieramy podzbiory wielkości pi(B) i rozsyłamy do klientów<br>
+ * 4. Z zebranej listy 'b' z całego przedziału wybieramy podzbiory wielkości >=pi(B) i rozsyłamy do klientów<br>
  * 5. Klient zwraca parę (p, q) p*q=n lub błąd.
  */
 
@@ -33,12 +33,12 @@ public class Task {
     private String number;
 
     private String B;
-
     private String piB;
-
     private String rangeStart;
+    private String factor1, factor2;
+    private boolean solved;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "task_fac_number",
             joinColumns = {@JoinColumn(name = "task_number")},
@@ -47,11 +47,9 @@ public class Task {
     @Fetch(FetchMode.SELECT)
     private Set<FactorizedNumber> numbers;
 
-    @OneToMany(mappedBy = "task")
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
     @Fetch(FetchMode.SELECT)
     private Set<SubSet> subsets;
-
-    private String factor1, factor2;
 
 
     public Task(@NonNull String number) throws NumberFormatException {
@@ -81,6 +79,17 @@ public class Task {
         return result;
     }
 
+
+    private static boolean isPrime(String p) {
+        return new BigInteger(p).isProbablePrime(5);
+    }
+
+    private static boolean checkSolution(String n, String p, String q) {
+        if (isPrime(p) && isPrime(q))
+            return new BigInteger(n).equals(new BigInteger(p).multiply(new BigInteger(q)));
+        return false;
+    }
+
     private SubSet newSubset(int size) {
         SubSet result;
         do {
@@ -108,6 +117,7 @@ public class Task {
             rangeStart = Long.toString(Long.parseLong(rangeStart) + STEP);
             result.setRangeMax(rangeStart);
             result.setType(TaskType.PAIRS);
+            result.setFactorizedNumbers(getNumbers());
         } else {
             int k = subsets.stream().mapToInt(SubSet::size).max().orElseGet(() -> (int) Long.parseLong(B));
             int finalK = k;
@@ -130,6 +140,16 @@ public class Task {
             }
         }
         return result;
+    }
+
+    public void submitSolution(Solution solution) {
+        if (solution.getType() == TaskType.PAIRS) {
+            numbers.addAll(solution.getFactorizedNumbers());
+        } else if (checkSolution(this.number, solution.getP(), solution.getQ())) {
+            this.factor1 = solution.getP();
+            this.factor2 = solution.getQ();
+            this.solved = true;
+        }
     }
 
     @Override

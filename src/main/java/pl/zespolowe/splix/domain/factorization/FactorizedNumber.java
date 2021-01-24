@@ -2,6 +2,7 @@ package pl.zespolowe.splix.domain.factorization;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -15,14 +16,15 @@ import java.util.Objects;
 @Entity
 public class FactorizedNumber {
     @Id
-    private String b;
+    private String num;
 
     @ElementCollection
     @MapKeyColumn(name = "factor")
     @Column(name = "power")
     @CollectionTable(name = "factors", joinColumns = @JoinColumn(name = "factorized_number_b"))
     @Fetch(FetchMode.SELECT)
-    private Map<Long, Long> factors;
+    @Cascade(org.hibernate.annotations.CascadeType.PERSIST)
+    private Map<String, String> factors;
 
     public FactorizedNumber() {
         this.factors = new HashMap<>();
@@ -33,11 +35,11 @@ public class FactorizedNumber {
         if (this == o) return true;
         if (!(o instanceof FactorizedNumber)) return false;
         FactorizedNumber that = (FactorizedNumber) o;
-        return Objects.equals(b, that.b);
+        return Objects.equals(num, that.num);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(b);
+        return Objects.hash(num);
     }
 }
