@@ -18,6 +18,8 @@ public class FactorizedNumber {
     @Id
     private String num;
 
+    private String a;
+
     @ElementCollection
     @MapKeyColumn(name = "factor")
     @Column(name = "power")
