@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Chilanka&display=swap');
 
 body {
+    overscroll-behavior: contain;
     background: url(../img/green_dust_scratch.png);
     font-family: 'Amatic SC', cursive;
 }

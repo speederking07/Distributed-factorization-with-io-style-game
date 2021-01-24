@@ -32,7 +32,8 @@ class Game {
         this.connection.subscribe(this.update.bind(this))
             .then(init => this.initialize(init))
             .catch(error => {
-                popup("Error", error, [["OK", () => {}]]);
+                popup("Error", error, [["OK", () => {
+                }]]);
                 this.whenFinished();
             });
         this.gameLoop = null;
@@ -65,11 +66,12 @@ class Game {
         this.animator.start();
     }
 
-    initialize(data){
+    initialize(data) {
         console.log(data)
-        for (let p of data.addedPlayers){
+        this.gameStart = data.time;
+        for (let p of data.addedPlayers) {
             let player = Player.fromServer(p);
-            player.path = p.path;
+            player.path = p.path.map(x => x.map(y => y * BLOCK_SIZE));
             this.players.push(player);
             this.playersMap.set(p.name, player);
             for (let [x, y] of p.fields) {
@@ -137,10 +139,10 @@ class Game {
      */
     update(data) {
         console.log(data);
-        console.log("Behind: "+this.turn-Number(data.turn));
+        console.log("Behind: " + Number(this.turn - Number(data.turn)));
         if (this.turn === -1) {
             this.turn = data.turn;
-            this.gameStart = (Date.now()-(1000/TURNS_PER_SECONDS)*data.turn) - currentAvgDelay();
+            this.gameStart = (Date.now() - (1000 / TURNS_PER_SECONDS) * data.turn) - currentAvgDelay();
             this.step = data.turn * NUMBER_OF_STEPS;
             this.addPlayerList(data.addedPlayers);
             this.killPlayerList(data.killedPlayers);
@@ -192,15 +194,15 @@ class Game {
             const index = Game.findPlayerIndexByName(this.players, p);
             let toDel = this.players[index];
             const patternToDel = toDel.pattern;
-            for(let x = 0; x < BOARD_SIZE; x ++){
-                for(let y = 0; y < BOARD_SIZE; y ++){
-                    if (this.board === patternToDel){
+            for (let x = 0; x < BOARD_SIZE; x++) {
+                for (let y = 0; y < BOARD_SIZE; y++) {
+                    if (this.board[x][y] === patternToDel) {
                         this.view.changeField(x, y, this.board[x][y], BASE_PATTERN);
                         this.board[x][y] = BASE_PATTERN;
                     }
                 }
             }
-            this.players.slice(index, 1);
+            this.players.splice(index, 1);
             this.view.killPlayer(toDel);
         }
     }
@@ -213,7 +215,7 @@ class Game {
     moveListInTime(moves) {
         for (let m of moves) {
             let p = this.playersMap.get(m.player);
-            if(p !== undefined) {
+            if (p !== undefined) {
                 p.setFuturePos(m.x, m.y);
                 if (m.havePath) {
                     p.drawPath();
@@ -271,8 +273,8 @@ class Game {
         if (turnsBehind === 1) {
             for (let m of moves) {
                 let p = this.playersMap.get(m.player);
-                if(p !== undefined) {
-                    p.makePositionAdjustments(m.x, m.y);
+                if (p !== undefined) {
+                    p.makePositionAdjustments(m.x, m.y, this.step);
                     if (m.havePath) {
                         p.drawPath();
                     } else {
@@ -283,7 +285,7 @@ class Game {
         } else if (turnsBehind === 2) {
             for (let m of moves) {
                 let p = this.playersMap.get(m.player);
-                if(p !== undefined) {
+                if (p !== undefined) {
                     p.setPrevPos(m.x, m.y);
                     if (m.havePath) {
                         p.drawPath();
@@ -336,7 +338,8 @@ class Game {
             }
             this.step = (this.step + 1);
             if (this.alive) {
-                const main = this.playersMap.get(this.playerName);
+                //const main = this.playersMap.get("Bot Marek");
+                const main = this.playersMap.get(this.playerName); //TODO
                 this.playerX = main.posX - this.canvas.width / 2 + PLAYER_RADIUS;
                 this.playerY = main.posY - this.canvas.height / 2 + PLAYER_RADIUS;
             }

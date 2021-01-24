@@ -165,18 +165,21 @@ class Player {
      * Change current position target in case of wrong predictions
      * @param currX
      * @param currY
+     * @param step
      */
-    makePositionAdjustments(currX, currY) {
+    makePositionAdjustments(currX, currY, step) {
         if(currX !== this.currentPos.x || currY !== this.currentPos.y) {
-            const step = this.computeStep();
-            if (this.path.length >= 1) {
-                this.path.push([currX * BLOCK_SIZE, currY * BLOCK_SIZE])
+            if(Math.abs(currX - this.currentPos.x) >= 2 || Math.abs(currY - this.currentPos.y) >= 2){
+                console.log('ERROR major shift')
             }
             this.currentPos = {x: currX, y:currY};
             this.movX = (this.currentPos.x - this.prevPos.x) * SPEED;
             this.movY = (this.currentPos.y - this.prevPos.y) * SPEED;
-            this.posX = this.prevPos.x * BLOCK_SIZE + this.movX * step;
-            this.posY = this.prevPos.y * BLOCK_SIZE + this.movY * step;
+            this.posX = this.prevPos.x * BLOCK_SIZE + this.movX * mod(step, NUMBER_OF_STEPS);
+            this.posY = this.prevPos.y * BLOCK_SIZE + this.movY * mod(step, NUMBER_OF_STEPS);
+            if (this.path.length >= 1) {
+                this.path.push([this.prevPos.x * BLOCK_SIZE, this.prevPos.y * BLOCK_SIZE])
+            }
         }
     }
 
