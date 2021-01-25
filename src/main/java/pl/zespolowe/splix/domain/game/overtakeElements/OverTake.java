@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * Elements for taking fields
  *
- * @author MichalKalina
+ * @author KalinaMichal
  */
 public class OverTake {
     /***
@@ -26,7 +26,6 @@ public class OverTake {
 
         path.add(p1);
         fields.remove(p1);
-//        System.out.println(p1 + "aa" + p2);
         Set<Point> area = new HashSet<>();
         area.add(new Point(p1.x + 1, p1.y));
         area.add(new Point(p1.x - 1, p1.y));
@@ -38,19 +37,6 @@ public class OverTake {
             if (!pathTmp.isEmpty())
                 return pathTmp;
         }
-
-//        for (Point p : area) {
-////            System.out.println(p + "p");
-//            for (Point pointField : fields) {
-//                if (pointField.equals(p)) {
-//                    Set<Point> pathTmp = findPath(p, p2, fields, path);
-//                    if (!pathTmp.isEmpty())
-//                        return pathTmp;
-//                }
-//            }
-//        }
-
-        //System.out.println("bb");
         return new HashSet<>();
     }
 
@@ -96,53 +82,6 @@ public class OverTake {
             }
         }
         rtr.add(arrPoints.get(len - 1));
-        return rtr;
-    }
-
-    //metoda do wyjebania ale szkoda mi usuwac bo bylo napracowanko
-    public static Set<Point> paintPolygon(Set<Point> points) {
-        Set<Point> rtr = points;
-        ArrayList<Integer[]> myarr = new ArrayList<Integer[]>();
-
-        int min = 1000000;
-        int max = 0;
-        for (Point p : points) {
-            if (p.y < min) min = p.y;
-            if (p.y > max) max = p.y;
-        }
-        //System.out.println("max i min" + max + " " + min);
-        for (int i = min; i <= max; i++) {
-            //System.out.println(i + "b");
-            ArrayList<Integer> al = new ArrayList<>();
-            for (Point p : points) {
-                //System.out.println(p);
-                if (p.getY() == i) {
-                    al.add((int) p.getX());
-                    // System.out.println(p.getX());
-                }
-            }
-            int a = 0;
-            int k = al.get(0);
-            boolean take = true;
-            while (a < al.size() - 1) {
-                //System.out.println("aaaaaa");
-                int curr = al.get(a);
-                int next = al.get(a + 1);
-                while (k < next) {
-                    if (take) {
-                        for (int j = curr; j <= next; j++) {
-                            Point p = new Point();
-                            p.y = i;
-                            p.x = j;
-                            rtr.add(p);
-                        }
-                    }
-                    k++;
-                }
-                take = !take;
-                a++;
-            }
-        }
         return rtr;
     }
 

@@ -1,9 +1,5 @@
 package pl.zespolowe.splix.domain.game;
-/***
- *
- * @author Michal Kalina
- *
- */
+
 
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +13,11 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
-
+/***
+ *
+ * @author KalinaMichal
+ * Klasa odpowiedzialna za logikę planszy
+ */
 class Board {
     @Getter
     private final Map<Point, Checker> fields;
@@ -40,6 +40,10 @@ class Board {
         this.gls = new GameListenerState(0);
     }
 
+    /***
+     * Czyszczenie sladu
+     * @param checker
+     */
     private void clearPlayersSign(Checker checker) {
 
         ArrayList<Point> arrayPaths = new ArrayList<>();
@@ -53,6 +57,10 @@ class Board {
         }
     }
 
+    /***
+     * Przejmowanie nowych pol przez gracza
+     * @param checker
+     */
     private void overtake(Checker checker) {
         Point p2 = checker.getPoint();
         Point p1 = checker.getPath();
@@ -85,6 +93,10 @@ class Board {
         clearPlayersSign(checker);
     }
 
+    /***
+     * Zabujstwo gracza checker
+     * @param checker
+     */
     public void killPlayer(Checker checker) {
         clearPlayersSign(checker);
         Iterator<Map.Entry<Point, Checker>> iterator = fields.entrySet().iterator();
@@ -105,6 +117,13 @@ class Board {
         }
     }
 
+    /***
+     * Pojawienie sie nowego gracza na planszy
+     * @param size_x
+     * @param size_y
+     * @param p
+     * @return
+     */
     public Checker respawnPlayer(int size_x, int size_y, Player p) {
         Point point0 = new Point();
         for (int i = 0; i < size_x * size_y / 5; i++) {
@@ -136,8 +155,11 @@ class Board {
         return null;
     }
 
-    /**
-     * automatic
+    /***
+     * Ruch gracza ch w kierunku dir
+     * @param ch
+     * @param dir
+     * @return
      */
     public Checker move(Checker ch, Direction dir) {
         Checker rtr = null;
@@ -195,6 +217,12 @@ class Board {
         return rtr;
     }
 
+    /***
+     * Zwraca informacja o stanie gry dla gracza ktory dolaczyl
+     * @param ch
+     * @param gcs
+     * @return
+     */
     public GameCurrentState setInfoForNewPlayer(Checker ch, GameCurrentState gcs) {
         ArrayList<Point> points = new ArrayList<>();
         Set<Point> localPath;
@@ -213,6 +241,10 @@ class Board {
         return gcs;
     }
 
+    /***
+     * dodaje gracza do gamelistenerstate
+     * @param ch1
+     */
     public void addGlsPlayer(Checker ch1) {
         gls.addPlayer(ch1);
 
@@ -236,8 +268,10 @@ class Board {
         System.out.println("###################################");
     }*/
 
-    /**
+    /***
      * Ruch botow
+     * @param ch
+     * @return
      */
     public Checker botMove(Checker ch) {
         Checker rtr = null;
@@ -323,6 +357,12 @@ class Board {
         return rtr;
     }
 
+    /***
+     * Tworzenie listy ruchow dla Bota (taki plan na przyszlosc)
+     * @param ch
+     * @param localDir
+     * @return
+     */
     //sprawdz czy wykoanie ruchu (3x ten kier)&&(2x obrot 90o || 2x obrot 2 wersja 90o)&& find path to nasza baza nie przekroczy planszy
     List<Point> getMovesList(Checker ch, Direction localDir) {
         List<Point> rtr = new ArrayList<>();
@@ -348,6 +388,11 @@ class Board {
         return rtr;
     }
 
+    /***
+     * Konwertuje liste-sciezke pol na liste kierunkow po kolei
+     * @param movesList
+     * @return
+     */
     private List<Direction> getDirectionsFromPath(List<Point> movesList) {
         List<Direction> directionsList = new ArrayList<>();
         for (int i = 0; i < movesList.size() - 1; i++) {
@@ -364,6 +409,12 @@ class Board {
         return directionsList;
     }
 
+    /***
+     * Zdobywa nowy punkt na podstawnie podanego kierunku
+     * @param p
+     * @param d
+     * @return
+     */
     private Point getNewPosition(Point p, Direction d) {
         int x = (int) p.getX();
         int y = (int) p.getY();
@@ -376,6 +427,12 @@ class Board {
         return (new Point(x, y));
     }
 
+    /***
+     * Znajduje najkrotsza droge do domu(swoich pol)
+     * @param checker
+     * @param point
+     * @return
+     */
     private List<Point> shortestPathToHomeland(Checker checker, Point point) {
         List<Point> rtr = new ArrayList<>();
         //wyznaczam punkt najblizszy mi

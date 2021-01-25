@@ -75,7 +75,6 @@ public class Game implements ObservableGame {
         return playersLocal;
     }
 
-    //TODO: nie dostaję inforamcji o zmianie statustu pola - jest ok?
     private void publishEvent() {
         listeners.forEach(l -> l.event(board.getGls()));
     }
