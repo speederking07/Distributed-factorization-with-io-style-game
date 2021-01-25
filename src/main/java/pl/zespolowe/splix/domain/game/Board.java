@@ -27,13 +27,7 @@ class Board {
 
     protected int x_size;
     protected int y_size;
-    List<Point> movesList = new ArrayList<>();
-    List<Direction> directionsList = new ArrayList<>();
 
-  /*  public void clear_board() {
-        fields = new HashMap<>();
-        paths = new HashMap<>();
-    }*/
     @Getter
     @Setter
     private GameListenerState gls;
@@ -52,10 +46,6 @@ class Board {
         paths.forEach((k, v) -> {
             if (v.equals(checker)) {
                 arrayPaths.add(k);
-                //paths.remove(k);
-                //fields.containsKey(k) ? gls.changeField(fields.get(k),k) :  gls.changeField(k);
-                //if (fields.containsKey(k)) gls.changeField(fields.get(k), k);
-                //else gls.changeField(k);
             }
         });
         for (Point p : arrayPaths) {
@@ -84,9 +74,6 @@ class Board {
         myPath.addAll(finalMyPaths);
         //teraz mam liste pol ktore nalezy zamalowac
         //maluje je
-        /*for(Point p: myPath ){
-            System.out.println("to wchodzi: "+p);
-        }*/
         Set<Point> taken = OverTake.paintPolygon2(myPath);
         //na prosbe Pana Marka biore tez liste samych zakretow do wyslania
         ArrayList<Point> curves = OverTake.getCurves(myPath);
@@ -94,7 +81,6 @@ class Board {
         for (Point tmp : taken) {
             fields.put(tmp, checker);
             gls.changeField(checker.getPlayer().getUsername(), tmp);
-            //System.out.println("zamalowalem: "+tmp);
         }
         clearPlayersSign(checker);
     }
@@ -206,9 +192,6 @@ class Board {
                 }
             }
         }
-        /*paths.forEach((k, v) -> {
-            System.out.println(k);
-        });*/
         return rtr;
     }
 
@@ -235,23 +218,23 @@ class Board {
 
     }
 
-    public void printGls() {
+    /*public void printGls() {
         int turn = gls.getTurn();
         List<String> killedPlayers = gls.getKilledPlayers();
         Map<String, ArrayList<int[]>> changes = gls.getChanges();
         List<Move> moves = gls.getMoves();
         List<AddPlayer> addedPlayers = gls.getAddedPlayers();
-//        System.out.println("###################################");
-//        System.out.println("info co zostalo wyslane w "+turn+" turze");
-//        System.out.println("killed players: "+killedPlayers);
-//        System.out.println("moves: ");
-//        for(Move m: moves) {
-//            System.out.println("x:" + m.getX()+" y:"+m.getY()+"name: "+m.getPlayer());
-//        }
-//        System.out.println("addedPlayers"+addedPlayers);
-//        System.out.println("field's changes"+changes);
-//        System.out.println("###################################");
-    }
+        System.out.println("###################################");
+        System.out.println("info co zostalo wyslane w "+turn+" turze");
+        System.out.println("killed players: "+killedPlayers);
+        System.out.println("moves: ");
+        for(Move m: moves) {
+            System.out.println("x:" + m.getX()+" y:"+m.getY()+"name: "+m.getPlayer());
+        }
+        System.out.println("addedPlayers"+addedPlayers);
+        System.out.println("field's changes"+changes);
+        System.out.println("###################################");
+    }*/
 
     /**
      * Ruch botow
@@ -259,7 +242,6 @@ class Board {
     public Checker botMove(Checker ch) {
         Checker rtr = null;
         Point oldPoint = ch.getPoint();
-//        System.out.println("BOT-POZYCJA: "+oldPoint);
         int x = (int) oldPoint.getX();
         int y = (int) oldPoint.getY();
         switch (ch.getDirection()) {
@@ -305,7 +287,6 @@ class Board {
                     }
                     while (localDir == null || localDir == forbidden);
                     ch.setDirection(localDir);//losuje kierunek i oprozniam liste
-                    //BotMoves.put(ch, Collections.emptyList());
                 }
             }
         } else {//nie wiem gdzie isc
@@ -324,8 +305,8 @@ class Board {
                 localDir = Direction.values()[(int) (Math.random() * Direction.values().length)];
             }
             while (localDir == null || localDir == forbidden);
-            List<Point> movesList = new ArrayList<>();
-            List<Direction> directionsList = new ArrayList<>();
+            List<Point> movesList;
+            List<Direction> directionsList;
             //sprawdz czy wykoanie ruchu (3x ten kier)&&(2x obrot 90o || 2x obrot 2 wersja 90o)&& find path to nasza baza nie przekroczy planszy
             movesList = getMovesList(ch, localDir);//jesli nie mozliwe zwraca pusta liste a jesli mozliwe to zwraca liste punktow
             if (movesList.isEmpty()) {
@@ -339,7 +320,6 @@ class Board {
             ch.getPlayer().isRoadSet(true);
             botMove(ch);
         }
-        //TODO: TU SIE DZIEJE MAGIA ROBIENIA RUCHU PIONEM BOTA
         return rtr;
     }
 
@@ -365,7 +345,6 @@ class Board {
         rtr.add(new Point(x0 + 2 * x + 2 * y, y0 + 2 * y + 2 * x));
         rtr.add(new Point(x0 + x + 2 * y, y0 + y + 2 * x));
         rtr.addAll(shortestPathToHomeland(ch, new Point(x0 + x + 2 * y, y0 + y + 2 * x)));
-//        System.out.println("MOJA LISTA HAHA "+rtr);
         return rtr;
     }
 
@@ -435,10 +414,6 @@ class Board {
             point = new Point((int) point.getX(), (int) point.getY() - 1);
             rtr.add(point);
         }
-        //wyznaczylem juz punkt najblizszy mi
-        //dokonczone
-        //jeblem strumien co leci po fields, jak na field jest checker to policz roznice punkow, jak roznica<minRoznica to BINGO!
-
 
         return rtr;
     }

@@ -33,7 +33,6 @@ public class Game implements ObservableGame {
 
 
     public Game(int gameID) {
-        //this.players = new HashSet<>();
         this.listeners = new ArrayList<>();
         this.gameID = gameID;
         this.board = new Board(x_size, y_size);
@@ -129,11 +128,8 @@ public class Game implements ObservableGame {
         if (!isFull()) {
             Checker ch = board.respawnPlayer(x_size, y_size, p);
             if (ch == null) return false;
-            players.add(ch); //Mozliwe że nie potrzebe ale u mnie nie działało bez tego
+            players.add(ch); //dodanie piona
             board.addGlsPlayer(ch);
-            //GameListenerState gls = board.getGls();
-            //gls.addPlayer(ch);
-            //board.setGls(gls);
 
             return true;
         }
@@ -172,7 +168,7 @@ public class Game implements ObservableGame {
         startTime = (startTime == -1) ? System.currentTimeMillis() : -1;
 //        log.info("NEXT TURN");
         turn++;
-        board.printGls();//Marek rutaj sb sprawdz co wysyla server
+        //board.printGls();//print to co zostanie wyslane
         publishEvent();
         board.setGls(new GameListenerState(turn));
         moveBots();
@@ -198,13 +194,6 @@ public class Game implements ObservableGame {
                 }
             }
         }
-//        players.forEach((ch) -> {
-//            Checker chs = null;
-//            if (ch.getPlayer() instanceof Bot) {
-//                chs = board.botMove(ch);
-//                if (chs != null) killPlayer(chs);
-//            }
-//        });
     }
 
 }

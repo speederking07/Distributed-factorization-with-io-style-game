@@ -137,7 +137,5 @@ public class BoardTest {
             }
         });
         Assert.assertTrue(iter.get() >=5);
-        //sprawdzam czy pole ze srodka nalezy do mnie
-//        Assert.assertTrue(sut.getFields().get(new Point(x+2,y+1)).getPlayer().getUsername().equals("testowyGracz"));
-    }
+  }
 }
