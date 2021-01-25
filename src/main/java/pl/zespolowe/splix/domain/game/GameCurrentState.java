@@ -8,7 +8,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO: Na pełnią wersję to też ma myć
+/***
+ * @Author KalinaMichal
+ */
 @Getter
 @Setter
 public class GameCurrentState {

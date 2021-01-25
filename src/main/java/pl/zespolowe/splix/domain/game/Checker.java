@@ -7,6 +7,9 @@ import pl.zespolowe.splix.domain.game.player.Player;
 
 import java.awt.*;
 
+/***
+ * @Author KalinaMichal
+ */
 @Getter
 @Setter
 public class Checker {
@@ -21,31 +24,6 @@ public class Checker {
         this.point = po;
         this.direction = Direction.EAST;
         this.score = 0;
-    }
-
-    public Point nextTurn() {
-        Point point0 = point;
-        switch (direction) {
-            case EAST -> point0.x++;
-            case WEST -> point0.x--;
-            case NORTH -> point0.y++;
-            case SOUTH -> point0.y--;
-        }
-        return point0;
-    }
-
-    public void makeMove(Direction dir) {
-        int x = point.x;
-        int y = point.y;
-        switch (direction) {
-            case EAST -> x++;
-            case WEST -> x--;
-            case NORTH -> y++;
-            case SOUTH -> y--;
-        }
-        point = new Point();
-        point.x = x;
-        point.y = y;
     }
 
     public void setScore(int x) {

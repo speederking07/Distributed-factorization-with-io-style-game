@@ -49,10 +49,7 @@ public class OverTake {
     public static Set<Point> getCircuit(Set<Point> points) {
         Set<Point> rtr = new LinkedHashSet<>();
         for (Point point : points) {
-            if (isBorderPoint(point, points)) {
-                rtr.add(point);
-                //System.out.println("x" + point);
-            }
+            if (isBorderPoint(point, points)) {rtr.add(point);}
         }
         return rtr;
     }
@@ -166,7 +163,6 @@ public class OverTake {
             return rtrFields;
         }
         rtrFields.add(point);
-        //System.out.println(point);
         int x = (int) point.getX();
         int y = (int) point.getY();
         rtrFields = fillEnclousureFields(new Point(x, y + 1), enclosureFields, rtrFields);
@@ -254,8 +250,7 @@ public class OverTake {
         pot.x = x - 1;
         pot.y = y - 1;
         potentialPoints.add(pot);
-
-        //koniec
+        //koniec wyznaczania potencjalych punktow
 
         int i = 0;
         for (Point potPo : potentialPoints) {

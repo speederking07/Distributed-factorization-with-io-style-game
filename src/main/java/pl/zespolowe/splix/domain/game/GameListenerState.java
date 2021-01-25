@@ -11,17 +11,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/***
+ * @Author KalinaMichal
+ */
 @Getter
 @Setter
 public class GameListenerState {
-    //liste stingow(graczy(sama nazwa))
-    //liste change'ow - change
-    //lista ruchow - moves
-    //lista nowych graczy - players
     private int turn;
     private List<String> killedPlayers;
-    private Map<String, ArrayList<int[]>> changes;//TODO: Marek ustawilem tak jak chciales
-    //private List<Change> changes;
+    private Map<String, ArrayList<int[]>> changes;
     private List<Move> moves;
     private List<AddPlayer> addedPlayers;
 
@@ -68,32 +66,4 @@ public class GameListenerState {
         }
         changes.put(name, arr);
     }
-
-    public void changeField(Point p) {
-        changeField("", p);
-        //changes.add(new Change(p));
-    }
-
-
-   /* class Change{//pole ktore zminilo wlasciciela w danej turze.
-        int x;
-        int y;
-        String player;//jak nan nikogo to pusty
-    }
-
-    class Move{
-        int x;
-        int y;
-        boolean havePath;
-        String player;
-    }
-
-    class AddPlayer{
-        //kolor z colorsInCsv
-        //nazwa String
-        //wspolczedne x,y
-    }
-
-    */
-
 }

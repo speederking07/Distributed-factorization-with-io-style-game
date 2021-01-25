@@ -285,7 +285,7 @@ class Board {
             case SOUTH -> y++;
         }
         Point newPoint = new Point(x, y);
-        if (ch.getPlayer().isRoadSet()) {//wiem gdzie isc //todo: zapytac was
+        if (ch.getPlayer().isRoadSet()) {//wiem gdzie isc
             if (fields.get(oldPoint) != null && fields.get(oldPoint).equals(ch)) {//jestem u siebie
                 rtr = move(ch, ch.getDirection());
                 if (!(fields.get(newPoint) != null && fields.get(newPoint).equals(ch))) {//w next turn nie bedzie u siebie
