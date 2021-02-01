@@ -13,9 +13,10 @@ import javax.security.auth.login.CredentialException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class StepDef {
-    Game sut;
-    Player player;
-    SimpleMove move;
+    private Game sut;
+    private Player player;
+    private SimpleMove move;
+
     @Given("gra została wystartowana")
     public void started_game() throws CredentialException {
         sut = new Game(1);
