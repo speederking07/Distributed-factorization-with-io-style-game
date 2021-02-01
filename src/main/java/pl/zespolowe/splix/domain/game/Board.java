@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  * @author KalinaMichal
  * Klasa odpowiedzialna za logikę planszy
  */
-class Board {
+public class Board {
     @Getter
     private final Map<Point, Checker> fields;
     @Getter
