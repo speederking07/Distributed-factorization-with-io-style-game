@@ -20,4 +20,4 @@ Project for course "Technologie programowania" developed by:
 
 ## Application description
 
-A web multiplayer game in style of .io games, with bacgrounf component computing factorization of lagre naumbers 
+A web multiplayer game in the style of .io games, with background component computing factorization of large numbers.
